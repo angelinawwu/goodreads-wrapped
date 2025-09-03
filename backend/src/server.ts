@@ -11,7 +11,7 @@ console.log('Express app created');
 app.use(express.json());
 
 console.log('Middleware added');
-
+//test
 // Basic test endpoint
 // Add this before your /test endpoint
 app.get('/', (req, res) => {
