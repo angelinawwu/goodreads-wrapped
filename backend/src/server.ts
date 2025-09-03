@@ -144,19 +144,17 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
       const yearBooks: Book[] = [];
       let page = 1;
       let hasMorePages = true;
+      let foundOlderBook = false;
       
-      // Loop through all pages until we find no more books
-      while (hasMorePages) {
-        // Use the correct URL structure you provided
-        const goodreadsUrl = `https://www.goodreads.com/review/list/${username}?page=${page}&shelf=read`;
+      while (hasMorePages && !foundOlderBook) {
+        // Use Goodreads' built-in date sorting
+        const goodreadsUrl = `https://www.goodreads.com/review/list/${username}?page=${page}&shelf=read&sort=date_read`;
         console.log(`Scraping page ${page}: ${goodreadsUrl}`);
         
         const response = await axios.get(goodreadsUrl);
         console.log(`Page ${page} response status: ${response.status}`);
         
         const $ = cheerio.load(response.data);
-        
-        // Look for book elements on this page
         const bookElements = $('tr[itemtype="http://schema.org/Book"], tr:has(a[href*="/book/show/"])');
         console.log(`Page ${page}: Found ${bookElements.length} book elements`);
         
@@ -165,21 +163,16 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
         bookElements.each((index, element) => {
           const $book = $(element);
           
-          // Look for book title
           const titleElement = $book.find('a[href*="/book/show/"]');
           const title = titleElement.text().trim();
           
           if (title) {
             booksOnThisPage++;
             
-            // Look for author
             const authorElement = $book.find('a[href*="/author/show/"]');
             const author = authorElement.text().trim();
             
-            // Look for rating
             const rating = $book.find('.rating, .stars, [class*="rating"]').text().trim();
-            
-            // Look for date
             const dateRead = $book.find('.date, .date_pub, [class*="date"]').text().trim();
             
             const book: Book = {
@@ -191,37 +184,42 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
             
             allBooks.push(book);
             
+            // Check if this book was read in the target year
             if (dateRead && dateRead.includes(year)) {
               yearBooks.push(book);
+              console.log(`✅ ${year} book: ${title}`);
+            } else if (dateRead && dateRead !== 'Date not specified') {
+              // Since books are now sorted by date_read, we can stop when we hit a different year
+              console.log(`🛑 Found book from different year: ${title} (${dateRead}) - stopping pagination`);
+              foundOlderBook = true;
+              return false; // Break out of the .each() loop
             }
           }
         });
         
-        console.log(`Page ${page}: Found ${booksOnThisPage} books`);
+        console.log(`Page ${page}: Found ${booksOnThisPage} books, ${yearBooks.length} from ${year} so far`);
         
-        // If we found fewer than 20 books, we've probably reached the end
         if (booksOnThisPage < 20) {
           hasMorePages = false;
           console.log(`Reached last page (found ${booksOnThisPage} books)`);
-        } else {
+        } else if (!foundOlderBook) {
           page++;
-          
-          // Add a small delay to be respectful to Goodreads
           await new Promise(resolve => setTimeout(resolve, 1000));
         }
       }
       
-      console.log(`Total books found: ${allBooks.length}, Books in ${year}: ${yearBooks.length}`);
+      console.log(`Scraping complete! Total books found: ${allBooks.length}, Books in ${year}: ${yearBooks.length}`);
       
       res.json({ 
-        message: `Successfully scraped ${username}'s complete reading list!`,
+        message: `Successfully scraped ${username}'s ${year} reading list!`,
         username: username,
         year: year,
         totalBooks: allBooks.length,
         yearBooks: yearBooks.length,
         books: yearBooks,
         pagesScraped: page,
-        url: `https://www.goodreads.com/review/list/${username}?shelf=read`
+        stoppedEarly: foundOlderBook,
+        url: `https://www.goodreads.com/review/list/${username}?shelf=read&sort=date_read`
       });
       
     } catch (error) {
