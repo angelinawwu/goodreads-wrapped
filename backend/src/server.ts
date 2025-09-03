@@ -1,5 +1,6 @@
 import express from 'express';
 import axios from 'axios';
+import * as cheerio from 'cheerio';
 
 console.log('Starting server...');
 
@@ -19,8 +20,8 @@ app.get('/', (req, res) => {
   });
 
 app.get('/test', (req, res) => {
-  console.log('Test endpoint hit');
-  res.json({ message: 'Hello from your backend!' });
+   console.log('Test endpoint hit');
+   res.json({ message: 'Hello from your backend!' });
 });
 
 // Add this after your /test endpoint
@@ -36,11 +37,25 @@ app.get('/scrape/:username', async (req, res) => {
       // Make the HTTP request to Goodreads
       const response = await axios.get(goodreadsUrl);
       console.log(`Response status: ${response.status}`);
-      
-      // For now, just return that we got a response
+
+      // Load the HTML into cheerio for parsing
+      const $ = cheerio.load(response.data);
+
+      // Extract the user's name
+      const userName = $('h1.userProfileName').text().trim();
+      console.log(`Found user name: ${userName}`);
+
+      // Extract the profile picture URL
+      const profilePic = $('img.profilePictureIcon').attr('src');
+      console.log(`Found profile picture: ${profilePic}`);
+
+      // Return the extracted data
       res.json({ 
-        message: `Successfully connected to Goodreads!`,
-        username: username,
+        message: `Successfully scraped ${username}'s profile!`,
+        userData: {
+            name: userName || 'Name not found',
+            profilePicture: profilePic || 'No profile picture found'
+          },
         status: response.status,
         url: goodreadsUrl
       });
