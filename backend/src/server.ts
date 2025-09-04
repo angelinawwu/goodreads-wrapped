@@ -7,6 +7,9 @@ interface Book {
     author: string;
     rating: string;
     dateRead: string;
+    userRating?: number;        // 1-5 stars
+    avgRating?: number;         // Goodreads average
+    numRatings?: number;        // Total ratings count
   }
 
 console.log('Starting server...');
@@ -73,67 +76,6 @@ app.get('/scrape/:username', async (req, res) => {
     }
   });
 
-// app.get('/scrape/:username/books/:year', async (req, res) => {
-//     try {
-//       const username = req.params.username;
-//       const year = req.params.year;
-//       console.log(`Attempting to scrape ${year} books for: ${username}`);
-      
-//       const goodreadsUrl = `https://www.goodreads.com/review/list/${username}?shelf=read`;
-//       console.log(`Scraping URL: ${goodreadsUrl}`);
-      
-//       const response = await axios.get(goodreadsUrl);
-//       console.log(`Response status: ${response.status}`);
-      
-//       const $ = cheerio.load(response.data);
-
-//       const allBooks: Book[] = [];
-//       const yearBooks: Book[] = [];
-      
-//       // Find all book entries
-//       $('tr[itemtype="http://schema.org/Book"]').each((index, element) => {
-//         const $book = $(element);
-        
-//         const title = $book.find('a.field title').text().trim();
-//         const author = $book.find('a.field author').text().trim();
-//         const rating = $book.find('.field avg_rating').text().trim();
-//         const dateRead = $book.find('.field date_read').text().trim();
-        
-//         if (title) {
-//           const book = {
-//             title: title,
-//             author: author || 'Unknown Author',
-//             rating: rating || 'No rating',
-//             dateRead: dateRead || 'Date not specified'
-//           };
-          
-//           allBooks.push(book);
-          
-//           // Check if the book was read in the specified year
-//           if (dateRead && dateRead.includes(year)) {
-//             yearBooks.push(book);
-//           }
-//         }
-//       });
-      
-//       console.log(`Found ${allBooks.length} total books, ${yearBooks.length} in ${year}`);
-      
-//       res.json({ 
-//         message: `Successfully scraped ${username}'s reading list!`,
-//         username: username,
-//         year: year,
-//         totalBooks: allBooks.length,
-//         yearBooks: yearBooks.length,
-//         books: yearBooks,
-//         url: goodreadsUrl
-//       });
-      
-//     } catch (error) {
-//       console.error('Error:', error);
-//       res.status(500).json({ error: 'Something went wrong' });
-//     }
-//   });
-
 app.get('/scrape/:username/books/:year', async (req, res) => {
     try {
       const username = req.params.username;
@@ -163,8 +105,10 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
         bookElements.each((index, element) => {
           const $book = $(element);
           
+          
           const titleElement = $book.find('a[href*="/book/show/"]');
           const title = titleElement.text().trim();
+
           
           if (title) {
             booksOnThisPage++;
@@ -172,14 +116,43 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
             const authorElement = $book.find('a[href*="/author/show/"]');
             const author = authorElement.text().trim();
             
-            const rating = $book.find('.rating, .stars, [class*="rating"]').text().trim();
-            const dateRead = $book.find('.date, .date_pub, [class*="date"]').text().trim();
+            
+            const ratingText = $book.find('.rating, .stars, [class*="rating"]').text().trim();
+
+            // Parse the rating data
+            let userRating: number | undefined;
+            let avgRating: number | undefined;
+            let numRatings: number | undefined;
+            
+            if (ratingText) {
+              // Extract user's rating (look for "liked it", "really liked it", etc.)
+              if (ratingText.includes('it was amazing')) userRating = 5;
+              else if (ratingText.includes('really liked it')) userRating = 4;
+              else if (ratingText.includes('liked it')) userRating = 3;
+              else if (ratingText.includes('it was ok')) userRating = 2;
+              else if (ratingText.includes('did not like it')) userRating = 1;
+              
+              // Extract average rating (look for "avg rating X.XX")
+              const avgMatch = ratingText.match(/avg rating\s+(\d+\.\d+)/);
+              if (avgMatch) {
+                avgRating = parseFloat(avgMatch[1]);
+              }
+              
+              // Extract number of ratings (look for "num ratings X,XXX")
+              const numMatch = ratingText.match(/num ratings\s+([\d,]+)/);
+              if (numMatch) {
+                numRatings = parseInt(numMatch[1].replace(/,/g, ''));
+              }
+            }            const dateRead = $book.find('.date, .date_pub, [class*="date"]').text().trim();
             
             const book: Book = {
               title: title,
               author: author || 'Unknown Author',
-              rating: rating || 'No rating',
-              dateRead: dateRead || 'Date not specified'
+              rating: ratingText || 'No rating',
+              dateRead: dateRead || 'Date not specified',
+              userRating: userRating,
+              avgRating: avgRating,
+              numRatings: numRatings
             };
             
             allBooks.push(book);
