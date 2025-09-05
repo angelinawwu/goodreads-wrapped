@@ -1,6 +1,8 @@
 import express from 'express';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
+import cors from 'cors';
+
 
 interface Book {
     title: string;
@@ -16,6 +18,7 @@ console.log('Starting server...');
 
 const app = express();
 const PORT = 3001;
+app.use(cors());
 
 console.log('Express app created');
 
@@ -106,7 +109,7 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
           const $book = $(element);
           
           
-          const titleElement = $book.find('a[href*="/book/show/"]');
+          const titleElement = $book.find('td.field.title a[href*="/book/show/"]');
           const title = titleElement.text().trim();
 
           
