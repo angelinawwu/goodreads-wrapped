@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 interface ScrapingResult {
@@ -16,10 +16,24 @@ function App() {
   const [result, setResult] = useState<ScrapingResult | null>(null);
   const [username, setUsername] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkDevice = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkDevice();
+    window.addEventListener('resize', checkDevice);
+    
+    return () => window.removeEventListener('resize', checkDevice);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!username.trim()) return;
+
+    const userId = Math.random().toString(36).substr(2, 9);
 
     setLoading(true);
     try {
@@ -40,6 +54,9 @@ function App() {
       <header className="App-header">
         <h1>Goodreads Wrapped 2025</h1>
         <p>Discover your reading year in review!</p>
+        <p style={{fontSize: '0.8rem', opacity: 0.7}}>
+          Device: {isMobile ? '📱 Mobile' : '💻 Desktop'}
+        </p>
         
         <form onSubmit={handleSubmit} className="username-form">
           <div className="input-group">
@@ -76,16 +93,13 @@ function App() {
               <div className="book-list">
                 <h3>Your 2025 Books</h3>
                 <ul>
-                  {result.books.slice(0, 10).map((book: any, index: number) => (
+                  {result.books.map((book: any, index: number) => (
                     <li key={index}>
                       <strong>{book.title}</strong> by {book.author}
                       {book.userRating && <span className="rating"> ⭐ {book.userRating}/5</span>}
                     </li>
                   ))}
                 </ul>
-                {result.books.length > 10 && (
-                  <p>...and {result.books.length - 10} more books!</p>
-                )}
               </div>
             )}
           </div>

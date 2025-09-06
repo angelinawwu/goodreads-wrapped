@@ -21,12 +21,14 @@
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "puppeteer": "^24.18.0",
+    "qrcode": "^1.5.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
   },
   "devDependencies": {
     "@types/cheerio": "^0.22.35",
     "@types/cors": "^2.8.19",
+    "@types/qrcode": "^1.5.5",
     "nodemon": "^3.1.10"
   }
 }

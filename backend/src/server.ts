@@ -204,6 +204,24 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
     }
   });
 
+// Store user data temporarily in memory
+const userDataStore: { [key: string]: any } = {};
+
+// Backend: Store user data
+app.post('/store-data', (req, res) => {
+  const { userId, data } = req.body;
+  // Store in memory or database
+  userDataStore[userId] = data;
+  res.json({ success: true });
+});
+
+// Backend: Retrieve user data
+app.get('/get-data/:userId', (req, res) => {
+  const data = userDataStore[req.params.userId];
+  res.json(data || { error: 'Data not found' });
+});
+
+// Keep your existing app.listen() code below this
 console.log('About to start listening...');
 
 app.listen(PORT, () => {
