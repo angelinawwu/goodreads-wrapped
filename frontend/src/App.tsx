@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import QRCode from 'qrcode';
 
 interface ScrapingResult {
   yearBooks?: number;
@@ -17,6 +18,8 @@ function App() {
   const [username, setUsername] = useState('');
   const [loading, setLoading] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [qrCode, setQrCode] = useState<string | null>(null);
+  const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
 
   useEffect(() => {
     const checkDevice = () => {
@@ -32,15 +35,20 @@ function App() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!username.trim()) return;
-
+  
     const userId = Math.random().toString(36).substr(2, 9);
-
+  
     setLoading(true);
     try {
-      // Call your backend endpoint
       const response = await fetch(`http://localhost:3001/scrape/${username}/books/2025`);
       const data = await response.json();
       setResult(data);
+      
+      // Generate QR code for mobile view
+      const mobileUrl = `${window.location.origin}?userId=${userId}`;
+      const qrCode = await QRCode.toDataURL(mobileUrl);
+      setQrCodeUrl(qrCode);
+      
     } catch (error) {
       console.error('Error:', error);
       setResult({ error: 'Failed to fetch data' });
@@ -55,7 +63,7 @@ function App() {
         <h1>Goodreads Wrapped 2025</h1>
         <p>Discover your reading year in review!</p>
         <p style={{fontSize: '0.8rem', opacity: 0.7}}>
-          Device: {isMobile ? '📱 Mobile' : '💻 Desktop'}
+          Device: {isMobile ? '📱 Mobile' : '�� Desktop'}
         </p>
         
         <form onSubmit={handleSubmit} className="username-form">
@@ -74,32 +82,62 @@ function App() {
             {loading ? 'Analyzing...' : 'Get My Reading Stats'}
           </button>
         </form>
-
+  
         {result && (
           <div className="results">
-            <h2>Your 2025 Reading Stats</h2>
-            <div className="stats-grid">
-              <div className="stat-card">
-                <h3>📖 Books Read</h3>
-                <p className="stat-number">{result.yearBooks || 0}</p>
+            {isMobile ? (
+              // Mobile layout (current design)
+              <div>
+                <h2>Your 2025 Reading Stats</h2>
+                <div className="stats-grid">
+                  <div className="stat-card">
+                    <h3>📖 Books Read</h3>
+                    <p className="stat-number">{result.yearBooks || 0}</p>
+                  </div>
+                  <div className="stat-card">
+                    <h3>📄 Pages Scraped</h3>
+                    <p className="stat-number">{result.pagesScraped || 0}</p>
+                  </div>
+                </div>
+                
+                {result.books && result.books.length > 0 && (
+                  <div className="book-list">
+                    <h3>Your 2025 Books</h3>
+                    <ul>
+                      {result.books.map((book: any, index: number) => (
+                        <li key={index}>
+                          <strong>{book.title}</strong> by {book.author}
+                          {book.userRating && <span className="rating"> ⭐ {book.userRating}/5</span>}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
-              <div className="stat-card">
-                <h3>📄 Pages Scraped</h3>
-                <p className="stat-number">{result.pagesScraped || 0}</p>
-              </div>
-            </div>
-            
-            {result.books && result.books.length > 0 && (
-              <div className="book-list">
-                <h3>Your 2025 Books</h3>
-                <ul>
-                  {result.books.map((book: any, index: number) => (
-                    <li key={index}>
-                      <strong>{book.title}</strong> by {book.author}
-                      {book.userRating && <span className="rating"> ⭐ {book.userRating}/5</span>}
-                    </li>
-                  ))}
-                </ul>
+            ) : (
+              // Desktop layout with QR code
+              <div>
+                <h2>Scan QR Code to View on Mobile</h2>
+                {qrCodeUrl && (
+                  <div style={{textAlign: 'center', margin: '2rem 0'}}>
+                    <img src={qrCodeUrl} alt="QR Code" style={{maxWidth: '200px'}} />
+                  </div>
+                )}
+                <p style={{fontSize: '0.9rem', opacity: 0.8}}>
+                  Or, view in browser below:
+                </p>
+                
+                {/* Same content as mobile but desktop-optimized */}
+                <div className="stats-grid">
+                  <div className="stat-card">
+                    <h3>📖 Books Read</h3>
+                    <p className="stat-number">{result.yearBooks || 0}</p>
+                  </div>
+                  <div className="stat-card">
+                    <h3>📄 Pages Scraped</h3>
+                    <p className="stat-number">{result.pagesScraped || 0}</p>
+                  </div>
+                </div>
               </div>
             )}
           </div>
