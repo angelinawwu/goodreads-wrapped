@@ -13,6 +13,8 @@ interface ScrapingResult {
   error?: string;
 }
 
+type Page = 'welcome' | 'books-read' | 'pages-scraped' | 'book-list' | 'complete';
+
 function App() {
   const [result, setResult] = useState<ScrapingResult | null>(null);
   const [username, setUsername] = useState('');
@@ -20,6 +22,7 @@ function App() {
   const [isMobile, setIsMobile] = useState(false);
   const [qrCode, setQrCode] = useState<string | null>(null);
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState<Page>('welcome');
 
   useEffect(() => {
     const checkDevice = () => {
@@ -49,6 +52,9 @@ function App() {
       const qrCode = await QRCode.toDataURL(mobileUrl);
       setQrCodeUrl(qrCode);
       
+      // Start the wrapped experience
+      setCurrentPage('books-read');
+      
     } catch (error) {
       console.error('Error:', error);
       setResult({ error: 'Failed to fetch data' });
@@ -57,90 +63,202 @@ function App() {
     }
   };
 
+  const nextPage = () => {
+    const pageOrder: Page[] = ['welcome', 'books-read', 'pages-scraped', 'book-list', 'complete'];
+    const currentIndex = pageOrder.indexOf(currentPage);
+    if (currentIndex < pageOrder.length - 1) {
+      setCurrentPage(pageOrder[currentIndex + 1]);
+    }
+  };
+
+  const prevPage = () => {
+    const pageOrder: Page[] = ['welcome', 'books-read', 'pages-scraped', 'book-list', 'complete'];
+    const currentIndex = pageOrder.indexOf(currentPage);
+    if (currentIndex > 0) {
+      setCurrentPage(pageOrder[currentIndex - 1]);
+    }
+  };
+
+  const renderWelcomePage = () => (
+    <div className="page-container">
+      <h1>Goodreads Wrapped 2025</h1>
+      <p className="subtitle">Discover your reading year in review!</p>
+      <p style={{fontSize: '0.8rem', opacity: 0.7}}>
+        Device: {isMobile ? '📱 Mobile' : '💻 Desktop'}
+      </p>
+      
+      <form onSubmit={handleSubmit} className="username-form">
+        <div className="input-group">
+          <label htmlFor="username">Goodreads Username:</label>
+          <input
+            type="text"
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Enter your Goodreads username"
+            disabled={loading}
+          />
+        </div>
+        <button type="submit" disabled={loading || !username.trim()}>
+          {loading ? 'Analyzing...' : 'Get My Reading Stats'}
+        </button>
+      </form>
+    </div>
+  );
+
+  const renderBooksReadPage = () => (
+    <div className="page-container">
+      <div className="page-header">
+        <h2>📖 Books Read</h2>
+        <p className="page-subtitle">In 2025, you read...</p>
+      </div>
+      <div className="big-stat">
+        <div className="stat-number">{result?.yearBooks || 0}</div>
+        <div className="stat-label">books</div>
+      </div>
+      <button className="next-button" onClick={nextPage}>
+        Continue →
+      </button>
+    </div>
+  );
+
+  const renderPagesScrapedPage = () => (
+    <div className="page-container">
+      <div className="page-header">
+        <h2>📄 Data Processed</h2>
+        <p className="page-subtitle">We analyzed...</p>
+      </div>
+      <div className="big-stat">
+        <div className="stat-number">{result?.pagesScraped || 0}</div>
+        <div className="stat-label">pages of your reading history</div>
+      </div>
+      <button className="next-button" onClick={nextPage}>
+        Continue →
+      </button>
+    </div>
+  );
+
+  const renderBookListPage = () => (
+    <div className="page-container">
+      <div className="page-header">
+        <h2>📚 Your 2025 Books</h2>
+        <p className="page-subtitle">Here's what you read this year</p>
+      </div>
+      <div className="book-list-container">
+        {result?.books && result.books.length > 0 ? (
+          <ul className="book-list">
+            {result.books.map((book: any, index: number) => (
+              <li key={index} className="book-item">
+                <div className="book-title">{book.title}</div>
+                <div className="book-author">by {book.author}</div>
+                {book.userRating && (
+                  <div className="book-rating">⭐ {book.userRating}/5</div>
+                )}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="no-books">No books found for 2025</p>
+        )}
+      </div>
+      <button className="next-button" onClick={nextPage}>
+        Finish →
+      </button>
+    </div>
+  );
+
+  const renderCompletePage = () => (
+    <div className="page-container">
+      <div className="page-header">
+        <h2>🎉 That's a Wrap!</h2>
+        <p className="page-subtitle">Thanks for exploring your reading year</p>
+      </div>
+      <div className="summary-stats">
+        <div className="summary-stat">
+          <div className="summary-number">{result?.yearBooks || 0}</div>
+          <div className="summary-label">Books Read</div>
+        </div>
+        <div className="summary-stat">
+          <div className="summary-number">{result?.pagesScraped || 0}</div>
+          <div className="summary-label">Pages Analyzed</div>
+        </div>
+      </div>
+      <div className="action-buttons">
+        <button className="restart-button" onClick={() => {
+          setCurrentPage('welcome');
+          setResult(null);
+          setUsername('');
+        }}>
+          Start Over
+        </button>
+        {!isMobile && qrCodeUrl && (
+          <div className="qr-section">
+            <p>Share on mobile:</p>
+            <img src={qrCodeUrl} alt="QR Code" className="qr-code" />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  const renderDesktopView = () => (
+    <div className="desktop-container">
+      <h2>Scan QR Code to View on Mobile</h2>
+      {qrCodeUrl && (
+        <div className="qr-section">
+          <img src={qrCodeUrl} alt="QR Code" className="qr-code" />
+        </div>
+      )}
+      <p className="desktop-note">
+        Or use the navigation below to view your stats:
+      </p>
+      <div className="desktop-nav">
+        <button 
+          className={currentPage === 'books-read' ? 'active' : ''} 
+          onClick={() => setCurrentPage('books-read')}
+        >
+          Books Read
+        </button>
+        <button 
+          className={currentPage === 'pages-scraped' ? 'active' : ''} 
+          onClick={() => setCurrentPage('pages-scraped')}
+        >
+          Data Processed
+        </button>
+        <button 
+          className={currentPage === 'book-list' ? 'active' : ''} 
+          onClick={() => setCurrentPage('book-list')}
+        >
+          Book List
+        </button>
+      </div>
+    </div>
+  );
+
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Goodreads Wrapped 2025</h1>
-        <p>Discover your reading year in review!</p>
-        <p style={{fontSize: '0.8rem', opacity: 0.7}}>
-          Device: {isMobile ? '📱 Mobile' : '�� Desktop'}
-        </p>
+        {currentPage === 'welcome' && renderWelcomePage()}
         
-        <form onSubmit={handleSubmit} className="username-form">
-          <div className="input-group">
-            <label htmlFor="username">Goodreads Username:</label>
-            <input
-              type="text"
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Enter your Goodreads username"
-              disabled={loading}
-            />
-          </div>
-          <button type="submit" disabled={loading || !username.trim()}>
-            {loading ? 'Analyzing...' : 'Get My Reading Stats'}
-          </button>
-        </form>
-  
-        {result && (
-          <div className="results">
+        {result && currentPage !== 'welcome' && (
+          <>
             {isMobile ? (
-              // Mobile layout (current design)
-              <div>
-                <h2>Your 2025 Reading Stats</h2>
-                <div className="stats-grid">
-                  <div className="stat-card">
-                    <h3>📖 Books Read</h3>
-                    <p className="stat-number">{result.yearBooks || 0}</p>
-                  </div>
-                  <div className="stat-card">
-                    <h3>📄 Pages Scraped</h3>
-                    <p className="stat-number">{result.pagesScraped || 0}</p>
-                  </div>
-                </div>
-                
-                {result.books && result.books.length > 0 && (
-                  <div className="book-list">
-                    <h3>Your 2025 Books</h3>
-                    <ul>
-                      {result.books.map((book: any, index: number) => (
-                        <li key={index}>
-                          <strong>{book.title}</strong> by {book.author}
-                          {book.userRating && <span className="rating"> ⭐ {book.userRating}/5</span>}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
+              <>
+                {currentPage === 'books-read' && renderBooksReadPage()}
+                {currentPage === 'pages-scraped' && renderPagesScrapedPage()}
+                {currentPage === 'book-list' && renderBookListPage()}
+                {currentPage === 'complete' && renderCompletePage()}
+              </>
             ) : (
-              // Desktop layout with QR code
-              <div>
-                <h2>Scan QR Code to View on Mobile</h2>
-                {qrCodeUrl && (
-                  <div style={{textAlign: 'center', margin: '2rem 0'}}>
-                    <img src={qrCodeUrl} alt="QR Code" style={{maxWidth: '200px'}} />
-                  </div>
-                )}
-                <p style={{fontSize: '0.9rem', opacity: 0.8}}>
-                  Or, view in browser below:
-                </p>
-                
-                {/* Same content as mobile but desktop-optimized */}
-                <div className="stats-grid">
-                  <div className="stat-card">
-                    <h3>📖 Books Read</h3>
-                    <p className="stat-number">{result.yearBooks || 0}</p>
-                  </div>
-                  <div className="stat-card">
-                    <h3>📄 Pages Scraped</h3>
-                    <p className="stat-number">{result.pagesScraped || 0}</p>
-                  </div>
-                </div>
-              </div>
+              <>
+                {renderDesktopView()}
+                {currentPage === 'books-read' && renderBooksReadPage()}
+                {currentPage === 'pages-scraped' && renderPagesScrapedPage()}
+                {currentPage === 'book-list' && renderBookListPage()}
+                {currentPage === 'complete' && renderCompletePage()}
+              </>
             )}
-          </div>
+          </>
         )}
       </header>
     </div>

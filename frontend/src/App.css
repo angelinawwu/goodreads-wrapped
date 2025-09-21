@@ -4,20 +4,216 @@
   min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
+  overflow-x: hidden;
 }
 
 .App-header {
   padding: 2rem;
   max-width: 800px;
   margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-/* Big header Goodreads Wrapped 2025 */
-h1 {
-  font-size: 3rem;
+/* Page Container */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  padding: 2rem;
+}
+
+.page-header {
+  margin-bottom: 3rem;
+}
+
+.page-header h2 {
+  font-size: 2.5rem;
   margin-bottom: 0.5rem;
 }
 
+.page-subtitle {
+  font-size: 1.2rem;
+  opacity: 0.8;
+  margin: 0;
+}
+
+/* Big Stat Display */
+.big-stat {
+  margin: 3rem 0;
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 6rem;
+  font-weight: bold;
+  margin: 0;
+  color: #ffd700;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.stat-label {
+  font-size: 1.5rem;
+  margin-top: 1rem;
+  opacity: 0.9;
+}
+
+/* Navigation Buttons */
+.next-button, .restart-button {
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 2rem;
+  min-width: 150px;
+}
+
+.next-button:hover, .restart-button:hover {
+  background: #ff5252;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+}
+
+/* Book List Page */
+.book-list-container {
+  max-width: 600px;
+  width: 100%;
+  margin: 2rem 0;
+}
+
+.book-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.book-item {
+  background: rgba(255, 255, 255, 0.1);
+  margin: 1rem 0;
+  padding: 1.5rem;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  text-align: left;
+  transition: transform 0.2s ease;
+}
+
+.book-item:hover {
+  transform: translateY(-2px);
+}
+
+.book-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.book-author {
+  font-size: 1rem;
+  opacity: 0.8;
+  margin-bottom: 0.5rem;
+}
+
+.book-rating {
+  color: #ffd700;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.no-books {
+  font-size: 1.2rem;
+  opacity: 0.7;
+  margin: 2rem 0;
+}
+
+/* Complete Page */
+.summary-stats {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin: 3rem 0;
+}
+
+.summary-stat {
+  text-align: center;
+}
+
+.summary-number {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #ffd700;
+  margin-bottom: 0.5rem;
+}
+
+.summary-label {
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.qr-section {
+  text-align: center;
+}
+
+.qr-code {
+  max-width: 150px;
+  border-radius: 10px;
+}
+
+/* Desktop View */
+.desktop-container {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border-radius: 15px;
+  margin-bottom: 2rem;
+  backdrop-filter: blur(10px);
+}
+
+.desktop-note {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin: 1rem 0;
+}
+
+.desktop-nav {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.desktop-nav button {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.desktop-nav button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.desktop-nav button.active {
+  background: #ff6b6b;
+}
+
+/* Form Styles (unchanged) */
 .username-form {
   background: rgba(255, 255, 255, 0.1);
   padding: 2rem;
@@ -47,74 +243,33 @@ input {
   color: #333;
 }
 
-button {
-  background: #ff6b6b;
-  color: white;
-  border: none;
-  padding: 1rem 2rem;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-button:hover:not(:disabled) {
-  background: #ff5252;
-  transform: translateY(-2px);
-}
-
 button:disabled {
   background: #ccc;
   cursor: not-allowed;
+  transform: none;
 }
 
-.results {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 2rem;
-  border-radius: 15px;
-  margin-top: 2rem;
-  backdrop-filter: blur(10px);
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin: 2rem 0;
-}
-
-.stat-card {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 1.5rem;
-  border-radius: 10px;
-}
-
-.stat-number {
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin: 0.5rem 0;
-  color: #ffd700;
-}
-
-.book-list {
-  text-align: left;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.book-list ul {
-  list-style: none;
-  padding: 0;
-}
-
-.book-list li {
-  background: rgba(255, 255, 255, 0.1);
-  margin: 0.5rem 0;
-  padding: 1rem;
-  border-radius: 8px;
-}
-
-.rating {
-  color: #ffd700;
-  font-weight: bold;
+/* Responsive Design */
+@media (max-width: 768px) {
+  .App-header {
+    padding: 1rem;
+  }
+  
+  .page-container {
+    padding: 1rem;
+    min-height: 70vh;
+  }
+  
+  .stat-number {
+    font-size: 4rem;
+  }
+  
+  .summary-stats {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .desktop-nav {
+    flex-direction: column;
+  }
 }
