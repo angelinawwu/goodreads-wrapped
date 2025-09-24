@@ -9,11 +9,30 @@ interface ScrapingResult {
     title: string;
     author: string;
     userRating?: number;
+    numPages?: number;          // NEW
+    coverImage?: string;        // NEW
   }>;
+  averageRating?: number;
+  booksWithRatings?: number;
+  // NEW: Page statistics
+  averagePages?: number;
+  longestBook?: {
+    title: string;
+    author: string;
+    numPages?: number;
+    coverImage?: string;
+  };
+  shortestBook?: {
+    title: string;
+    author: string;
+    numPages?: number;
+    coverImage?: string;
+  };
+  booksWithPages?: number;
   error?: string;
 }
 
-type Page = 'welcome' | 'books-read' | 'pages-scraped' | 'book-list' | 'complete';
+type Page = 'welcome' | 'books-read' | 'average-rating' | 'book-details' | 'book-list' | 'complete';
 
 function App() {
   const [result, setResult] = useState<ScrapingResult | null>(null);
@@ -64,7 +83,7 @@ function App() {
   };
 
   const nextPage = () => {
-    const pageOrder: Page[] = ['welcome', 'books-read', 'pages-scraped', 'book-list', 'complete'];
+    const pageOrder: Page[] = ['welcome', 'books-read', 'average-rating', 'book-details', 'book-list', 'complete'];
     const currentIndex = pageOrder.indexOf(currentPage);
     if (currentIndex < pageOrder.length - 1) {
       setCurrentPage(pageOrder[currentIndex + 1]);
@@ -72,7 +91,7 @@ function App() {
   };
 
   const prevPage = () => {
-    const pageOrder: Page[] = ['welcome', 'books-read', 'pages-scraped', 'book-list', 'complete'];
+    const pageOrder: Page[] = ['welcome', 'books-read', 'average-rating', 'book-list', 'complete'];
     const currentIndex = pageOrder.indexOf(currentPage);
     if (currentIndex > 0) {
       setCurrentPage(pageOrder[currentIndex - 1]);
@@ -122,15 +141,18 @@ function App() {
     </div>
   );
 
-  const renderPagesScrapedPage = () => (
+  const renderAverageRatingPage = () => (
     <div className="page-container">
       <div className="page-header">
-        <h2>📄 Data Processed</h2>
-        <p className="page-subtitle">We analyzed...</p>
+        <h2>⭐ Average Rating</h2>
+        <p className="page-subtitle">Your average rating for 2025 books</p>
       </div>
       <div className="big-stat">
-        <div className="stat-number">{result?.pagesScraped || 0}</div>
-        <div className="stat-label">pages of your reading history</div>
+        <div className="stat-number">{result?.averageRating?.toFixed(1) || '0.0'}</div>
+        <div className="stat-label">out of 5 stars</div>
+      </div>
+      <div className="rating-details">
+        <p>Based on {result?.booksWithRatings || 0} books you rated</p>
       </div>
       <button className="next-button" onClick={nextPage}>
         Continue →
@@ -201,6 +223,63 @@ function App() {
     </div>
   );
 
+  const renderBookDetailsPage = () => (
+    <div className="page-container">
+      <div className="page-header">
+        <h2>�� Book Details</h2>
+        <p className="page-subtitle">Your reading patterns in 2025</p>
+      </div>
+      
+      <div className="book-details-grid">
+        <div className="detail-card">
+          <h3>�� Average Length</h3>
+          <div className="detail-number">{result?.averagePages || 0}</div>
+          <div className="detail-label">pages per book</div>
+        </div>
+        
+        {result?.longestBook && (
+          <div className="detail-card book-card">
+            <h3>�� Longest Book</h3>
+            <div className="book-cover">
+              {result.longestBook.coverImage ? (
+                <img src={result.longestBook.coverImage} alt={result.longestBook.title} />
+              ) : (
+                <div className="no-cover">📖</div>
+              )}
+            </div>
+            <div className="book-info">
+              <div className="book-title">{result.longestBook.title}</div>
+              <div className="book-author">by {result.longestBook.author}</div>
+              <div className="book-pages">{result.longestBook.numPages} pages</div>
+            </div>
+          </div>
+        )}
+        
+        {result?.shortestBook && (
+          <div className="detail-card book-card">
+            <h3>�� Shortest Book</h3>
+            <div className="book-cover">
+              {result.shortestBook.coverImage ? (
+                <img src={result.shortestBook.coverImage} alt={result.shortestBook.title} />
+              ) : (
+                <div className="no-cover">📖</div>
+              )}
+            </div>
+            <div className="book-info">
+              <div className="book-title">{result.shortestBook.title}</div>
+              <div className="book-author">by {result.shortestBook.author}</div>
+              <div className="book-pages">{result.shortestBook.numPages} pages</div>
+            </div>
+          </div>
+        )}
+      </div>
+      
+      <button className="next-button" onClick={nextPage}>
+        Continue →
+      </button>
+    </div>
+  );
+
   const renderDesktopView = () => (
     <div className="desktop-container">
       <h2>Scan QR Code to View on Mobile</h2>
@@ -220,10 +299,16 @@ function App() {
           Books Read
         </button>
         <button 
-          className={currentPage === 'pages-scraped' ? 'active' : ''} 
-          onClick={() => setCurrentPage('pages-scraped')}
+          className={currentPage === 'average-rating' ? 'active' : ''} 
+          onClick={() => setCurrentPage('average-rating')}
         >
-          Data Processed
+          Average Rating
+        </button>
+        <button 
+          className={currentPage === 'book-details' ? 'active' : ''} 
+          onClick={() => setCurrentPage('book-details')}
+        >
+          Book Details
         </button>
         <button 
           className={currentPage === 'book-list' ? 'active' : ''} 
@@ -245,17 +330,19 @@ function App() {
             {isMobile ? (
               <>
                 {currentPage === 'books-read' && renderBooksReadPage()}
-                {currentPage === 'pages-scraped' && renderPagesScrapedPage()}
+                {currentPage === 'average-rating' && renderAverageRatingPage()}
                 {currentPage === 'book-list' && renderBookListPage()}
                 {currentPage === 'complete' && renderCompletePage()}
+                {currentPage === 'book-details' && renderBookDetailsPage()}
               </>
             ) : (
               <>
                 {renderDesktopView()}
                 {currentPage === 'books-read' && renderBooksReadPage()}
-                {currentPage === 'pages-scraped' && renderPagesScrapedPage()}
+                {currentPage === 'average-rating' && renderAverageRatingPage()}
                 {currentPage === 'book-list' && renderBookListPage()}
                 {currentPage === 'complete' && renderCompletePage()}
+                {currentPage === 'book-details' && renderBookDetailsPage()}
               </>
             )}
           </>

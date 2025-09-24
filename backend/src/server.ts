@@ -12,6 +12,9 @@ interface Book {
     userRating?: number;        // 1-5 stars
     avgRating?: number;         // Goodreads average
     numRatings?: number;        // Total ratings count
+    numPages?: number;          // Total pages read
+    coverImage?: string;         // Cover image URL
+    genres?: string[];             // Genres
   }
 
 console.log('Starting server...');
@@ -111,6 +114,7 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
           
           const titleElement = $book.find('td.field.title a[href*="/book/show/"]');
           const title = titleElement.text().trim();
+          const bookUrl = titleElement.attr('href'); // NEW: Extract the book URL
 
           
           if (title) {
@@ -140,13 +144,31 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
               if (avgMatch) {
                 avgRating = parseFloat(avgMatch[1]);
               }
+
+              
               
               // Extract number of ratings (look for "num ratings X,XXX")
               const numMatch = ratingText.match(/num ratings\s+([\d,]+)/);
               if (numMatch) {
                 numRatings = parseInt(numMatch[1].replace(/,/g, ''));
               }
-            }            const dateRead = $book.find('.date, .date_pub, [class*="date"]').text().trim();
+            }            
+            
+            // NEW: Extract number of pages
+            const numPagesText = $book.find('.field.num_pages').text().trim();
+            let numPages: number | undefined;
+            if (numPagesText) {
+              const pagesMatch = numPagesText.match(/(\d+)/);
+              if (pagesMatch) {
+                numPages = parseInt(pagesMatch[1]);
+              }
+            }
+            
+            // NEW: Extract book cover image
+            const coverElement = $book.find('.field.cover img');
+            const coverImage = coverElement.attr('src') || coverElement.attr('data-src');
+            
+            const dateRead = $book.find('.date, .date_pub, [class*="date"]').text().trim();
             
             const book: Book = {
               title: title,
@@ -155,9 +177,14 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
               dateRead: dateRead || 'Date not specified',
               userRating: userRating,
               avgRating: avgRating,
-              numRatings: numRatings
+              numRatings: numRatings,
+              numPages: numPages,        // NEW
+              coverImage: coverImage,     // NEW
+              genres: [],
             };
             
+            (book as any).bookUrl = bookUrl;
+
             allBooks.push(book);
             
             // Check if this book was read in the target year
@@ -185,6 +212,27 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
       }
       
       console.log(`Scraping complete! Total books found: ${allBooks.length}, Books in ${year}: ${yearBooks.length}`);
+
+      const booksWithRatings = yearBooks.filter(book => book.userRating !== undefined);
+      const averageRating = booksWithRatings.length > 0 
+        ? booksWithRatings.reduce((sum, book) => sum + (book.userRating || 0), 0) / booksWithRatings.length
+        : 0;
+
+      const booksWithPages = yearBooks.filter(book => book.numPages !== undefined);
+      const averagePages = booksWithPages.length > 0 
+        ? booksWithPages.reduce((sum, book) => sum + (book.numPages || 0), 0) / booksWithPages.length
+        : 0;
+
+      // Find longest and shortest books
+      const longestBook = booksWithPages.length > 0 
+        ? booksWithPages.reduce((longest, book) => (book.numPages || 0) > (longest.numPages || 0) ? book : longest)
+        : null;
+
+      const shortestBook = booksWithPages.length > 0 
+        ? booksWithPages.reduce((shortest, book) => (book.numPages || 0) < (shortest.numPages || 0) ? book : shortest)
+        : null;
+
+      console.log(`Page stats: Average ${averagePages.toFixed(0)} pages, Longest: ${longestBook?.title} (${longestBook?.numPages} pages), Shortest: ${shortestBook?.title} (${shortestBook?.numPages} pages)`);
       
       res.json({ 
         message: `Successfully scraped ${username}'s ${year} reading list!`,
@@ -195,6 +243,12 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
         books: yearBooks,
         pagesScraped: page,
         stoppedEarly: foundOlderBook,
+        averageRating: Math.round(averageRating * 100) / 100,
+        booksWithRatings: booksWithRatings.length,
+        averagePages: Math.round(averagePages),
+        longestBook: longestBook,
+        shortestBook: shortestBook,
+        booksWithPages: booksWithPages.length,
         url: `https://www.goodreads.com/review/list/${username}?shelf=read&sort=date_read`
       });
       
