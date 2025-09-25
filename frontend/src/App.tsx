@@ -49,10 +49,20 @@ interface ScrapingResult {
     coverImage?: string;
   };
   booksWithReadingTime?: number;
+  // NEW: Biggest hater moment
+  biggestHaterMoment?: {
+    title: string;
+    author: string;
+    userRating?: number;
+    avgRating?: number;
+    coverImage?: string;
+  };
+  biggestDisparity?: number;
+  booksWithBothRatings?: number;
   error?: string;
 }
 
-type Page = 'welcome' | 'books-read' | 'average-rating' | 'book-details' | 'top-genres' | 'reading-time' | 'book-list' | 'complete';
+type Page = 'welcome' | 'books-read' | 'average-rating' | 'book-details' | 'top-genres' | 'reading-time' | 'biggest-hater' | 'book-list' | 'complete';
 
 function App() {
   const [result, setResult] = useState<ScrapingResult | null>(null);
@@ -103,7 +113,7 @@ function App() {
   };
 
   const nextPage = () => {
-    const pageOrder: Page[] = ['welcome', 'books-read', 'average-rating', 'book-details', 'top-genres', 'reading-time', 'book-list', 'complete'];
+    const pageOrder: Page[] = ['welcome', 'books-read', 'average-rating', 'book-details', 'top-genres', 'reading-time', 'biggest-hater', 'book-list', 'complete'];
     const currentIndex = pageOrder.indexOf(currentPage);
     if (currentIndex < pageOrder.length - 1) {
       setCurrentPage(pageOrder[currentIndex + 1]);
@@ -111,7 +121,7 @@ function App() {
   };
 
   const prevPage = () => {
-    const pageOrder: Page[] = ['welcome', 'books-read', 'average-rating', 'book-details', 'top-genres', 'reading-time', 'book-list', 'complete'];
+    const pageOrder: Page[] = ['welcome', 'books-read', 'average-rating', 'book-details', 'top-genres', 'reading-time', 'biggest-hater', 'book-list', 'complete'];
     const currentIndex = pageOrder.indexOf(currentPage);
     if (currentIndex > 0) {
       setCurrentPage(pageOrder[currentIndex - 1]);
@@ -168,7 +178,7 @@ function App() {
         <p className="page-subtitle">Your average rating for 2025 books</p>
       </div>
       <div className="big-stat">
-        <div className="stat-number">{result?.averageRating?.toFixed(1) || '0.0'}</div>
+        <div className="stat-number">{result?.averageRating?.toFixed(2) || '0.0'}</div>
         <div className="stat-label">out of 5 stars</div>
       </div>
       <div className="rating-details">
@@ -405,6 +415,74 @@ function App() {
     </div>
   );
 
+  const renderBiggestHaterPage = () => (
+    <div className="page-container">
+      <div className="page-header">
+        <h2>😤 Biggest Hater Moment</h2>
+        <p className="page-subtitle">When you disagreed with everyone else</p>
+      </div>
+      
+      {result?.biggestHaterMoment ? (
+        <div className="hater-moment-container">
+          <div className="hater-book-card">
+            <div className="book-cover">
+              {result.biggestHaterMoment.coverImage ? (
+                <img src={result.biggestHaterMoment.coverImage} alt={result.biggestHaterMoment.title} />
+              ) : (
+                <div className="no-cover">📖</div>
+              )}
+            </div>
+            <div className="book-info">
+              <div className="book-title">{result.biggestHaterMoment.title}</div>
+              <div className="book-author">by {result.biggestHaterMoment.author}</div>
+            </div>
+          </div>
+          
+          <div className="rating-comparison">
+            <div className="rating-display">
+              <div className="rating-label">Your Rating</div>
+              <div className="rating-stars user-rating">
+                {'⭐'.repeat(result.biggestHaterMoment.userRating || 0)}
+                <span className="rating-number">{result.biggestHaterMoment.userRating}/5</span>
+              </div>
+            </div>
+            
+            <div className="vs-divider">VS</div>
+            
+            <div className="rating-display">
+              <div className="rating-label">Everyone Else</div>
+              <div className="rating-stars avg-rating">
+                {'⭐'.repeat(Math.floor(result.biggestHaterMoment.avgRating || 0))}
+                <span className="rating-number">{result.biggestHaterMoment.avgRating?.toFixed(2)}/5</span>
+              </div>
+            </div>
+          </div>
+          
+          <div className="disparity-display">
+            <div className="disparity-number">{result.biggestDisparity?.toFixed(2)}</div>
+            <div className="disparity-label">stars difference</div>
+          </div>
+          
+          <div className="hater-message">
+            <p>You were {result.biggestDisparity?.toFixed(1)} stars more critical than the average reader!</p>
+          </div>
+        </div>
+      ) : (
+        <div className="no-hater-moment">
+          <p>No hater moments found - you're too agreeable! 😊</p>
+        </div>
+      )}
+      
+      <div className="hater-details">
+        <p>Based on {result?.booksWithBothRatings || 0} books with both your rating and average rating</p>
+      </div>
+      
+      <button className="next-button" onClick={nextPage}>
+        Continue →
+      </button>
+    </div>
+  );
+
   const renderDesktopView = () => (
     <div className="desktop-container">
       <h2>Scan QR Code to View on Mobile</h2>
@@ -448,6 +526,12 @@ function App() {
           Reading Speed
         </button>
         <button 
+          className={currentPage === 'biggest-hater' ? 'active' : ''} 
+          onClick={() => setCurrentPage('biggest-hater')}
+        >
+          Biggest Hater
+        </button>
+        <button 
           className={currentPage === 'book-list' ? 'active' : ''} 
           onClick={() => setCurrentPage('book-list')}
         >
@@ -471,6 +555,7 @@ function App() {
                 {currentPage === 'book-details' && renderBookDetailsPage()}
                 {currentPage === 'top-genres' && renderTopGenresPage()}
                 {currentPage === 'reading-time' && renderReadingTimePage()}
+                {currentPage === 'biggest-hater' && renderBiggestHaterPage()}
                 {currentPage === 'book-list' && renderBookListPage()}
                 {currentPage === 'complete' && renderCompletePage()}
               </>
@@ -482,6 +567,7 @@ function App() {
                 {currentPage === 'book-details' && renderBookDetailsPage()}
                 {currentPage === 'top-genres' && renderTopGenresPage()}
                 {currentPage === 'reading-time' && renderReadingTimePage()}
+                {currentPage === 'biggest-hater' && renderBiggestHaterPage()}
                 {currentPage === 'book-list' && renderBookListPage()}
                 {currentPage === 'complete' && renderCompletePage()}
               </>

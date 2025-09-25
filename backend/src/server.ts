@@ -360,7 +360,25 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
         ? booksWithReadingTime.reduce((slowest, book) => (book.readingDays || 0) > (slowest.readingDays || 0) ? book : slowest)
         : null;
 
-      console.log(`Reading time stats: Average ${averageReadingTime.toFixed(1)} days, Fastest: ${fastestRead?.title} (${fastestRead?.readingDays} days), Slowest: ${slowestRead?.title} (${slowestRead?.readingDays} days)`);
+      console.log(`Reading time stats: Average ${averageReadingTime.toFixed(2)} days, Fastest: ${fastestRead?.title} (${fastestRead?.readingDays} days), Slowest: ${slowestRead?.title} (${slowestRead?.readingDays} days)`);
+
+      // Calculate biggest hater moment (biggest negative disparity between user rating and average rating)
+      const booksWithBothRatings = yearBooks.filter(book => 
+        book.userRating !== undefined && book.avgRating !== undefined
+      );
+      
+      let biggestHaterMoment = null as Book | null;
+      let biggestDisparity = 0;
+      
+      booksWithBothRatings.forEach(book => {
+        const disparity = (book.avgRating || 0) - (book.userRating || 0);
+        if (disparity > biggestDisparity) {
+          biggestDisparity = disparity;
+          biggestHaterMoment = book;
+        }
+      });
+
+      console.log(`Biggest hater moment: ${biggestHaterMoment ? biggestHaterMoment.title : 'None'} (User: ${biggestHaterMoment ? biggestHaterMoment.userRating : 0}/5, Average: ${biggestHaterMoment ? biggestHaterMoment.avgRating : 0}/5, Disparity: ${biggestDisparity.toFixed(2)})`);
 
       const booksWithRatings = yearBooks.filter(book => book.userRating !== undefined);
       const averageRating = booksWithRatings.length > 0 
@@ -402,10 +420,14 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
         uniqueGenres: uniqueGenres,
         genreCounts: genreCounts,
         // NEW: Reading time statistics
-        averageReadingTime: Math.round(averageReadingTime * 10) / 10,
+        averageReadingTime: Math.round(averageReadingTime * 100) / 100,
         fastestRead: fastestRead,
         slowestRead: slowestRead,
         booksWithReadingTime: booksWithReadingTime.length,
+        // NEW: Biggest hater moment
+        biggestHaterMoment: biggestHaterMoment,
+        biggestDisparity: Math.round(biggestDisparity * 100) / 100,
+        booksWithBothRatings: booksWithBothRatings.length,
         url: `https://www.goodreads.com/review/list/${username}?shelf=read&sort=date_read`
       });
       
