@@ -33,17 +33,30 @@ const scrapeBookGenres = async (bookUrl: string): Promise<string[]> => {
     const $ = cheerio.load(response.data);
     const genres: string[] = [];
     
+    // List of non-genre categories to filter out
+    const nonGenres = [
+      'fiction', 'non-fiction', 'nonfiction', 'adult', 'young-adult', 'ya', 'children', 'kids',
+      'audiobook', 'book-club', 'book club', 'library', 'owned', 'to-read', 'currently-reading',
+      'read', 'favorites', 'favourites', 'recommended', 'modern', 'queer', 'lgbt', 'lgbtq',
+      'new', 'old', 'popular', 'bestseller', 'award-winning', 'series', 'standalone', 
+      'novel', 'book', 'story', 'tale', 'narrative', 'literature', 'writing', 'author', 
+      'publisher', 'edition', 'format', 'hardcover', 'paperback', 'ebook', 'kindle', 
+      'digital', 'print', 'audio', 'review', 'rating', 'star', 'page', 'chapter', 
+      'volume', 'part', 'collection', 'anthology', 'trilogy', 'series', 'chronicles', 
+      'saga', 'cycle', 'prequel', 'sequel', 'companion', 'tie-in', 'crossover'
+    ];
+    
     $('a[href*="/genres/"], .elementList a[href*="/genres/"], .leftContainer a[href*="/genres/"]').each((index, element) => {
-      const genreText = $(element).text().trim();
-      if (genreText && !genres.includes(genreText)) {
+      const genreText = $(element).text().trim().toLowerCase();
+      if (genreText && !genres.includes(genreText) && !nonGenres.includes(genreText)) {
         genres.push(genreText);
       }
     });
     
     if (genres.length === 0) {
       $('.bookPageGenreLink').each((index, element) => {
-        const genreText = $(element).text().trim();
-        if (genreText && !genres.includes(genreText)) {
+        const genreText = $(element).text().trim().toLowerCase();
+        if (genreText && !genres.includes(genreText) && !nonGenres.includes(genreText)) {
           genres.push(genreText);
         }
       });
@@ -51,8 +64,8 @@ const scrapeBookGenres = async (bookUrl: string): Promise<string[]> => {
     
     if (genres.length === 0) {
       $('a[href*="genres"]').each((index, element) => {
-        const genreText = $(element).text().trim();
-        if (genreText && !genres.includes(genreText) && genreText.length < 50) {
+        const genreText = $(element).text().trim().toLowerCase();
+        if (genreText && !genres.includes(genreText) && !nonGenres.includes(genreText) && genreText.length < 50) {
           genres.push(genreText);
         }
       });
