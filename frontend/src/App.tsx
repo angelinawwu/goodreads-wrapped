@@ -3,6 +3,7 @@ import './App.css';
 import QRCode from 'qrcode';
 
 interface ScrapingResult {
+  year?: string;
   yearBooks?: number;
   pagesScraped?: number;
   books?: Array<{
@@ -60,9 +61,13 @@ interface ScrapingResult {
   biggestDisparity?: number;
   booksWithBothRatings?: number;
   error?: string;
+  // NEW: Dependability statistics
+  toReadAddedCount?: number;
+  toReadReadCount?: number;
+  dependability?: number;
 }
 
-type Page = 'welcome' | 'books-read' | 'average-rating' | 'book-details' | 'top-genres' | 'reading-time' | 'biggest-hater' | 'book-list' | 'complete';
+type Page = 'welcome' | 'books-read' | 'average-rating' | 'book-details' | 'top-genres' | 'reading-time' | 'dependability' | 'biggest-hater' | 'book-list' | 'complete';
 
 function App() {
   const [result, setResult] = useState<ScrapingResult | null>(null);
@@ -113,7 +118,7 @@ function App() {
   };
 
   const nextPage = () => {
-    const pageOrder: Page[] = ['welcome', 'books-read', 'average-rating', 'book-details', 'top-genres', 'reading-time', 'biggest-hater', 'book-list', 'complete'];
+    const pageOrder: Page[] = ['welcome', 'books-read', 'average-rating', 'book-details', 'top-genres', 'reading-time', 'dependability', 'biggest-hater', 'book-list', 'complete'];
     const currentIndex = pageOrder.indexOf(currentPage);
     if (currentIndex < pageOrder.length - 1) {
       setCurrentPage(pageOrder[currentIndex + 1]);
@@ -121,7 +126,7 @@ function App() {
   };
 
   const prevPage = () => {
-    const pageOrder: Page[] = ['welcome', 'books-read', 'average-rating', 'book-details', 'top-genres', 'reading-time', 'biggest-hater', 'book-list', 'complete'];
+    const pageOrder: Page[] = ['welcome', 'books-read', 'average-rating', 'book-details', 'top-genres', 'reading-time', 'dependability', 'biggest-hater', 'book-list', 'complete'];
     const currentIndex = pageOrder.indexOf(currentPage);
     if (currentIndex > 0) {
       setCurrentPage(pageOrder[currentIndex - 1]);
@@ -464,7 +469,7 @@ function App() {
           </div>
           
           <div className="hater-message">
-            <p>You were {result.biggestDisparity?.toFixed(1)} stars more critical than the average reader!</p>
+            <p>You were {result.biggestDisparity?.toFixed(2)} stars more critical than the average reader!</p>
           </div>
         </div>
       ) : (
@@ -475,6 +480,54 @@ function App() {
       
       <div className="hater-details">
         <p>Based on {result?.booksWithBothRatings || 0} books with both your rating and average rating</p>
+      </div>
+      
+      <button className="next-button" onClick={nextPage}>
+        Continue →
+      </button>
+    </div>
+  );
+
+  const renderDependabilityPage = () => (
+    <div className="page-container">
+      <div className="page-header">
+        <h2>📋 Dependability</h2>
+        <p className="page-subtitle">How well you follow through on your reading goals</p>
+      </div>
+      
+      <div className="dependability-stats">
+        <div className="dependability-main">
+          <div className="dependability-number">
+            {result?.dependability ? (result.dependability * 100).toFixed(1) : '0.0'}%
+          </div>
+          <div className="dependability-label">follow-through rate</div>
+        </div>
+        
+        <div className="dependability-breakdown">
+          <div className="breakdown-item">
+            <div className="breakdown-number">{result?.toReadReadCount || 0}</div>
+            <div className="breakdown-label">books read in {result?.year || '2025'}</div>
+          </div>
+          <div className="breakdown-divider">of</div>
+          <div className="breakdown-item">
+            <div className="breakdown-number">{(result?.toReadAddedCount || 0) + (result?.toReadReadCount || 0)}</div>
+            <div className="breakdown-label">total books added in {result?.year || '2025'}</div>
+          </div>
+        </div>
+      </div>
+      
+      <div className="dependability-message">
+        <p>
+          {result?.dependability && result.dependability >= 0.8 
+            ? "You're incredibly reliable with your reading goals! 🎯"
+            : result?.dependability && result.dependability >= 0.5
+            ? "You're doing well at following through on your reading plans! 📚"
+            : "There's always room to improve your reading follow-through! 💪"
+          }
+        </p>
+        <p style={{fontSize: '0.9rem', opacity: 0.8, marginTop: '0.5rem'}}>
+          This measures how many books you read in {result?.year || '2025'} that were also added to your shelves in {result?.year || '2025'}.
+        </p>
       </div>
       
       <button className="next-button" onClick={nextPage}>
@@ -526,6 +579,12 @@ function App() {
           Reading Speed
         </button>
         <button 
+          className={currentPage === 'dependability' ? 'active' : ''} 
+          onClick={() => setCurrentPage('dependability')}
+        >
+          Dependability
+        </button>
+        <button 
           className={currentPage === 'biggest-hater' ? 'active' : ''} 
           onClick={() => setCurrentPage('biggest-hater')}
         >
@@ -555,6 +614,7 @@ function App() {
                 {currentPage === 'book-details' && renderBookDetailsPage()}
                 {currentPage === 'top-genres' && renderTopGenresPage()}
                 {currentPage === 'reading-time' && renderReadingTimePage()}
+                {currentPage === 'dependability' && renderDependabilityPage()}
                 {currentPage === 'biggest-hater' && renderBiggestHaterPage()}
                 {currentPage === 'book-list' && renderBookListPage()}
                 {currentPage === 'complete' && renderCompletePage()}
@@ -567,6 +627,7 @@ function App() {
                 {currentPage === 'book-details' && renderBookDetailsPage()}
                 {currentPage === 'top-genres' && renderTopGenresPage()}
                 {currentPage === 'reading-time' && renderReadingTimePage()}
+                {currentPage === 'dependability' && renderDependabilityPage()}
                 {currentPage === 'biggest-hater' && renderBiggestHaterPage()}
                 {currentPage === 'book-list' && renderBookListPage()}
                 {currentPage === 'complete' && renderCompletePage()}

@@ -9,6 +9,7 @@ interface Book {
     author: string;
     rating: string;
     dateRead: string;
+    dateAdded?: string;         // NEW: Date when book was added to shelves
     dateStarted?: string;       // NEW: Date when book was started
     readingDays?: number;       // NEW: Days between start and finish
     userRating?: number;        // 1-5 stars
@@ -80,6 +81,69 @@ const scrapeBookGenres = async (bookUrl: string): Promise<string[]> => {
     console.error(`Error scraping genres from ${bookUrl}:`, error);
     return [];
   }
+};
+
+const scrapeToReadList = async (username: string, year: string): Promise<Set<string>> => {
+  const toReadIds = new Set<string>();
+  let page = 1;
+  let hasMorePages = true;
+  let foundOlderBook = false;
+
+  while (hasMorePages && !foundOlderBook) {
+    const toReadUrl = `https://www.goodreads.com/review/list/${username}?page=${page}&shelf=to-read&sort=date_added`;
+    console.log(`Scraping to-read page ${page}: ${toReadUrl}`);
+    
+    try {
+      const response = await axios.get(toReadUrl);
+      const $ = cheerio.load(response.data);
+      const bookElements = $('tr[itemtype="http://schema.org/Book"], tr:has(a[href*="/book/show/"])');
+      
+      let booksOnThisPage = 0;
+      
+      bookElements.each((index, element) => {
+        const $book = $(element);
+        
+        const titleElement = $book.find('td.field.title a[href*="/book/show/"]');
+        const bookUrl = titleElement.attr('href');
+        const dateAdded = $book.find('.field.date_added').text().trim();
+        
+        if (bookUrl && dateAdded) {
+          booksOnThisPage++;
+          
+          // Check if this book was added in the target year
+          if (dateAdded.includes(year)) {
+            // Extract book ID from URL (e.g., "/book/show/12345-title" -> "12345")
+            const bookIdMatch = bookUrl.match(/\/book\/show\/(\d+)/);
+            if (bookIdMatch) {
+              toReadIds.add(bookIdMatch[1]);
+              console.log(`✅ To-read book added in ${year}: ${titleElement.text().trim()}`);
+            }
+          } else if (dateAdded && dateAdded !== 'Date not specified') {
+            // Since books are sorted by date_added, we can stop when we hit a different year
+            console.log(`🛑 Found book from different year: ${titleElement.text().trim()} (${dateAdded}) - stopping pagination`);
+            foundOlderBook = true;
+            return false; // Break out of the .each() loop
+          }
+        }
+      });
+      
+      console.log(`To-read page ${page}: Found ${booksOnThisPage} books, ${toReadIds.size} added in ${year} so far`);
+      
+      if (booksOnThisPage < 20) {
+        hasMorePages = false;
+        console.log(`Reached last to-read page (found ${booksOnThisPage} books)`);
+      } else if (!foundOlderBook) {
+        page++;
+        await new Promise(resolve => setTimeout(resolve, 1000)); // 1 second delay between pages
+      }
+    } catch (error) {
+      console.error(`Error scraping to-read page ${page}:`, error);
+      hasMorePages = false;
+    }
+  }
+  
+  console.log(`To-read scraping complete! Found ${toReadIds.size} books added in ${year}`);
+  return toReadIds;
 };
 
 console.log('Starting server...');
@@ -235,6 +299,9 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
             
             const dateRead = $book.find('.date, .date_pub, [class*="date"]').text().trim();
             
+            // NEW: Extract date added to shelves
+            const dateAdded = $book.find('.field.date_added').text().trim();
+            
             // NEW: Extract start and finish dates
             const dateStarted = $book.find('.field.date_started').text().trim();
             const dateFinished = $book.find('.field.date_read').text().trim();
@@ -259,6 +326,7 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
               author: author || 'Unknown Author',
               rating: ratingText || 'No rating',
               dateRead: dateRead || 'Date not specified',
+              dateAdded: dateAdded || undefined,
               dateStarted: dateStarted || undefined,
               readingDays: readingDays,
               userRating: userRating,
@@ -270,6 +338,14 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
             };
 
             (book as any).bookUrl = bookUrl;
+
+            // Extract book ID for dependability calculation
+            if (bookUrl) {
+              const bookIdMatch = bookUrl.match(/\/book\/show\/(\d+)/);
+              if (bookIdMatch) {
+                (book as any).bookId = bookIdMatch[1];
+              }
+            }
 
             allBooks.push(book);
             
@@ -344,6 +420,22 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
       const uniqueGenres = Object.keys(genreCounts).length;
 
       console.log(`Genre stats: ${uniqueGenres} unique genres, most popular: ${mostPopularGenre}`);
+
+      // Calculate dependability (proportion of books read in year that were added in year)
+      console.log(`Scraping to-read list for dependability calculation...`);
+      const toReadIds = await scrapeToReadList(username, year);
+
+      // Count books read in year that were also added in year
+      const readAndAddedInYear = yearBooks.filter(book => 
+        book.dateAdded && book.dateAdded.includes(year)
+      ).length;
+
+      // Calculate dependability using new formula
+      const toReadAddedCount = toReadIds.size;
+      const totalBooksAddedInYear = toReadAddedCount + readAndAddedInYear;
+      const dependability = totalBooksAddedInYear > 0 ? readAndAddedInYear / totalBooksAddedInYear : 0;
+
+      console.log(`Dependability: ${readAndAddedInYear}/(${toReadAddedCount} + ${readAndAddedInYear}) = ${(dependability * 100).toFixed(1)}%`);
 
       // Calculate reading time statistics
       const booksWithReadingTime = yearBooks.filter(book => book.readingDays !== undefined);
@@ -428,7 +520,11 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
         biggestHaterMoment: biggestHaterMoment,
         biggestDisparity: Math.round(biggestDisparity * 100) / 100,
         booksWithBothRatings: booksWithBothRatings.length,
-        url: `https://www.goodreads.com/review/list/${username}?shelf=read&sort=date_read`
+        url: `https://www.goodreads.com/review/list/${username}?shelf=read&sort=date_read`,
+        // NEW: Dependability statistics
+        toReadAddedCount: toReadAddedCount,
+        toReadReadCount: readAndAddedInYear,
+        dependability: Math.round(dependability * 1000) / 1000, // Round to 3 decimal places
       });
       
     } catch (error) {
