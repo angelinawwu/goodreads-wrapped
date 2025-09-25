@@ -278,49 +278,50 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
       console.log(`Scraping complete! Total books found: ${allBooks.length}, Books in ${year}: ${yearBooks.length}`);
 
       // ADD THIS CODE RIGHT HERE:
-console.log(`Scraping genres for ${yearBooks.length} books from ${year}...`);
+      console.log(`Scraping genres for ${yearBooks.length} books from ${year}...`);
 
-// Scrape genres for each book read in the target year
-for (let i = 0; i < yearBooks.length; i++) {
-  const book = yearBooks[i];
-  const bookUrl = (book as any).bookUrl;
-  
-  if (bookUrl) {
-    const genres = await scrapeBookGenres(bookUrl);
-    book.genres = genres;
-    
-    // Add delay to be respectful to Goodreads
-    await new Promise(resolve => setTimeout(resolve, 1000));
-  }
-  
-  console.log(`Progress: ${i + 1}/${yearBooks.length} books processed`);
-}
+      // Scrape genres for each book read in the target year (parallel processing)
+      const genrePromises = yearBooks.map(async (book, index) => {
+        const bookUrl = (book as any).bookUrl;
+        
+        if (bookUrl) {
+          // Add staggered delay to avoid overwhelming the server
+          await new Promise(resolve => setTimeout(resolve, index * 100));
+          const genres = await scrapeBookGenres(bookUrl);
+          book.genres = genres;
+          console.log(`Progress: ${index + 1}/${yearBooks.length} books processed`);
+        }
+        
+        return book;
+      });
 
-// Clean up the bookUrl property we added temporarily
-yearBooks.forEach(book => {
-  delete (book as any).bookUrl;
-});
+      // Wait for all genre scraping to complete
+      await Promise.all(genrePromises);
 
-// ADD THIS CODE RIGHT HERE TOO:
-// Calculate genre statistics
-const allGenres = yearBooks.flatMap(book => book.genres || []);
-const genreCounts: { [key: string]: number } = {};
+      // Clean up the bookUrl property we added temporarily
+      yearBooks.forEach(book => {
+        delete (book as any).bookUrl;
+      });
 
-allGenres.forEach(genre => {
-  genreCounts[genre] = (genreCounts[genre] || 0) + 1;
-});
+      // ADD THIS CODE RIGHT HERE TOO:
+      // Calculate genre statistics
+      const allGenres = yearBooks.flatMap(book => book.genres || []);
+      const genreCounts: { [key: string]: number } = {};
 
-// Find most popular genre
-const mostPopularGenre = Object.keys(genreCounts).length > 0 
-  ? Object.keys(genreCounts).reduce((a, b) => 
-      genreCounts[a] > genreCounts[b] ? a : b, '')
-  : '';
+      allGenres.forEach(genre => {
+        genreCounts[genre] = (genreCounts[genre] || 0) + 1;
+      });
 
-// Get unique genres count
-const uniqueGenres = Object.keys(genreCounts).length;
+      // Find most popular genre
+      const mostPopularGenre = Object.keys(genreCounts).length > 0 
+        ? Object.keys(genreCounts).reduce((a, b) => 
+            genreCounts[a] > genreCounts[b] ? a : b, '')
+        : '';
 
-console.log(`Genre stats: ${uniqueGenres} unique genres, most popular: ${mostPopularGenre}`);
+      // Get unique genres count
+      const uniqueGenres = Object.keys(genreCounts).length;
 
+      console.log(`Genre stats: ${uniqueGenres} unique genres, most popular: ${mostPopularGenre}`);
 
       const booksWithRatings = yearBooks.filter(book => book.userRating !== undefined);
       const averageRating = booksWithRatings.length > 0 
