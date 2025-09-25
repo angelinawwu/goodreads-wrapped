@@ -17,6 +17,56 @@ interface Book {
     genres?: string[];             // Genres
   }
 
+const scrapeBookGenres = async (bookUrl: string): Promise<string[]> => {
+  try {
+    console.log(`Scraping genres from: ${bookUrl}`);
+    
+    const fullBookUrl = bookUrl.startsWith('http') ? bookUrl : `https://www.goodreads.com${bookUrl}`;
+    
+    const response = await axios.get(fullBookUrl, {
+      timeout: 10000,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; GoodreadsWrapped/1.0)'
+      }
+    });
+    
+    const $ = cheerio.load(response.data);
+    const genres: string[] = [];
+    
+    $('a[href*="/genres/"], .elementList a[href*="/genres/"], .leftContainer a[href*="/genres/"]').each((index, element) => {
+      const genreText = $(element).text().trim();
+      if (genreText && !genres.includes(genreText)) {
+        genres.push(genreText);
+      }
+    });
+    
+    if (genres.length === 0) {
+      $('.bookPageGenreLink').each((index, element) => {
+        const genreText = $(element).text().trim();
+        if (genreText && !genres.includes(genreText)) {
+          genres.push(genreText);
+        }
+      });
+    }
+    
+    if (genres.length === 0) {
+      $('a[href*="genres"]').each((index, element) => {
+        const genreText = $(element).text().trim();
+        if (genreText && !genres.includes(genreText) && genreText.length < 50) {
+          genres.push(genreText);
+        }
+      });
+    }
+    
+    console.log(`Found genres for ${fullBookUrl}: ${genres.join(', ')}`);
+    return genres;
+    
+  } catch (error) {
+    console.error(`Error scraping genres from ${bookUrl}:`, error);
+    return [];
+  }
+};
+
 console.log('Starting server...');
 
 const app = express();
@@ -182,7 +232,7 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
               coverImage: coverImage,     // NEW
               genres: [],
             };
-            
+
             (book as any).bookUrl = bookUrl;
 
             allBooks.push(book);
@@ -199,6 +249,7 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
             }
           }
         });
+
         
         console.log(`Page ${page}: Found ${booksOnThisPage} books, ${yearBooks.length} from ${year} so far`);
         
@@ -212,6 +263,51 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
       }
       
       console.log(`Scraping complete! Total books found: ${allBooks.length}, Books in ${year}: ${yearBooks.length}`);
+
+      // ADD THIS CODE RIGHT HERE:
+console.log(`Scraping genres for ${yearBooks.length} books from ${year}...`);
+
+// Scrape genres for each book read in the target year
+for (let i = 0; i < yearBooks.length; i++) {
+  const book = yearBooks[i];
+  const bookUrl = (book as any).bookUrl;
+  
+  if (bookUrl) {
+    const genres = await scrapeBookGenres(bookUrl);
+    book.genres = genres;
+    
+    // Add delay to be respectful to Goodreads
+    await new Promise(resolve => setTimeout(resolve, 1000));
+  }
+  
+  console.log(`Progress: ${i + 1}/${yearBooks.length} books processed`);
+}
+
+// Clean up the bookUrl property we added temporarily
+yearBooks.forEach(book => {
+  delete (book as any).bookUrl;
+});
+
+// ADD THIS CODE RIGHT HERE TOO:
+// Calculate genre statistics
+const allGenres = yearBooks.flatMap(book => book.genres || []);
+const genreCounts: { [key: string]: number } = {};
+
+allGenres.forEach(genre => {
+  genreCounts[genre] = (genreCounts[genre] || 0) + 1;
+});
+
+// Find most popular genre
+const mostPopularGenre = Object.keys(genreCounts).length > 0 
+  ? Object.keys(genreCounts).reduce((a, b) => 
+      genreCounts[a] > genreCounts[b] ? a : b, '')
+  : '';
+
+// Get unique genres count
+const uniqueGenres = Object.keys(genreCounts).length;
+
+console.log(`Genre stats: ${uniqueGenres} unique genres, most popular: ${mostPopularGenre}`);
+
 
       const booksWithRatings = yearBooks.filter(book => book.userRating !== undefined);
       const averageRating = booksWithRatings.length > 0 
@@ -249,6 +345,9 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
         longestBook: longestBook,
         shortestBook: shortestBook,
         booksWithPages: booksWithPages.length,
+        mostPopularGenre: mostPopularGenre,
+        uniqueGenres: uniqueGenres,
+        genreCounts: genreCounts,
         url: `https://www.goodreads.com/review/list/${username}?shelf=read&sort=date_read`
       });
       
