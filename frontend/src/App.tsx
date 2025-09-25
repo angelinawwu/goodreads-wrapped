@@ -29,10 +29,14 @@ interface ScrapingResult {
     coverImage?: string;
   };
   booksWithPages?: number;
+  // NEW: Genre statistics
+  mostPopularGenre?: string;
+  uniqueGenres?: number;
+  genreCounts?: { [key: string]: number };
   error?: string;
 }
 
-type Page = 'welcome' | 'books-read' | 'average-rating' | 'book-details' | 'book-list' | 'complete';
+type Page = 'welcome' | 'books-read' | 'average-rating' | 'book-details' | 'top-genres' | 'book-list' | 'complete';
 
 function App() {
   const [result, setResult] = useState<ScrapingResult | null>(null);
@@ -83,7 +87,7 @@ function App() {
   };
 
   const nextPage = () => {
-    const pageOrder: Page[] = ['welcome', 'books-read', 'average-rating', 'book-details', 'book-list', 'complete'];
+    const pageOrder: Page[] = ['welcome', 'books-read', 'average-rating', 'book-details', 'top-genres', 'book-list', 'complete'];
     const currentIndex = pageOrder.indexOf(currentPage);
     if (currentIndex < pageOrder.length - 1) {
       setCurrentPage(pageOrder[currentIndex + 1]);
@@ -91,7 +95,7 @@ function App() {
   };
 
   const prevPage = () => {
-    const pageOrder: Page[] = ['welcome', 'books-read', 'average-rating', 'book-list', 'complete'];
+    const pageOrder: Page[] = ['welcome', 'books-read', 'average-rating', 'book-details', 'top-genres', 'book-list', 'complete'];
     const currentIndex = pageOrder.indexOf(currentPage);
     if (currentIndex > 0) {
       setCurrentPage(pageOrder[currentIndex - 1]);
@@ -280,6 +284,50 @@ function App() {
     </div>
   );
 
+  const renderTopGenresPage = () => {
+    const topGenres = result?.genreCounts 
+      ? Object.entries(result.genreCounts)
+          .sort(([,a], [,b]) => (b as number) - (a as number))
+          .slice(0, 5)
+      : [];
+
+    return (
+      <div className="page-container">
+        <div className="page-header">
+          <h2>🏆 Top Genres</h2>
+          <p className="page-subtitle">Your favorite genres in 2025</p>
+        </div>
+        
+        <div className="top-genres-list">
+          {topGenres.length > 0 ? (
+            topGenres.map(([genre, count], index) => (
+              <div key={genre} className="genre-rank-item">
+                <div className="genre-rank">
+                  <span className="rank-number">#{index + 1}</span>
+                </div>
+                <div className="genre-info">
+                  <div className="genre-name">{genre}</div>
+                  <div className="genre-fraction">{count as number}/{result?.yearBooks || 0} books</div>
+                </div>
+                <div className="genre-percentage">
+                  {Math.round(((count as number) / (result?.yearBooks || 1)) * 100)}%
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="no-genres">
+              <p>No genre data available</p>
+            </div>
+          )}
+        </div>
+        
+        <button className="next-button" onClick={nextPage}>
+          Continue →
+        </button>
+      </div>
+    );
+  };
+
   const renderDesktopView = () => (
     <div className="desktop-container">
       <h2>Scan QR Code to View on Mobile</h2>
@@ -311,6 +359,12 @@ function App() {
           Book Details
         </button>
         <button 
+          className={currentPage === 'top-genres' ? 'active' : ''} 
+          onClick={() => setCurrentPage('top-genres')}
+        >
+          Top Genres
+        </button>
+        <button 
           className={currentPage === 'book-list' ? 'active' : ''} 
           onClick={() => setCurrentPage('book-list')}
         >
@@ -331,18 +385,20 @@ function App() {
               <>
                 {currentPage === 'books-read' && renderBooksReadPage()}
                 {currentPage === 'average-rating' && renderAverageRatingPage()}
+                {currentPage === 'book-details' && renderBookDetailsPage()}
+                {currentPage === 'top-genres' && renderTopGenresPage()}
                 {currentPage === 'book-list' && renderBookListPage()}
                 {currentPage === 'complete' && renderCompletePage()}
-                {currentPage === 'book-details' && renderBookDetailsPage()}
               </>
             ) : (
               <>
                 {renderDesktopView()}
                 {currentPage === 'books-read' && renderBooksReadPage()}
                 {currentPage === 'average-rating' && renderAverageRatingPage()}
+                {currentPage === 'book-details' && renderBookDetailsPage()}
+                {currentPage === 'top-genres' && renderTopGenresPage()}
                 {currentPage === 'book-list' && renderBookListPage()}
                 {currentPage === 'complete' && renderCompletePage()}
-                {currentPage === 'book-details' && renderBookDetailsPage()}
               </>
             )}
           </>
