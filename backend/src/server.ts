@@ -9,6 +9,8 @@ interface Book {
     author: string;
     rating: string;
     dateRead: string;
+    dateStarted?: string;       // NEW: Date when book was started
+    readingDays?: number;       // NEW: Days between start and finish
     userRating?: number;        // 1-5 stars
     avgRating?: number;         // Goodreads average
     numRatings?: number;        // Total ratings count
@@ -233,11 +235,32 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
             
             const dateRead = $book.find('.date, .date_pub, [class*="date"]').text().trim();
             
+            // NEW: Extract start and finish dates
+            const dateStarted = $book.find('.field.date_started').text().trim();
+            const dateFinished = $book.find('.field.date_read').text().trim();
+            
+            // Calculate reading days if both dates are available
+            let readingDays: number | undefined;
+            if (dateStarted && dateFinished) {
+              try {
+                const startDate = new Date(dateStarted);
+                const finishDate = new Date(dateFinished);
+                if (!isNaN(startDate.getTime()) && !isNaN(finishDate.getTime())) {
+                  const timeDiff = finishDate.getTime() - startDate.getTime();
+                  readingDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                }
+              } catch (error) {
+                console.log(`Could not parse dates for ${title}: ${dateStarted} - ${dateFinished}`);
+              }
+            }
+            
             const book: Book = {
               title: title,
               author: author || 'Unknown Author',
               rating: ratingText || 'No rating',
               dateRead: dateRead || 'Date not specified',
+              dateStarted: dateStarted || undefined,
+              readingDays: readingDays,
               userRating: userRating,
               avgRating: avgRating,
               numRatings: numRatings,
@@ -303,7 +326,6 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
         delete (book as any).bookUrl;
       });
 
-      // ADD THIS CODE RIGHT HERE TOO:
       // Calculate genre statistics
       const allGenres = yearBooks.flatMap(book => book.genres || []);
       const genreCounts: { [key: string]: number } = {};
@@ -322,6 +344,23 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
       const uniqueGenres = Object.keys(genreCounts).length;
 
       console.log(`Genre stats: ${uniqueGenres} unique genres, most popular: ${mostPopularGenre}`);
+
+      // Calculate reading time statistics
+      const booksWithReadingTime = yearBooks.filter(book => book.readingDays !== undefined);
+      const averageReadingTime = booksWithReadingTime.length > 0 
+        ? booksWithReadingTime.reduce((sum, book) => sum + (book.readingDays || 0), 0) / booksWithReadingTime.length
+        : 0;
+
+      // Find fastest and slowest reads
+      const fastestRead = booksWithReadingTime.length > 0 
+        ? booksWithReadingTime.reduce((fastest, book) => (book.readingDays || 0) < (fastest.readingDays || 0) ? book : fastest)
+        : null;
+
+      const slowestRead = booksWithReadingTime.length > 0 
+        ? booksWithReadingTime.reduce((slowest, book) => (book.readingDays || 0) > (slowest.readingDays || 0) ? book : slowest)
+        : null;
+
+      console.log(`Reading time stats: Average ${averageReadingTime.toFixed(1)} days, Fastest: ${fastestRead?.title} (${fastestRead?.readingDays} days), Slowest: ${slowestRead?.title} (${slowestRead?.readingDays} days)`);
 
       const booksWithRatings = yearBooks.filter(book => book.userRating !== undefined);
       const averageRating = booksWithRatings.length > 0 
@@ -362,6 +401,11 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
         mostPopularGenre: mostPopularGenre,
         uniqueGenres: uniqueGenres,
         genreCounts: genreCounts,
+        // NEW: Reading time statistics
+        averageReadingTime: Math.round(averageReadingTime * 10) / 10,
+        fastestRead: fastestRead,
+        slowestRead: slowestRead,
+        booksWithReadingTime: booksWithReadingTime.length,
         url: `https://www.goodreads.com/review/list/${username}?shelf=read&sort=date_read`
       });
       

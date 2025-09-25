@@ -11,6 +11,7 @@ interface ScrapingResult {
     userRating?: number;
     numPages?: number;          // NEW
     coverImage?: string;        // NEW
+    readingDays?: number;       // NEW: Reading time in days
   }>;
   averageRating?: number;
   booksWithRatings?: number;
@@ -33,10 +34,25 @@ interface ScrapingResult {
   mostPopularGenre?: string;
   uniqueGenres?: number;
   genreCounts?: { [key: string]: number };
+  // NEW: Reading time statistics
+  averageReadingTime?: number;
+  fastestRead?: {
+    title: string;
+    author: string;
+    readingDays?: number;
+    coverImage?: string;
+  };
+  slowestRead?: {
+    title: string;
+    author: string;
+    readingDays?: number;
+    coverImage?: string;
+  };
+  booksWithReadingTime?: number;
   error?: string;
 }
 
-type Page = 'welcome' | 'books-read' | 'average-rating' | 'book-details' | 'top-genres' | 'book-list' | 'complete';
+type Page = 'welcome' | 'books-read' | 'average-rating' | 'book-details' | 'top-genres' | 'reading-time' | 'book-list' | 'complete';
 
 function App() {
   const [result, setResult] = useState<ScrapingResult | null>(null);
@@ -87,7 +103,7 @@ function App() {
   };
 
   const nextPage = () => {
-    const pageOrder: Page[] = ['welcome', 'books-read', 'average-rating', 'book-details', 'top-genres', 'book-list', 'complete'];
+    const pageOrder: Page[] = ['welcome', 'books-read', 'average-rating', 'book-details', 'top-genres', 'reading-time', 'book-list', 'complete'];
     const currentIndex = pageOrder.indexOf(currentPage);
     if (currentIndex < pageOrder.length - 1) {
       setCurrentPage(pageOrder[currentIndex + 1]);
@@ -95,7 +111,7 @@ function App() {
   };
 
   const prevPage = () => {
-    const pageOrder: Page[] = ['welcome', 'books-read', 'average-rating', 'book-details', 'top-genres', 'book-list', 'complete'];
+    const pageOrder: Page[] = ['welcome', 'books-read', 'average-rating', 'book-details', 'top-genres', 'reading-time', 'book-list', 'complete'];
     const currentIndex = pageOrder.indexOf(currentPage);
     if (currentIndex > 0) {
       setCurrentPage(pageOrder[currentIndex - 1]);
@@ -328,6 +344,67 @@ function App() {
     );
   };
 
+  const renderReadingTimePage = () => (
+    <div className="page-container">
+      <div className="page-header">
+        <h2>⏱️ Reading Speed</h2>
+        <p className="page-subtitle">How fast you read in 2025</p>
+      </div>
+      
+      <div className="reading-time-grid">
+        <div className="reading-time-stat">
+          <h3>📊 Average Time</h3>
+          <div className="reading-time-number">{result?.averageReadingTime?.toFixed(1) || '0.0'}</div>
+          <div className="reading-time-label">days per book</div>
+        </div>
+        
+        {result?.fastestRead && (
+          <div className="reading-time-card">
+            <h3>⚡ Fastest Read</h3>
+            <div className="book-cover">
+              {result.fastestRead.coverImage ? (
+                <img src={result.fastestRead.coverImage} alt={result.fastestRead.title} />
+              ) : (
+                <div className="no-cover">📖</div>
+              )}
+            </div>
+            <div className="book-info">
+              <div className="book-title">{result.fastestRead.title}</div>
+              <div className="book-author">by {result.fastestRead.author}</div>
+              <div className="reading-days">{result.fastestRead.readingDays} days</div>
+            </div>
+          </div>
+        )}
+        
+        {result?.slowestRead && (
+          <div className="reading-time-card">
+            <h3>🐌 Slowest Read</h3>
+            <div className="book-cover">
+              {result.slowestRead.coverImage ? (
+                <img src={result.slowestRead.coverImage} alt={result.slowestRead.title} />
+              ) : (
+                <div className="no-cover">📖</div>
+              )}
+            </div>
+            <div className="book-info">
+              <div className="book-title">{result.slowestRead.title}</div>
+              <div className="book-author">by {result.slowestRead.author}</div>
+              <div className="reading-days">{result.slowestRead.readingDays} days</div>
+            </div>
+          </div>
+        )}
+      </div>
+      
+      <div className="reading-time-details">
+        <p>Based on {result?.booksWithReadingTime || 0} books with reading dates</p>
+      </div>
+      
+      <button className="next-button" onClick={nextPage}>
+        Continue →
+      </button>
+    </div>
+  );
+
   const renderDesktopView = () => (
     <div className="desktop-container">
       <h2>Scan QR Code to View on Mobile</h2>
@@ -365,6 +442,12 @@ function App() {
           Top Genres
         </button>
         <button 
+          className={currentPage === 'reading-time' ? 'active' : ''} 
+          onClick={() => setCurrentPage('reading-time')}
+        >
+          Reading Speed
+        </button>
+        <button 
           className={currentPage === 'book-list' ? 'active' : ''} 
           onClick={() => setCurrentPage('book-list')}
         >
@@ -387,6 +470,7 @@ function App() {
                 {currentPage === 'average-rating' && renderAverageRatingPage()}
                 {currentPage === 'book-details' && renderBookDetailsPage()}
                 {currentPage === 'top-genres' && renderTopGenresPage()}
+                {currentPage === 'reading-time' && renderReadingTimePage()}
                 {currentPage === 'book-list' && renderBookListPage()}
                 {currentPage === 'complete' && renderCompletePage()}
               </>
@@ -397,6 +481,7 @@ function App() {
                 {currentPage === 'average-rating' && renderAverageRatingPage()}
                 {currentPage === 'book-details' && renderBookDetailsPage()}
                 {currentPage === 'top-genres' && renderTopGenresPage()}
+                {currentPage === 'reading-time' && renderReadingTimePage()}
                 {currentPage === 'book-list' && renderBookListPage()}
                 {currentPage === 'complete' && renderCompletePage()}
               </>
