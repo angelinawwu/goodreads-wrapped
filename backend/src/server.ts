@@ -18,6 +18,7 @@ interface Book {
     numPages?: number;          // Total pages read
     coverImage?: string;         // Cover image URL
     genres?: string[];             // Genres
+    review?: string;
   }
 
 const scrapeBookGenres = async (bookUrl: string): Promise<string[]> => {
@@ -296,7 +297,8 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
             // NEW: Extract book cover image
             const coverElement = $book.find('.field.cover img');
             const coverImage = coverElement.attr('src') || coverElement.attr('data-src');
-            
+            const review = $book.find('.field.review').text().trim();
+
             const dateRead = $book.find('.date, .date_pub, [class*="date"]').text().trim();
             
             // NEW: Extract date added to shelves
@@ -320,6 +322,7 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
                 console.log(`Could not parse dates for ${title}: ${dateStarted} - ${dateFinished}`);
               }
             }
+
             
             const book: Book = {
               title: title,
@@ -335,6 +338,7 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
               numPages: numPages,        // NEW
               coverImage: coverImage,     // NEW
               genres: [],
+              review: review || undefined,
             };
 
             (book as any).bookUrl = bookUrl;

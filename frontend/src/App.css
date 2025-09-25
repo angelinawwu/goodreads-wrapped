@@ -788,8 +788,4 @@ button:disabled {
     flex-direction: column;
     gap: 0.5rem;
   }
-  
-  .breakdown-divider {
-    transform: rotate(90deg);
-  }
 }
