@@ -84,6 +84,39 @@ const scrapeBookGenres = async (bookUrl: string): Promise<string[]> => {
   }
 };
 
+const scrapeUserReview = async (bookUrl: string, username: string): Promise<string> => {
+  try {
+    console.log(`Scraping user review for: ${bookUrl}`);
+    
+    const fullBookUrl = bookUrl.startsWith('http') ? bookUrl : `https://www.goodreads.com${bookUrl}`;
+    
+    const response = await axios.get(fullBookUrl, {
+      timeout: 10000,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; GoodreadsWrapped/1.0)'
+      }
+    });
+    
+    const $ = cheerio.load(response.data);
+    
+    // Look for the user's specific review
+    const userReview = $(`.review[data-reviewer-name="${username}"], .review:contains("${username}")`).first();
+    
+    if (userReview.length > 0) {
+      const reviewText = userReview.find('.reviewText, .readable').text().trim();
+      console.log(`Found review for ${username}: ${reviewText.substring(0, 100)}...`);
+      return reviewText;
+    }
+    
+    console.log(`No review found for ${username} on ${fullBookUrl}`);
+    return '';
+    
+  } catch (error) {
+    console.error(`Error scraping review from ${bookUrl}:`, error);
+    return '';
+  }
+};
+
 const scrapeToReadList = async (username: string, year: string): Promise<Set<string>> => {
   const toReadIds = new Set<string>();
   let page = 1;
@@ -297,7 +330,7 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
             // NEW: Extract book cover image
             const coverElement = $book.find('.field.cover img');
             const coverImage = coverElement.attr('src') || coverElement.attr('data-src');
-            const review = $book.find('.field.review').text().trim();
+            const reviewText = $book.find('.field.review').text().trim();
 
             const dateRead = $book.find('.date, .date_pub, [class*="date"]').text().trim();
             
@@ -338,7 +371,7 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
               numPages: numPages,        // NEW
               coverImage: coverImage,     // NEW
               genres: [],
-              review: review || undefined,
+              review: reviewText || undefined,
             };
 
             (book as any).bookUrl = bookUrl;
