@@ -140,9 +140,9 @@ function App() {
     <div className="page-container">
       <h1>Goodreads Wrapped 2025</h1>
       <p className="subtitle">Discover your reading year in review!</p>
-      <p style={{fontSize: '0.8rem', opacity: 0.7}}>
+      {/* <p style={{fontSize: '0.8rem', opacity: 0.7}}>
         Device: {isMobile ? '📱 Mobile' : '💻 Desktop'}
-      </p>
+      </p> */}
       
       <form onSubmit={handleSubmit} className="username-form">
         <div className="input-group">
@@ -607,18 +607,18 @@ function App() {
     <div className="App">
       <div className="background-container">
         <GradientBlinds
-          gradientColors={['#FF9FFC', '#5227FF']}
+          gradientColors={['#EF6B46', '#ED5EFD', '#4447EA']}
           angle={20}
           noise={0.3}
           blindCount={12}
           blindMinWidth={50}
           spotlightRadius={0.5}
-          spotlightSoftness={1}
-          spotlightOpacity={1}
-          mouseDampening={0.05}
+          spotlightSoftness={2}
+          spotlightOpacity={0.3}
+          mouseDampening={0.1}
           distortAmount={0}
           shineDirection="left"
-          mixBlendMode="lighten"
+          mixBlendMode="normal"
         />
       </div>
       <header className="App-header">

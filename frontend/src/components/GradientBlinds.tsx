@@ -30,7 +30,7 @@ const hexToRGB = (hex: string): [number, number, number] => {
   return [r, g, b];
 };
 const prepStops = (stops?: string[]) => {
-  const base = (stops && stops.length ? stops : ['#FF9FFC', '#5227FF']).slice(0, MAX_COLORS);
+  const base = (stops && stops.length ? stops : ['#EF6B46', '#ED5EFD', '#4447EA']).slice(0, MAX_COLORS);
   if (base.length === 1) base.push(base[0]);
   while (base.length < MAX_COLORS) base.push(base[base.length - 1]);
   const arr: [number, number, number][] = [];
@@ -55,7 +55,7 @@ const GradientBlinds: React.FC<GradientBlindsProps> = ({
   spotlightOpacity = 1,
   distortAmount = 0,
   shineDirection = 'left',
-  mixBlendMode = 'lighten'
+  mixBlendMode = 'multiply'
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const rafRef = useRef<number | null>(null);
@@ -78,6 +78,9 @@ const GradientBlinds: React.FC<GradientBlindsProps> = ({
     });
     rendererRef.current = renderer;
     const gl = renderer.gl;
+
+    // Set the clear color to transparent
+    gl.clearColor(0, 0, 0, 0);
     const canvas = gl.canvas as HTMLCanvasElement;
 
     canvas.style.width = '100%';
