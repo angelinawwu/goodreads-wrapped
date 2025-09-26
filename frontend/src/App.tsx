@@ -116,8 +116,11 @@ function App() {
       setQrCodeUrl(qrCode);
       
       // Navigate to the first page instead of setting state
-      navigate('/books-read');
-      
+      if (isMobile) {
+        navigate('/books-read');
+      } else {
+        navigate('/desktop');
+      }      
     } catch (error) {
       console.error('Error:', error);
       setResult({ error: 'Failed to fetch data' });
@@ -253,7 +256,7 @@ function App() {
       </div>
       <div className="action-buttons">
         <button className="restart-button" onClick={() => {
-          // setCurrentPage('welcome'); // Removed
+          navigate('/');
           setResult(null);
           setUsername('');
         }}>
@@ -630,18 +633,39 @@ function App() {
         />
       </div>
       <header className="App-header">
-        <Routes>
-          <Route path="/" element={renderWelcomePage()} />
-          <Route path="/books-read" element={renderBooksReadPage()} />
-          <Route path="/average-rating" element={renderAverageRatingPage()} />
-          <Route path="/book-details" element={renderBookDetailsPage()} />
-          <Route path="/top-genres" element={renderTopGenresPage()} />
-          <Route path="/reading-time" element={renderReadingTimePage()} />
-          <Route path="/dependability" element={renderDependabilityPage()} />
-          <Route path="/biggest-hater" element={renderBiggestHaterPage()} />
-          <Route path="/book-list" element={renderBookListPage()} />
-          <Route path="/complete" element={renderCompletePage()} />
-        </Routes>
+      <Routes>
+        <Route path="/" element={renderWelcomePage()} />
+        <Route path="/desktop" element={
+          result && !isMobile ? renderDesktopView() : <div>Loading...</div>
+        } />
+        <Route path="/books-read" element={
+          result ? renderBooksReadPage() : <div>Loading...</div>
+        } />
+        <Route path="/average-rating" element={
+          result ? renderAverageRatingPage() : <div>Loading...</div>
+        } />
+        <Route path="/book-details" element={
+          result ? renderBookDetailsPage() : <div>Loading...</div>
+        } />
+        <Route path="/top-genres" element={
+          result ? renderTopGenresPage() : <div>Loading...</div>
+        } />
+        <Route path="/reading-time" element={
+          result ? renderReadingTimePage() : <div>Loading...</div>
+        } />
+        <Route path="/dependability" element={
+          result ? renderDependabilityPage() : <div>Loading...</div>
+        } />
+        <Route path="/biggest-hater" element={
+          result ? renderBiggestHaterPage() : <div>Loading...</div>
+        } />
+        <Route path="/book-list" element={
+          result ? renderBookListPage() : <div>Loading...</div>
+        } />
+        <Route path="/complete" element={
+          result ? renderCompletePage() : <div>Loading...</div>
+        } />
+      </Routes>
       </header>
     </div>
   );
