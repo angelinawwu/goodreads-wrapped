@@ -62,6 +62,10 @@
   margin: 0;
 }
 
+button {
+  pointer-events: auto;
+}
+
 /* Big Stat Display */
 .big-stat {
   margin: 3rem 0;
@@ -243,8 +247,13 @@
   text-align: left;
 }
 
+.submit-button {
+  pointer-events: auto;
+}
+
 .input-group {
   margin-bottom: 1.5rem;
+  pointer-events: auto;
 }
 
 label {

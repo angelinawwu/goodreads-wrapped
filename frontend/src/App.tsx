@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import './App.css';
 import QRCode from 'qrcode';
-
 import GradientBlinds from './components/GradientBlinds';
+
 
 
 interface ScrapingResult {
@@ -73,13 +74,18 @@ interface ScrapingResult {
 type Page = 'welcome' | 'books-read' | 'average-rating' | 'book-details' | 'top-genres' | 'reading-time' | 'dependability' | 'biggest-hater' | 'book-list' | 'complete';
 
 function App() {
+
+
   const [result, setResult] = useState<ScrapingResult | null>(null);
   const [username, setUsername] = useState('');
   const [loading, setLoading] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [qrCode, setQrCode] = useState<string | null>(null);
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState<Page>('welcome');
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  // const [currentPage, setCurrentPage] = useState<Page>('welcome'); // Removed
 
   useEffect(() => {
     const checkDevice = () => {
@@ -109,8 +115,8 @@ function App() {
       const qrCode = await QRCode.toDataURL(mobileUrl);
       setQrCodeUrl(qrCode);
       
-      // Start the wrapped experience
-      setCurrentPage('books-read');
+      // Navigate to the first page instead of setting state
+      navigate('/books-read');
       
     } catch (error) {
       console.error('Error:', error);
@@ -121,18 +127,20 @@ function App() {
   };
 
   const nextPage = () => {
-    const pageOrder: Page[] = ['welcome', 'books-read', 'average-rating', 'book-details', 'top-genres', 'reading-time', 'dependability', 'biggest-hater', 'book-list', 'complete'];
-    const currentIndex = pageOrder.indexOf(currentPage);
+    const pageOrder = ['/books-read', '/average-rating', '/book-details', '/top-genres', '/reading-time', '/dependability', '/biggest-hater', '/book-list', '/complete'];
+    const currentPath = location.pathname;
+    const currentIndex = pageOrder.indexOf(currentPath);
     if (currentIndex < pageOrder.length - 1) {
-      setCurrentPage(pageOrder[currentIndex + 1]);
+      navigate(pageOrder[currentIndex + 1]);
     }
   };
 
   const prevPage = () => {
-    const pageOrder: Page[] = ['welcome', 'books-read', 'average-rating', 'book-details', 'top-genres', 'reading-time', 'dependability', 'biggest-hater', 'book-list', 'complete'];
-    const currentIndex = pageOrder.indexOf(currentPage);
+    const pageOrder = ['/books-read', '/average-rating', '/book-details', '/top-genres', '/reading-time', '/dependability', '/biggest-hater', '/book-list', '/complete'];
+    const currentPath = location.pathname;
+    const currentIndex = pageOrder.indexOf(currentPath);
     if (currentIndex > 0) {
-      setCurrentPage(pageOrder[currentIndex - 1]);
+      navigate(pageOrder[currentIndex - 1]);
     }
   };
 
@@ -156,7 +164,7 @@ function App() {
             disabled={loading}
           />
         </div>
-        <button type="submit" disabled={loading || !username.trim()}>
+        <button className="submit-button" type="submit" disabled={loading || !username.trim()}>
           {loading ? 'Analyzing...' : 'Get My Reading Stats'}
         </button>
       </form>
@@ -245,7 +253,7 @@ function App() {
       </div>
       <div className="action-buttons">
         <button className="restart-button" onClick={() => {
-          setCurrentPage('welcome');
+          // setCurrentPage('welcome'); // Removed
           setResult(null);
           setUsername('');
         }}>
@@ -552,50 +560,50 @@ function App() {
       </p>
       <div className="desktop-nav">
         <button 
-          className={currentPage === 'books-read' ? 'active' : ''} 
-          onClick={() => setCurrentPage('books-read')}
+          className={location.pathname === '/books-read' ? 'active' : ''} 
+          onClick={() => navigate('/books-read')}
         >
           Books Read
         </button>
         <button 
-          className={currentPage === 'average-rating' ? 'active' : ''} 
-          onClick={() => setCurrentPage('average-rating')}
+          className={location.pathname === '/average-rating' ? 'active' : ''} 
+          onClick={() => navigate('/average-rating')}
         >
           Average Rating
         </button>
         <button 
-          className={currentPage === 'book-details' ? 'active' : ''} 
-          onClick={() => setCurrentPage('book-details')}
+          className={location.pathname === '/book-details' ? 'active' : ''} 
+          onClick={() => navigate('/book-details')}
         >
           Book Details
         </button>
         <button 
-          className={currentPage === 'top-genres' ? 'active' : ''} 
-          onClick={() => setCurrentPage('top-genres')}
+          className={location.pathname === '/top-genres' ? 'active' : ''} 
+          onClick={() => navigate('/top-genres')}
         >
           Top Genres
         </button>
         <button 
-          className={currentPage === 'reading-time' ? 'active' : ''} 
-          onClick={() => setCurrentPage('reading-time')}
+          className={location.pathname === '/reading-time' ? 'active' : ''} 
+          onClick={() => navigate('/reading-time')}
         >
           Reading Speed
         </button>
         <button 
-          className={currentPage === 'dependability' ? 'active' : ''} 
-          onClick={() => setCurrentPage('dependability')}
+          className={location.pathname === '/dependability' ? 'active' : ''} 
+          onClick={() => navigate('/dependability')}
         >
           Dependability
         </button>
         <button 
-          className={currentPage === 'biggest-hater' ? 'active' : ''} 
-          onClick={() => setCurrentPage('biggest-hater')}
+          className={location.pathname === '/biggest-hater' ? 'active' : ''} 
+          onClick={() => navigate('/biggest-hater')}
         >
           Biggest Hater
         </button>
         <button 
-          className={currentPage === 'book-list' ? 'active' : ''} 
-          onClick={() => setCurrentPage('book-list')}
+          className={location.pathname === '/book-list' ? 'active' : ''} 
+          onClick={() => navigate('/book-list')}
         >
           Book List
         </button>
@@ -622,38 +630,18 @@ function App() {
         />
       </div>
       <header className="App-header">
-        {currentPage === 'welcome' && renderWelcomePage()}
-        
-        {result && currentPage !== 'welcome' && (
-          <>
-            {isMobile ? (
-              <>
-                {currentPage === 'books-read' && renderBooksReadPage()}
-                {currentPage === 'average-rating' && renderAverageRatingPage()}
-                {currentPage === 'book-details' && renderBookDetailsPage()}
-                {currentPage === 'top-genres' && renderTopGenresPage()}
-                {currentPage === 'reading-time' && renderReadingTimePage()}
-                {currentPage === 'dependability' && renderDependabilityPage()}
-                {currentPage === 'biggest-hater' && renderBiggestHaterPage()}
-                {currentPage === 'book-list' && renderBookListPage()}
-                {currentPage === 'complete' && renderCompletePage()}
-              </>
-            ) : (
-              <>
-                {renderDesktopView()}
-                {currentPage === 'books-read' && renderBooksReadPage()}
-                {currentPage === 'average-rating' && renderAverageRatingPage()}
-                {currentPage === 'book-details' && renderBookDetailsPage()}
-                {currentPage === 'top-genres' && renderTopGenresPage()}
-                {currentPage === 'reading-time' && renderReadingTimePage()}
-                {currentPage === 'dependability' && renderDependabilityPage()}
-                {currentPage === 'biggest-hater' && renderBiggestHaterPage()}
-                {currentPage === 'book-list' && renderBookListPage()}
-                {currentPage === 'complete' && renderCompletePage()}
-              </>
-            )}
-          </>
-        )}
+        <Routes>
+          <Route path="/" element={renderWelcomePage()} />
+          <Route path="/books-read" element={renderBooksReadPage()} />
+          <Route path="/average-rating" element={renderAverageRatingPage()} />
+          <Route path="/book-details" element={renderBookDetailsPage()} />
+          <Route path="/top-genres" element={renderTopGenresPage()} />
+          <Route path="/reading-time" element={renderReadingTimePage()} />
+          <Route path="/dependability" element={renderDependabilityPage()} />
+          <Route path="/biggest-hater" element={renderBiggestHaterPage()} />
+          <Route path="/book-list" element={renderBookListPage()} />
+          <Route path="/complete" element={renderCompletePage()} />
+        </Routes>
       </header>
     </div>
   );
