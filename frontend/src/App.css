@@ -23,6 +23,7 @@ html, body {
     /* aspect-ratio: 9/16; */
     overflow-x: hidden;
     overflow-y: auto;
+    width: 100vw;
   }
 
   .background-container {
@@ -77,6 +78,7 @@ html, body {
 
   .page-header {
     margin-bottom: 3rem;
+    width: 100%;
   }
 
   .page-header h2 {
@@ -225,11 +227,9 @@ html, body {
   }
 
   .book-item {
-    background: rgba(255, 255, 255, 0.1);
     margin: 1rem 0;
     padding: 1.5rem;
     border-radius: 15px;
-    backdrop-filter: blur(10px);
     text-align: left;
     transition: transform 0.2s ease;
   }
@@ -304,11 +304,9 @@ html, body {
 
   /* Desktop View */
   .desktop-container {
-    background: rgba(255, 255, 255, 0.1);
     padding: 2rem;
     border-radius: 15px;
     margin-bottom: 2rem;
-    backdrop-filter: blur(10px);
   }
 
   .desktop-note {
@@ -344,11 +342,9 @@ html, body {
 
   /* Form Styles (unchanged) */
   .username-form {
-    background: rgba(255, 255, 255, 0.1);
     padding: 2rem;
     border-radius: 15px;
     margin: 2rem 0;
-    backdrop-filter: blur(10px);
     text-align: left;
   }
 
@@ -439,10 +435,8 @@ html, body {
   }
 
   .detail-card {
-    background: rgba(255, 255, 255, 0.1);
     padding: 2rem;
     border-radius: 15px;
-    backdrop-filter: blur(10px);
     text-align: center;
   }
 
@@ -482,11 +476,11 @@ html, body {
   .no-cover {
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.1);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 3rem;
+    background: rgba(0, 0, 0, 0.3);
   }
 
   .book-info {
@@ -532,11 +526,9 @@ html, body {
   .genre-rank-item {
     display: flex;
     align-items: center;
-    background: rgba(255, 255, 255, 0.1);
     margin: 1rem 0;
     padding: 1.5rem;
     border-radius: 15px;
-    backdrop-filter: blur(10px);
     transition: transform 0.2s ease;
   }
 
@@ -628,10 +620,8 @@ html, body {
   }
 
   .reading-time-stat {
-    background: rgba(255, 255, 255, 0.1);
     padding: 2rem;
     border-radius: 15px;
-    backdrop-filter: blur(10px);
     text-align: center;
   }
 
@@ -652,10 +642,8 @@ html, body {
     flex-direction: column;
     align-items: center;
     gap: 1rem;
-    background: rgba(255, 255, 255, 0.1);
     padding: 2rem;
     border-radius: 15px;
-    backdrop-filter: blur(10px);
   }
 
   .reading-time-card h3 {
@@ -706,10 +694,8 @@ html, body {
     flex-direction: column;
     align-items: center;
     gap: 1rem;
-    background: rgba(255, 255, 255, 0.1);
     padding: 2rem;
     border-radius: 15px;
-    backdrop-filter: blur(10px);
     width: 100%;
   }
 
@@ -717,10 +703,8 @@ html, body {
     display: flex;
     align-items: center;
     gap: 2rem;
-    background: rgba(255, 255, 255, 0.1);
     padding: 2rem;
     border-radius: 15px;
-    backdrop-filter: blur(10px);
     width: 100%;
   }
 
@@ -793,10 +777,8 @@ html, body {
 
   .hater-message {
     text-align: center;
-    background: rgba(255, 255, 255, 0.1);
     padding: 1.5rem;
     border-radius: 15px;
-    backdrop-filter: blur(10px);
     width: 100%;
   }
 
@@ -809,10 +791,8 @@ html, body {
 
   .no-hater-moment {
     text-align: center;
-    background: rgba(255, 255, 255, 0.1);
     padding: 3rem;
     border-radius: 15px;
-    backdrop-filter: blur(10px);
     width: 100%;
   }
 
@@ -853,10 +833,8 @@ html, body {
 
   .dependability-main {
     text-align: center;
-    background: rgba(255, 255, 255, 0.1);
     padding: 2rem;
     border-radius: 15px;
-    backdrop-filter: blur(10px);
     width: 100%;
   }
 
@@ -876,10 +854,8 @@ html, body {
     display: flex;
     align-items: center;
     gap: 1rem;
-    background: rgba(255, 255, 255, 0.1);
     padding: 1.5rem;
     border-radius: 15px;
-    backdrop-filter: blur(10px);
     width: 100%;
   }
 
@@ -910,10 +886,8 @@ html, body {
 
   .dependability-message {
     text-align: center;
-    background: rgba(255, 255, 255, 0.1);
     padding: 1.5rem;
     border-radius: 15px;
-    backdrop-filter: blur(10px);
     width: 100%;
   }
 
@@ -1054,20 +1028,16 @@ html, body {
     display: flex;
     align-items: center;
     gap: 1.5rem;
-    background: rgba(255, 255, 255, 0.1);
     padding: 1.5rem;
     border-radius: 15px;
-    backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     max-width: 600px;
     width: 100%;
   }
 
   .review-content {
-    background: rgba(255, 255, 255, 0.1);
     padding: 2rem;
     border-radius: 15px;
-    backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     max-width: 700px;
     width: 100%;
@@ -1132,9 +1102,7 @@ html, body {
   .no-scathing-review {
     text-align: center;
     padding: 3rem;
-    background: rgba(255, 255, 255, 0.1);
     border-radius: 15px;
-    backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
   }
 
