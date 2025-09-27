@@ -63,8 +63,6 @@ const GradientBlinds: React.FC<GradientBlindsProps> = ({
   const meshRef = useRef<Mesh<Triangle> | null>(null);
   const geometryRef = useRef<Triangle | null>(null);
   const rendererRef = useRef<Renderer | null>(null);
-  const mouseTargetRef = useRef<[number, number]>([0, 0]);
-  const lastTimeRef = useRef<number>(0);
   const firstResizeRef = useRef<boolean>(true);
 
   useEffect(() => {
@@ -291,7 +289,6 @@ void main() {
         const cx = gl.drawingBufferWidth / 2;
         const cy = gl.drawingBufferHeight / 2;
         uniforms.iMouse.value = [cx, cy];
-        mouseTargetRef.current = [cx, cy];
       }
     };
 
@@ -299,35 +296,22 @@ void main() {
     const ro = new ResizeObserver(resize);
     ro.observe(container);
 
-    const onPointerMove = (e: PointerEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      const scale = (renderer as unknown as { dpr?: number }).dpr || 1;
-      const x = (e.clientX - rect.left) * scale;
-      const y = (rect.height - (e.clientY - rect.top)) * scale;
-      mouseTargetRef.current = [x, y];
-      if (mouseDampening <= 0) {
-        uniforms.iMouse.value = [x, y];
-      }
-    };
-    canvas.addEventListener('pointermove', onPointerMove);
+    // No longer need pointer move listener since we'll animate the spotlight automatically
 
     const loop = (t: number) => {
       rafRef.current = requestAnimationFrame(loop);
       uniforms.iTime.value = t * 0.001;
-      if (mouseDampening > 0) {
-        if (!lastTimeRef.current) lastTimeRef.current = t;
-        const dt = (t - lastTimeRef.current) / 1000;
-        lastTimeRef.current = t;
-        const tau = Math.max(1e-4, mouseDampening);
-        let factor = 1 - Math.exp(-dt / tau);
-        if (factor > 1) factor = 1;
-        const target = mouseTargetRef.current;
-        const cur = uniforms.iMouse.value;
-        cur[0] += (target[0] - cur[0]) * factor;
-        cur[1] += (target[1] - cur[1]) * factor;
-      } else {
-        lastTimeRef.current = t;
-      }
+      
+      // Animate the spotlight position automatically
+      const time = t * 0.001; // Convert to seconds
+      const speed = 0.6; // Adjust this to make it faster/slower
+      
+      // Create a smooth oscillating movement across the screen
+      const x = (Math.sin(time * speed) * 0.4 + 0.5) * gl.drawingBufferWidth;
+      const y = (Math.cos(time * speed * 0.7) * 0.3 + 0.5) * gl.drawingBufferHeight;
+      
+      uniforms.iMouse.value = [x, y];
+      
       if (!paused && programRef.current && meshRef.current) {
         try {
           renderer.render({ scene: meshRef.current });
@@ -340,7 +324,6 @@ void main() {
 
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      canvas.removeEventListener('pointermove', onPointerMove);
       ro.disconnect();
       if (canvas.parentElement === container) {
         container.removeChild(canvas);
