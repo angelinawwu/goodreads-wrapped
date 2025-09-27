@@ -2,6 +2,8 @@ import express from 'express';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 import cors from 'cors';
+import Sentiment from 'sentiment';
+
 
 
 interface Book {
@@ -19,6 +21,13 @@ interface Book {
     coverImage?: string;         // Cover image URL
     genres?: string[];             // Genres
     review?: string;
+    sentiment?: {
+      score: number;
+      comparative: number;
+      positive: string[];
+      negative: string[];
+      fullReview: string;
+    };
   }
 
 const scrapeBookGenres = async (bookUrl: string): Promise<string[]> => {
@@ -84,38 +93,67 @@ const scrapeBookGenres = async (bookUrl: string): Promise<string[]> => {
   }
 };
 
-const scrapeUserReview = async (bookUrl: string, username: string): Promise<string> => {
-  try {
-    console.log(`Scraping user review for: ${bookUrl}`);
-    
-    const fullBookUrl = bookUrl.startsWith('http') ? bookUrl : `https://www.goodreads.com${bookUrl}`;
-    
-    const response = await axios.get(fullBookUrl, {
-      timeout: 10000,
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; GoodreadsWrapped/1.0)'
+
+// Initialize sentiment analyzer
+const sentiment = new Sentiment();
+
+// Add this function after your existing helper functions
+const analyzeReviewSentiment = (reviewText: string): { score: number; comparative: number; positive: string[]; negative: string[] } => {
+  if (!reviewText || reviewText.trim().length < 10) {
+    return { score: 0, comparative: 0, positive: [], negative: [] };
+  }
+  
+  const result = sentiment.analyze(reviewText);
+  return result;
+};
+
+// Add this function to analyze sentiment for existing reviews
+const analyzeReviewsWithSentiment = async (books: Book[]): Promise<Book[]> => {
+  console.log(`Analyzing sentiment for ${books.length} books...`);
+  
+  const booksWithSentiment = books.map((book, index) => {
+    if (book.review && book.review.length > 10) {
+      try {
+        // Analyze sentiment of the existing review
+        const sentimentResult = analyzeReviewSentiment(book.review);
+        
+        // Add sentiment data to the book
+        (book as any).sentiment = {
+          score: sentimentResult.score,
+          comparative: sentimentResult.comparative,
+          positive: sentimentResult.positive,
+          negative: sentimentResult.negative,
+          fullReview: book.review
+        };
+        
+        console.log(`Progress: ${index + 1}/${books.length} - ${book.title}: Score ${sentimentResult.score}, Comparative ${sentimentResult.comparative.toFixed(3)}`);
+      } catch (error) {
+        console.error(`Error analyzing sentiment for ${book.title}:`, error);
+        (book as any).sentiment = {
+          score: 0,
+          comparative: 0,
+          positive: [],
+          negative: [],
+          fullReview: book.review || ''
+        };
       }
-    });
-    
-    const $ = cheerio.load(response.data);
-    
-    // Look for the user's specific review
-    const userReview = $(`.review[data-reviewer-name="${username}"], .review:contains("${username}")`).first();
-    
-    if (userReview.length > 0) {
-      const reviewText = userReview.find('.reviewText, .readable').text().trim();
-      console.log(`Found review for ${username}: ${reviewText.substring(0, 100)}...`);
-      return reviewText;
+    } else {
+      // No review available
+      (book as any).sentiment = {
+        score: 0,
+        comparative: 0,
+        positive: [],
+        negative: [],
+        fullReview: book.review || ''
+      };
     }
     
-    console.log(`No review found for ${username} on ${fullBookUrl}`);
-    return '';
-    
-  } catch (error) {
-    console.error(`Error scraping review from ${bookUrl}:`, error);
-    return '';
-  }
+    return book;
+  });
+  
+  return booksWithSentiment;
 };
+
 
 const scrapeToReadList = async (username: string, year: string): Promise<Set<string>> => {
   const toReadIds = new Set<string>();
@@ -331,6 +369,8 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
             const coverElement = $book.find('.field.cover img');
             const coverImage = coverElement.attr('src') || coverElement.attr('data-src');
             const reviewText = $book.find('.field.review').text().trim();
+            // Filter out placeholder text
+            const actualReview = reviewText && reviewText !== 'Write a review' ? reviewText : undefined;
 
             const dateRead = $book.find('.date, .date_pub, [class*="date"]').text().trim();
             
@@ -371,7 +411,7 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
               numPages: numPages,        // NEW
               coverImage: coverImage,     // NEW
               genres: [],
-              review: reviewText || undefined,
+              review: actualReview,
             };
 
             (book as any).bookUrl = bookUrl;
@@ -458,6 +498,7 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
 
       console.log(`Genre stats: ${uniqueGenres} unique genres, most popular: ${mostPopularGenre}`);
 
+
       // Calculate dependability (proportion of books read in year that were added in year)
       console.log(`Scraping to-read list for dependability calculation...`);
       const toReadIds = await scrapeToReadList(username, year);
@@ -530,6 +571,23 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
 
       console.log(`Page stats: Average ${averagePages.toFixed(0)} pages, Longest: ${longestBook?.title} (${longestBook?.numPages} pages), Shortest: ${shortestBook?.title} (${shortestBook?.numPages} pages)`);
       
+      // Analyze sentiment for existing reviews
+      console.log(`Analyzing sentiment for ${yearBooks.length} books...`);
+      const booksWithSentiment = await analyzeReviewsWithSentiment(yearBooks);
+
+      // Find the most scathing review (most negative sentiment)
+      const booksWithReviews = booksWithSentiment.filter(book => 
+        book.sentiment && book.sentiment.fullReview && book.sentiment.fullReview.length > 20
+      );
+
+      const mostScathingReview = booksWithReviews.length > 0 
+        ? booksWithReviews.reduce((mostScathing, book) => 
+            book.sentiment!.comparative < mostScathing.sentiment!.comparative ? book : mostScathing
+          )
+        : null;
+
+      console.log(`Most scathing review: ${mostScathingReview ? mostScathingReview.title : 'None'} (Score: ${mostScathingReview ? mostScathingReview.sentiment!.comparative.toFixed(3) : 0})`);
+
       res.json({ 
         message: `Successfully scraped ${username}'s ${year} reading list!`,
         username: username,
@@ -562,6 +620,9 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
         toReadAddedCount: toReadAddedCount,
         toReadReadCount: readAndAddedInYear,
         dependability: Math.round(dependability * 1000) / 1000, // Round to 3 decimal places
+        // NEW: Most scathing review
+        mostScathingReview: mostScathingReview,
+        booksWithReviews: booksWithReviews.length,
       });
       
     } catch (error) {

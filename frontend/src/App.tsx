@@ -69,9 +69,25 @@ interface ScrapingResult {
   toReadAddedCount?: number;
   toReadReadCount?: number;
   dependability?: number;
+  // NEW: Most scathing review
+  mostScathingReview?: {
+    title: string;
+    author: string;
+    userRating?: number;
+    avgRating?: number;
+    coverImage?: string;
+    sentiment?: {
+      score: number;
+      comparative: number;
+      positive: string[];
+      negative: string[];
+      fullReview: string;
+    };
+  };
+  booksWithReviews?: number;
 }
 
-type Page = 'welcome' | 'books-read' | 'average-rating' | 'book-details' | 'top-genres' | 'reading-time' | 'dependability' | 'biggest-hater' | 'book-list' | 'complete';
+type Page = 'welcome' | 'books-read' | 'average-rating' | 'book-details' | 'top-genres' | 'reading-time' | 'dependability' | 'biggest-hater' | 'most-scathing-review' | 'book-list' | 'complete';
 
 function App() {
 
@@ -130,7 +146,7 @@ function App() {
   };
 
   const nextPage = () => {
-    const pageOrder = ['/books-read', '/average-rating', '/book-details', '/top-genres', '/reading-time', '/dependability', '/biggest-hater', '/book-list', '/complete'];
+    const pageOrder = ['/books-read', '/average-rating', '/book-details', '/top-genres', '/reading-time', '/dependability', '/biggest-hater', '/most-scathing-review', '/book-list', '/complete'];
     const currentPath = location.pathname;
     const currentIndex = pageOrder.indexOf(currentPath);
     if (currentIndex < pageOrder.length - 1) {
@@ -139,7 +155,7 @@ function App() {
   };
 
   const prevPage = () => {
-    const pageOrder = ['/books-read', '/average-rating', '/book-details', '/top-genres', '/reading-time', '/dependability', '/biggest-hater', '/book-list', '/complete'];
+    const pageOrder = ['/books-read', '/average-rating', '/book-details', '/top-genres', '/reading-time', '/dependability', '/biggest-hater', '/most-scathing-review', '/book-list', '/complete'];
     const currentPath = location.pathname;
     const currentIndex = pageOrder.indexOf(currentPath);
     if (currentIndex > 0) {
@@ -536,6 +552,83 @@ function App() {
     </div>
   );
 
+  const renderMostScathingReviewPage = () => (
+    <div className="page-container">
+      <div className="page-header">
+        <h2>🔥 Most Scathing Review</h2>
+        <p className="page-subtitle">Your most critical review of 2025</p>
+      </div>
+      
+      {result?.mostScathingReview ? (
+        <div className="scathing-review-container">
+          <div className="scathing-book-card">
+            <div className="book-cover">
+              {result.mostScathingReview.coverImage ? (
+                <img src={result.mostScathingReview.coverImage} alt={result.mostScathingReview.title} />
+              ) : (
+                <div className="no-cover">📖</div>
+              )}
+            </div>
+            <div className="book-info">
+              <div className="book-title">{result.mostScathingReview.title}</div>
+              <div className="book-author">by {result.mostScathingReview.author}</div>
+              {result.mostScathingReview.userRating && (
+                <div className="book-rating">⭐ {result.mostScathingReview.userRating}/5</div>
+              )}
+            </div>
+          </div>
+          
+          <div className="review-content">
+            <div className="review-text">
+              "{result.mostScathingReview.sentiment?.fullReview || 'No review text available'}"
+            </div>
+            
+            <div className="sentiment-stats">
+              <div className="sentiment-score">
+                <div className="sentiment-number">
+                  {result.mostScathingReview.sentiment?.comparative?.toFixed(3) || '0.000'}
+                </div>
+                <div className="sentiment-label">sentiment score</div>
+              </div>
+              
+              <div className="sentiment-breakdown">
+                <div className="sentiment-positive">
+                  <span className="sentiment-icon">😊</span>
+                  <span>{result.mostScathingReview.sentiment?.positive?.length || 0} positive words</span>
+                </div>
+                <div className="sentiment-negative">
+                  <span className="sentiment-icon">😠</span>
+                  <span>{result.mostScathingReview.sentiment?.negative?.length || 0} negative words</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="scathing-message">
+            <p>This was your most critical review of the year! 💥</p>
+          </div>
+        </div>
+      ) : (
+        <div className="no-scathing-review">
+          <p>No scathing reviews found - you're too nice! ��</p>
+        </div>
+      )}
+      
+      <div className="review-details">
+        <p>Based on {result?.booksWithReviews || 0} books with reviews</p>
+      </div>
+      
+      <div className="button-container">
+        <button className='prev-button' onClick={prevPage}>
+          ← Previous
+        </button>
+        <button className="next-button" onClick={nextPage}>
+          Continue →
+        </button>
+      </div>
+    </div>
+  );
+
   const renderDependabilityPage = () => (
     <div className="page-container">
       <div className="page-header">
@@ -644,6 +737,12 @@ function App() {
           Biggest Hater
         </button>
         <button 
+          className={location.pathname === '/most-scathing-review' ? 'active' : ''} 
+          onClick={() => navigate('/most-scathing-review')}
+        >
+          Most Scathing Review
+        </button>
+        <button 
           className={location.pathname === '/book-list' ? 'active' : ''} 
           onClick={() => navigate('/book-list')}
         >
@@ -698,6 +797,9 @@ function App() {
           } />
           <Route path="/biggest-hater" element={
             result ? renderBiggestHaterPage() : <div>Loading...</div>
+          } />
+          <Route path="/most-scathing-review" element={
+            result ? renderMostScathingReviewPage() : <div>Loading...</div>
           } />
           <Route path="/book-list" element={
             result ? renderBookListPage() : <div>Loading...</div>
