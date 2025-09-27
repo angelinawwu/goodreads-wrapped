@@ -588,6 +588,14 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
 
       console.log(`Most scathing review: ${mostScathingReview ? mostScathingReview.title : 'None'} (Score: ${mostScathingReview ? mostScathingReview.sentiment!.comparative.toFixed(3) : 0})`);
 
+      const mostPositiveReview = booksWithReviews.length > 0 
+        ? booksWithReviews.reduce((mostPositive, book) => 
+            book.sentiment!.comparative > mostPositive.sentiment!.comparative ? book : mostPositive
+          )
+        : null;
+      
+      console.log(`Most positive review: ${mostPositiveReview ? mostPositiveReview.title : 'None'} (Score: ${mostPositiveReview ? mostPositiveReview.sentiment!.comparative.toFixed(3) : 0})`);
+
       res.json({ 
         message: `Successfully scraped ${username}'s ${year} reading list!`,
         username: username,
@@ -622,6 +630,7 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
         dependability: Math.round(dependability * 1000) / 1000, // Round to 3 decimal places
         // NEW: Most scathing review
         mostScathingReview: mostScathingReview,
+        mostPositiveReview: mostPositiveReview,
         booksWithReviews: booksWithReviews.length,
       });
       
