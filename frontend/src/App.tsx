@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import './App.css';
 import QRCode from 'qrcode';
@@ -101,7 +101,6 @@ interface ScrapingResult {
   booksWithReviews?: number;
 }
 
-type Page = 'welcome' | 'books-read' | 'average-rating' | 'book-details' | 'top-genres' | 'reading-time' | 'dependability' | 'biggest-hater' | 'most-scathing-review' | 'most-positive-review' | 'book-list' | 'complete';
 
 function App() {
 
@@ -110,12 +109,29 @@ function App() {
   const [username, setUsername] = useState('');
   const [loading, setLoading] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [qrCode, setQrCode] = useState<string | null>(null);
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
 
   const navigate = useNavigate();
   const location = useLocation();
   // const [currentPage, setCurrentPage] = useState<Page>('welcome'); // Removed
+
+  // Progress bar logic
+  const getProgressData = () => {
+    const pageOrder = ['/books-read', '/average-rating', '/book-details', '/top-genres', '/reading-time', '/dependability', '/biggest-hater', '/most-scathing-review', '/most-positive-review', '/book-list', '/complete'];
+    const currentPath = location.pathname;
+    const currentIndex = pageOrder.indexOf(currentPath);
+    
+    return {
+      totalPages: pageOrder.length,
+      currentIndex: currentIndex === -1 ? -1 : currentIndex,
+      isOnProgressPage: currentIndex !== -1
+    };
+  };
+
+  const shouldShowProgressBar = () => {
+    const progressPages = ['/books-read', '/average-rating', '/book-details', '/top-genres', '/reading-time', '/dependability', '/biggest-hater', '/most-scathing-review', '/most-positive-review', '/book-list', '/complete'];
+    return progressPages.includes(location.pathname);
+  };
 
   useEffect(() => {
     const checkDevice = () => {
@@ -214,14 +230,10 @@ function App() {
         <div className="stat-number">{result?.yearBooks || 0}</div>
         <div className="stat-label">books</div>
       </div>
-      <div className="button-container">  
-        <button className='prev-button' onClick={prevPage}>
-          ← Previous
-        </button>
-        <button className="next-button" onClick={nextPage}>
-          Continue →
-        </button>
-      </div>
+      
+      {/* Navigation areas */}
+      <div className="nav-left" onClick={prevPage}></div>
+      <div className="nav-right" onClick={nextPage}></div>
     </div>
   );
 
@@ -238,14 +250,10 @@ function App() {
       <div className="rating-details">
         <p>Based on {result?.booksWithRatings || 0} books you rated</p>
       </div>
-      <div className="button-container">
-        <button className='prev-button' onClick={prevPage}>
-          ← Previous
-        </button>
-        <button className="next-button" onClick={nextPage}>
-          Continue →
-        </button>
-      </div>
+      
+      {/* Navigation areas */}
+      <div className="nav-left" onClick={prevPage}></div>
+      <div className="nav-right" onClick={nextPage}></div>
     </div>
   );
 
@@ -272,14 +280,9 @@ function App() {
           <p className="no-books">No books found for 2025</p>
         )}
       </div>
-      <div className="button-container">
-        <button className='prev-button' onClick={prevPage}>
-          ← Previous
-        </button>
-        <button className="next-button" onClick={nextPage}>
-          Finish →
-        </button>
-      </div>
+      {/* Navigation areas */}
+      <div className="nav-left" onClick={prevPage}></div>
+      <div className="nav-right" onClick={nextPage}></div>
     </div>
   );
 
@@ -367,14 +370,9 @@ function App() {
           </div>
         )}
       </div>
-      <div className="button-container">
-        <button className='prev-button' onClick={prevPage}>
-          ← Previous
-        </button>
-        <button className="next-button" onClick={nextPage}> 
-          Continue →
-        </button>
-      </div>
+      {/* Navigation areas */}
+      <div className="nav-left" onClick={prevPage}></div>
+      <div className="nav-right" onClick={nextPage}></div>
     </div>
   );
 
@@ -415,14 +413,9 @@ function App() {
           )}
         </div>
         
-        <div className="button-container">
-          <button className='prev-button' onClick={prevPage}>
-            ← Previous
-          </button>
-          <button className="next-button" onClick={nextPage}>
-            Continue →
-          </button>
-      </div>
+        {/* Navigation areas */}
+        <div className="nav-left" onClick={prevPage}></div>
+        <div className="nav-right" onClick={nextPage}></div>
       </div>
     );
   };
@@ -437,7 +430,7 @@ function App() {
       <div className="reading-time-grid">
         <div className="reading-time-stat">
           <h3>📊 Average Time</h3>
-          <div className="reading-time-number">{result?.averageReadingTime?.toFixed(1) || '0.0'}</div>
+          <div className="reading-time-number">{result?.averageReadingTime?.toFixed(2) || '0.00'}</div>
           <div className="reading-time-label">days per book</div>
         </div>
         
@@ -482,14 +475,9 @@ function App() {
         <p>Based on {result?.booksWithReadingTime || 0} books with reading dates</p>
       </div>
       
-      <div className="button-container">
-        <button className='prev-button' onClick={prevPage}>
-        ← Previous
-      </button>
-        <button className="next-button" onClick={nextPage}>
-          Continue →
-        </button>
-      </div>
+      {/* Navigation areas */}
+      <div className="nav-left" onClick={prevPage}></div>
+      <div className="nav-right" onClick={nextPage}></div>
     </div>
   );
 
@@ -555,14 +543,9 @@ function App() {
         <p>Based on {result?.booksWithBothRatings || 0} books with both your rating and average rating</p>
       </div>
       
-      <div className="button-container">
-        <button className='prev-button' onClick={prevPage}>
-          ← Previous
-        </button>
-        <button className="next-button" onClick={nextPage}>
-          Continue →
-        </button>
-      </div>
+      {/* Navigation areas */}
+      <div className="nav-left" onClick={prevPage}></div>
+      <div className="nav-right" onClick={nextPage}></div>
     </div>
   );
 
@@ -618,30 +601,25 @@ function App() {
             </div>
           </div>
           
-          <div className="scathing-message">
-            <p>This was your most critical review of the year! 💥</p>
-          </div>
+        <div className="scathing-message">
+          <p>This was your most critical review of the year! 💥</p>
         </div>
-      ) : (
-        <div className="no-scathing-review">
-          <p>No scathing reviews found - you're too nice! ��</p>
-        </div>
-      )}
-      
-      <div className="review-details">
-        <p>Based on {result?.booksWithReviews || 0} books with reviews</p>
       </div>
-      
-      <div className="button-container">
-        <button className='prev-button' onClick={prevPage}>
-          ← Previous
-        </button>
-        <button className="next-button" onClick={nextPage}>
-          Continue →
-        </button>
+    ) : (
+      <div className="no-scathing-review">
+        <p>No scathing reviews found - you're too nice! ��</p>
       </div>
+    )}
+    
+    <div className="review-details">
+      <p>Based on {result?.booksWithReviews || 0} books with reviews</p>
     </div>
-  );
+    
+    {/* Navigation areas */}
+    <div className="nav-left" onClick={prevPage}></div>
+    <div className="nav-right" onClick={nextPage}></div>
+  </div>
+);
   const renderMostPositiveReviewPage = () => (
     <div className="page-container">
       <div className="page-header">
@@ -708,14 +686,9 @@ function App() {
         <p>Based on {result?.booksWithReviews || 0} books with reviews</p>
       </div>
       
-      <div className="button-container">
-        <button className='prev-button' onClick={prevPage}>
-          ← Previous
-        </button>
-        <button className="next-button" onClick={nextPage}>
-          Continue →
-        </button>
-      </div>
+      {/* Navigation areas */}
+      <div className="nav-left" onClick={prevPage}></div>
+      <div className="nav-right" onClick={nextPage}></div>
     </div>
   );
 
@@ -761,14 +734,9 @@ function App() {
         </p>
       </div>
       
-      <div className="button-container">
-        <button className='prev-button' onClick={prevPage}>
-          ← Previous
-        </button>
-        <button className='next-button' onClick={nextPage}>
-          Continue →
-        </button>
-      </div>
+      {/* Navigation areas */}
+      <div className="nav-left" onClick={prevPage}></div>
+      <div className="nav-right" onClick={nextPage}></div>
     </div>
   );
 
@@ -867,6 +835,23 @@ function App() {
             mixBlendMode="normal"
           />
         </div>
+        
+        {/* Instagram-style Segmented Progress Bar */}
+        {shouldShowProgressBar() && (
+          <div className="progress-container">
+            <div className="progress-segments">
+              {Array.from({ length: getProgressData().totalPages }, (_, index) => (
+                <div
+                  key={index}
+                  className={`progress-segment ${
+                    index <= getProgressData().currentIndex ? 'completed' : 'incomplete'
+                  }`}
+                ></div>
+              ))}
+            </div>
+          </div>
+        )}
+        
         <header className="App-header">
         <Routes>
           <Route path="/" element={renderWelcomePage()} />
