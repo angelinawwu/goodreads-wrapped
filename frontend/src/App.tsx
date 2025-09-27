@@ -200,23 +200,23 @@ function App() {
       {/* <p style={{fontSize: '0.8rem', opacity: 0.7}}>
         Device: {isMobile ? '📱 Mobile' : '💻 Desktop'}
       </p> */}
-      
-      <form onSubmit={handleSubmit} className="username-form">
-        <div className="input-group">
-          <label htmlFor="username">Goodreads Username:</label>
-          <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Enter your Goodreads username"
-            disabled={loading}
-          />
-        </div>
+        
+        <form onSubmit={handleSubmit} className="username-form">
+          <div className="input-group">
+            <label htmlFor="username">Goodreads Username:</label>
+            <input
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Enter your Goodreads username"
+              disabled={loading}
+            />
+          </div>
         <button className="submit-button" type="submit" disabled={loading || !username.trim()}>
-          {loading ? 'Analyzing...' : 'Get My Reading Stats'}
-        </button>
-      </form>
+            {loading ? 'Analyzing...' : 'Get My Reading Stats'}
+          </button>
+        </form>
     </div>
   );
 
@@ -265,7 +265,7 @@ function App() {
       </div>
       <div className="book-grid-container">
         {result?.books && result.books.length > 0 ? (
-          <div className="book-grid">
+          <div className="book-grid" data-count={result.books.length <= 12 ? result.books.length : 'auto'}>
             {result.books.map((book: any, index: number) => (
               <div key={index} className="book-grid-item">
                 <div className="book-cover-grid">
@@ -276,6 +276,7 @@ function App() {
                       <span>📖</span>
                     </div>
                   )}
+                  <div className="book-title-tooltip">{book.title}</div>
                 </div>
               </div>
             ))}
@@ -400,11 +401,11 @@ function App() {
               <div key={genre} className="genre-rank-item">
                 <div className="genre-rank">
                   <span className="rank-number">#{index + 1}</span>
-                </div>
+                  </div>
                 <div className="genre-info">
                   <div className="genre-name">{genre}</div>
                   <div className="genre-fraction">{count as number}/{result?.yearBooks || 0} books</div>
-                </div>
+                  </div>
                 <div className="genre-percentage">
                   {Math.round(((count as number) / (result?.yearBooks || 1)) * 100)}%
                 </div>
@@ -531,8 +532,8 @@ function App() {
           <div className="disparity-display">
             <div className="disparity-number">{result.biggestDisparity?.toFixed(2)}</div>
             <div className="disparity-label">stars difference</div>
-          </div>
-          
+                </div>
+                
           <div className="hater-message">
             <p>You were {result.biggestDisparity?.toFixed(2)} stars more critical than the average reader!</p>
           </div>
@@ -540,8 +541,8 @@ function App() {
       ) : (
         <div className="no-hater-moment">
           <p>No hater moments found - you're too agreeable! 😊</p>
-        </div>
-      )}
+                  </div>
+                )}
       
       <div className="hater-details">
         <p>Based on {result?.booksWithBothRatings || 0} books with both your rating and average rating</p>
@@ -608,12 +609,12 @@ function App() {
         <div className="scathing-message">
           <p>This was your most critical review of the year! 💥</p>
         </div>
-      </div>
-    ) : (
+              </div>
+            ) : (
       <div className="no-scathing-review">
         <p>No scathing reviews found - you're too nice! ��</p>
-      </div>
-    )}
+                  </div>
+                )}
     
     <div className="review-details">
       <p>Based on {result?.booksWithReviews || 0} books with reviews</p>
@@ -661,13 +662,13 @@ function App() {
                   {result.mostPositiveReview.sentiment?.comparative?.toFixed(3) || '0.000'}
                 </div>
                 <div className="sentiment-label">sentiment score</div>
-              </div>
+                  </div>
               
               <div className="sentiment-breakdown">
                 <div className="sentiment-positive">
                   <span className="sentiment-icon">😊</span>
                   <span>{result.mostPositiveReview.sentiment?.positive?.length || 0} positive words</span>
-                </div>
+                  </div>
                 <div className="sentiment-negative">
                   <span className="sentiment-icon">😠</span>
                   <span>{result.mostPositiveReview.sentiment?.negative?.length || 0} negative words</span>
@@ -750,8 +751,8 @@ function App() {
       {qrCodeUrl && (
         <div className="qr-section">
           <img src={qrCodeUrl} alt="QR Code" className="qr-code" />
-        </div>
-      )}
+              </div>
+            )}
       <p className="desktop-note">
         Or use the navigation below to view your stats:
       </p>
@@ -896,7 +897,7 @@ function App() {
             result ? renderCompletePage() : <div>Loading...</div>
           } />
         </Routes>
-        </header>
+      </header>
       </div>
     </div>
   );
