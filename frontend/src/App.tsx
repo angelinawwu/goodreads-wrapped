@@ -184,9 +184,14 @@ function App() {
         <div className="stat-number">{result?.yearBooks || 0}</div>
         <div className="stat-label">books</div>
       </div>
-      <button className="next-button" onClick={nextPage}>
-        Continue →
-      </button>
+      <div className="button-container">  
+        <button className='prev-button' onClick={prevPage}>
+          ← Previous
+        </button>
+        <button className="next-button" onClick={nextPage}>
+          Continue →
+        </button>
+      </div>
     </div>
   );
 
@@ -203,9 +208,14 @@ function App() {
       <div className="rating-details">
         <p>Based on {result?.booksWithRatings || 0} books you rated</p>
       </div>
-      <button className="next-button" onClick={nextPage}>
-        Continue →
-      </button>
+      <div className="button-container">
+        <button className='prev-button' onClick={prevPage}>
+          ← Previous
+        </button>
+        <button className="next-button" onClick={nextPage}>
+          Continue →
+        </button>
+      </div>
     </div>
   );
 
@@ -232,9 +242,14 @@ function App() {
           <p className="no-books">No books found for 2025</p>
         )}
       </div>
-      <button className="next-button" onClick={nextPage}>
-        Finish →
-      </button>
+      <div className="button-container">
+        <button className='prev-button' onClick={prevPage}>
+          ← Previous
+        </button>
+        <button className="next-button" onClick={nextPage}>
+          Finish →
+        </button>
+      </div>
     </div>
   );
 
@@ -322,10 +337,14 @@ function App() {
           </div>
         )}
       </div>
-      
-      <button className="next-button" onClick={nextPage}>
-        Continue →
-      </button>
+      <div className="button-container">
+        <button className='prev-button' onClick={prevPage}>
+          ← Previous
+        </button>
+        <button className="next-button" onClick={nextPage}> 
+          Continue →
+        </button>
+      </div>
     </div>
   );
 
@@ -366,9 +385,14 @@ function App() {
           )}
         </div>
         
-        <button className="next-button" onClick={nextPage}>
-          Continue →
-        </button>
+        <div className="button-container">
+          <button className='prev-button' onClick={prevPage}>
+            ← Previous
+          </button>
+          <button className="next-button" onClick={nextPage}>
+            Continue →
+          </button>
+      </div>
       </div>
     );
   };
@@ -428,9 +452,14 @@ function App() {
         <p>Based on {result?.booksWithReadingTime || 0} books with reading dates</p>
       </div>
       
-      <button className="next-button" onClick={nextPage}>
-        Continue →
+      <div className="button-container">
+        <button className='prev-button' onClick={prevPage}>
+        ← Previous
       </button>
+        <button className="next-button" onClick={nextPage}>
+          Continue →
+        </button>
+      </div>
     </div>
   );
 
@@ -496,9 +525,14 @@ function App() {
         <p>Based on {result?.booksWithBothRatings || 0} books with both your rating and average rating</p>
       </div>
       
-      <button className="next-button" onClick={nextPage}>
-        Continue →
-      </button>
+      <div className="button-container">
+        <button className='prev-button' onClick={prevPage}>
+          ← Previous
+        </button>
+        <button className="next-button" onClick={nextPage}>
+          Continue →
+        </button>
+      </div>
     </div>
   );
 
@@ -544,9 +578,14 @@ function App() {
         </p>
       </div>
       
-      <button className="next-button" onClick={nextPage}>
-        Continue →
-      </button>
+      <div className="button-container">
+        <button className='prev-button' onClick={prevPage}>
+          ← Previous
+        </button>
+        <button className='next-button' onClick={nextPage}>
+          Continue →
+        </button>
+      </div>
     </div>
   );
 

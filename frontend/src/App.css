@@ -62,6 +62,13 @@
   margin: 0;
 }
 
+.button-container {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
 button {
   pointer-events: auto;
 }
@@ -87,7 +94,7 @@ button {
 }
 
 /* Navigation Buttons */
-.next-button, .restart-button {
+.next-button, .restart-button, .prev-button {
   background: #ff6b6b;
   color: white;
   border: none;
@@ -100,7 +107,7 @@ button {
   min-width: 150px;
 }
 
-.next-button:hover, .restart-button:hover {
+.next-button:hover, .restart-button:hover, .prev-button:hover {
   background: #ff5252;
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
