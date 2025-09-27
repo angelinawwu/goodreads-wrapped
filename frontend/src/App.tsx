@@ -655,57 +655,59 @@ function App() {
 
   return (
     <div className="App">
-      <div className="background-container">
-        <GradientBlinds
-          gradientColors={['#EF6B46', '#ED5EFD', '#4447EA']}
-          angle={20}
-          noise={0.3}
-          blindCount={12}
-          blindMinWidth={50}
-          spotlightRadius={0.5}
-          spotlightSoftness={2}
-          spotlightOpacity={0.3}
-          mouseDampening={0.1}
-          distortAmount={0}
-          shineDirection="left"
-          mixBlendMode="normal"
-        />
+      <div className="App-wrapper">
+        <div className="background-container">
+          <GradientBlinds
+            gradientColors={['#EF6B46', '#ED5EFD', '#4447EA']}
+            angle={20}
+            noise={0.3}
+            blindCount={12}
+            blindMinWidth={50}
+            spotlightRadius={0.5}
+            spotlightSoftness={2}
+            spotlightOpacity={0.3}
+            mouseDampening={0.1}
+            distortAmount={0}
+            shineDirection="left"
+            mixBlendMode="normal"
+          />
+        </div>
+        <header className="App-header">
+        <Routes>
+          <Route path="/" element={renderWelcomePage()} />
+          <Route path="/desktop" element={
+            result && !isMobile ? renderDesktopView() : <div>Loading...</div>
+          } />
+          <Route path="/books-read" element={
+            result ? renderBooksReadPage() : <div>Loading...</div>
+          } />
+          <Route path="/average-rating" element={
+            result ? renderAverageRatingPage() : <div>Loading...</div>
+          } />
+          <Route path="/book-details" element={
+            result ? renderBookDetailsPage() : <div>Loading...</div>
+          } />
+          <Route path="/top-genres" element={
+            result ? renderTopGenresPage() : <div>Loading...</div>
+          } />
+          <Route path="/reading-time" element={
+            result ? renderReadingTimePage() : <div>Loading...</div>
+          } />
+          <Route path="/dependability" element={
+            result ? renderDependabilityPage() : <div>Loading...</div>
+          } />
+          <Route path="/biggest-hater" element={
+            result ? renderBiggestHaterPage() : <div>Loading...</div>
+          } />
+          <Route path="/book-list" element={
+            result ? renderBookListPage() : <div>Loading...</div>
+          } />
+          <Route path="/complete" element={
+            result ? renderCompletePage() : <div>Loading...</div>
+          } />
+        </Routes>
+        </header>
       </div>
-      <header className="App-header">
-      <Routes>
-        <Route path="/" element={renderWelcomePage()} />
-        <Route path="/desktop" element={
-          result && !isMobile ? renderDesktopView() : <div>Loading...</div>
-        } />
-        <Route path="/books-read" element={
-          result ? renderBooksReadPage() : <div>Loading...</div>
-        } />
-        <Route path="/average-rating" element={
-          result ? renderAverageRatingPage() : <div>Loading...</div>
-        } />
-        <Route path="/book-details" element={
-          result ? renderBookDetailsPage() : <div>Loading...</div>
-        } />
-        <Route path="/top-genres" element={
-          result ? renderTopGenresPage() : <div>Loading...</div>
-        } />
-        <Route path="/reading-time" element={
-          result ? renderReadingTimePage() : <div>Loading...</div>
-        } />
-        <Route path="/dependability" element={
-          result ? renderDependabilityPage() : <div>Loading...</div>
-        } />
-        <Route path="/biggest-hater" element={
-          result ? renderBiggestHaterPage() : <div>Loading...</div>
-        } />
-        <Route path="/book-list" element={
-          result ? renderBookListPage() : <div>Loading...</div>
-        } />
-        <Route path="/complete" element={
-          result ? renderCompletePage() : <div>Loading...</div>
-        } />
-      </Routes>
-      </header>
     </div>
   );
 }
