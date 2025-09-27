@@ -498,6 +498,47 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
 
       console.log(`Genre stats: ${uniqueGenres} unique genres, most popular: ${mostPopularGenre}`);
 
+      // Calculate monthly genre data for chart
+      console.log(`Calculating monthly genre distribution...`);
+      const monthlyGenreData: { [month: string]: { [genre: string]: number } } = {};
+      const monthlyBookTotals: { [month: string]: number } = {};
+
+      yearBooks.forEach(book => {
+        if (book.dateRead && book.genres && book.genres.length > 0) {
+          const dateMatch = book.dateRead.match(/(\w{3})\s+\d{2},\s+(\d{4})/);
+          if (dateMatch) {
+            const monthAbbr = dateMatch[1];
+            const year = dateMatch[2];
+
+            const monthMap: { [key: string]: string } = {
+              'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04',
+              'May': '05', 'Jun': '06', 'Jul': '07', 'Aug': '08',
+              'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12'
+            };
+
+            const monthNumber = monthMap[monthAbbr];
+            if (monthNumber) {
+              const monthKey = `${year}-${monthNumber}`;
+
+              if (!monthlyGenreData[monthKey]) {
+                monthlyGenreData[monthKey] = {};
+                monthlyBookTotals[monthKey] = 0;
+              }
+
+              // Increment total books for this month
+              monthlyBookTotals[monthKey]++;
+
+              // Count each genre fully
+              book.genres.forEach(genre => {
+                monthlyGenreData[monthKey][genre] =
+                  (monthlyGenreData[monthKey][genre] || 0) + 1;
+              });
+            }
+          }
+        }
+      });
+
+      console.log(`Monthly genre data calculated for ${Object.keys(monthlyGenreData).length} months`);
 
       // Calculate dependability (proportion of books read in year that were added in year)
       console.log(`Scraping to-read list for dependability calculation...`);
@@ -632,6 +673,9 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
         mostScathingReview: mostScathingReview,
         mostPositiveReview: mostPositiveReview,
         booksWithReviews: booksWithReviews.length,
+        // NEW: Monthly genre data
+        monthlyGenreData: monthlyGenreData,
+        monthlyBookTotals: monthlyBookTotals,
       });
       
     } catch (error) {

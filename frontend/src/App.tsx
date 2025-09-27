@@ -99,6 +99,15 @@ interface ScrapingResult {
     };
   };
   booksWithReviews?: number;
+  // NEW: Monthly genre data
+  monthlyGenreData?: {
+    [month: string]: {
+      [genre: string]: number;
+    };
+  };
+  monthlyBookTotals?: {
+    [month: string]: number;
+  };
 }
 
 
@@ -117,7 +126,7 @@ function App() {
 
   // Progress bar logic
   const getProgressData = () => {
-    const pageOrder = ['/books-read', '/average-rating', '/book-details', '/top-genres', '/reading-time', '/dependability', '/biggest-hater', '/most-scathing-review', '/most-positive-review', '/book-list', '/complete'];
+    const pageOrder = ['/books-read', '/average-rating', '/book-details', '/top-genres', '/genres-over-time', '/reading-time', '/dependability', '/biggest-hater', '/most-scathing-review', '/most-positive-review', '/book-list', '/complete'];
     const currentPath = location.pathname;
     const currentIndex = pageOrder.indexOf(currentPath);
     
@@ -129,7 +138,7 @@ function App() {
   };
 
   const shouldShowProgressBar = () => {
-    const progressPages = ['/books-read', '/average-rating', '/book-details', '/top-genres', '/reading-time', '/dependability', '/biggest-hater', '/most-scathing-review', '/most-positive-review', '/book-list', '/complete'];
+    const progressPages = ['/books-read', '/average-rating', '/book-details', '/top-genres', '/genres-over-time', '/reading-time', '/dependability', '/biggest-hater', '/most-scathing-review', '/most-positive-review', '/book-list', '/complete'];
     return progressPages.includes(location.pathname);
   };
 
@@ -176,7 +185,7 @@ function App() {
   };
 
   const nextPage = () => {
-    const pageOrder = ['/books-read', '/average-rating', '/book-details', '/top-genres', '/reading-time', '/dependability', '/biggest-hater', '/most-scathing-review', '/most-positive-review', '/book-list', '/complete'];
+    const pageOrder = ['/books-read', '/average-rating', '/book-details', '/top-genres', '/genres-over-time', '/reading-time', '/dependability', '/biggest-hater', '/most-scathing-review', '/most-positive-review', '/book-list', '/complete'];
     const currentPath = location.pathname;
     const currentIndex = pageOrder.indexOf(currentPath);
     if (currentIndex < pageOrder.length - 1) {
@@ -185,7 +194,7 @@ function App() {
   };
 
   const prevPage = () => {
-    const pageOrder = ['/books-read', '/average-rating', '/book-details', '/top-genres', '/reading-time', '/dependability', '/biggest-hater', '/most-scathing-review', '/most-positive-review', '/book-list', '/complete'];
+    const pageOrder = ['/books-read', '/average-rating', '/book-details', '/top-genres', '/genres-over-time', '/reading-time', '/dependability', '/biggest-hater', '/most-scathing-review', '/most-positive-review', '/book-list', '/complete'];
     const currentPath = location.pathname;
     const currentIndex = pageOrder.indexOf(currentPath);
     if (currentIndex > 0) {
@@ -414,6 +423,177 @@ function App() {
           ) : (
             <div className="no-genres">
               <p>No genre data available</p>
+            </div>
+          )}
+        </div>
+        
+        {/* Navigation areas */}
+        <div className="nav-left" onClick={prevPage}></div>
+        <div className="nav-right" onClick={nextPage}></div>
+      </div>
+    );
+  };
+
+  const renderGenresOverTimePage = () => {
+    const monthlyData = result?.monthlyGenreData;
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    // Get top 5 genres for the chart
+    const topGenres = result?.genreCounts 
+      ? Object.entries(result.genreCounts)
+          .sort(([,a], [,b]) => (b as number) - (a as number))
+          .slice(0, 5)
+          .map(([genre]) => genre)
+      : [];
+
+    // Map specific genres to consistent colors
+    const genreColorMap: { [genre: string]: string } = {
+      'fantasy': '#E0ABFF',           // Purple
+      'romance': '#FFA5C3',           // Pink
+      'mystery': '#C297CF',           // Dark blue
+      'science fiction': '#8EF9C2',   // Blue
+      'thriller': '#FFB48F',          // Red
+      'historical fiction': '#CDF862', // Orange
+      'contemporary': '#8DD6F8',      // Green
+      'young adult': '#F5CB86',       // Yellow
+      'horror': '#E58C8C',            // Dark purple
+      'biography': '#CEB4A4',         // Gray
+      'non-fiction': '#B7B7B7',       // Teal
+      'memoir': '#f1c40f',            // Gold
+      'literary fiction': '#95a5a6',  // Light gray
+      'crime': '#C47F77',             // Dark red
+      'adventure': '#EDB380'          // Orange-red
+    };
+    
+    // Fallback colors for unmapped genres
+    const fallbackColors = [
+      '#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57',
+      '#fd79a8', '#fdcb6e', '#6c5ce7', '#a29bfe', '#74b9ff'
+    ];
+    
+    // Get colors for top genres
+    const genreColors = topGenres.map((genre, index) => 
+      genreColorMap[genre.toLowerCase()] || fallbackColors[index % fallbackColors.length]
+    );
+
+    return (
+      <div className="page-container">
+        <div className="page-header">
+          <h2>📈 Genres Over Time</h2>
+          <p className="page-subtitle">How your reading tastes evolved in 2025</p>
+        </div>
+        
+        <div className="chart-container">
+          {monthlyData && topGenres.length > 0 ? (
+            <div className="line-chart">
+              <svg viewBox="0 0 800 400" className="chart-svg">
+                {/* Define drop shadow filter */}
+                <defs>
+                  <filter id="lineShadow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="rgba(0,0,0,0.5)" floodOpacity="0.5"/>
+                  </filter>
+                </defs>
+                
+                {/* Chart background */}
+                <rect width="800" height="400" fill="transparent" />
+                
+                {/* Y-axis labels */}
+                {[0, 25, 50, 75, 100].map(value => (
+                  <g key={value}>
+                    <line 
+                      x1="80" 
+                      y1={350 - (value * 2.5)} 
+                      x2="750" 
+                      y2={350 - (value * 2.5)} 
+                      stroke="rgba(255,255,255,0.1)" 
+                      strokeWidth="1"
+                    />
+                    <text 
+                      x="70" 
+                      y={355 - (value * 2.5)} 
+                      fill="white" 
+                      fontSize="12" 
+                      textAnchor="end"
+                    >
+                      {value}%
+                    </text>
+                  </g>
+                ))}
+                
+                {/* X-axis labels */}
+                {months.map((month, index) => (
+                  <text 
+                    key={month}
+                    x={110 + (index * 55)} 
+                    y="380" 
+                    fill="white" 
+                    fontSize="12" 
+                    textAnchor="middle"
+                  >
+                    {month}
+                  </text>
+                ))}
+                
+                {/* Genre lines */}
+                {topGenres.map((genre, genreIndex) => {
+                  const points = months.map((_, monthIndex) => {
+                    const monthKey = `${2025}-${String(monthIndex + 1).padStart(2, '0')}`;
+                    const totalBooks = result?.monthlyBookTotals?.[monthKey] || 0;
+                    const genreCount = monthlyData[monthKey]?.[genre] || 0;
+                    const percentage = totalBooks > 0 ? (genreCount / totalBooks) * 100 : 0;
+                    
+                    return {
+                      x: 110 + (monthIndex * 55),
+                      y: 350 - (percentage * 2.5)
+                    };
+                  });
+                  
+                  const pathData = points.map((point, index) => 
+                    `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`
+                  ).join(' ');
+                  
+                  return (
+                    <g key={genre}>
+                      <path
+                        d={pathData}
+                        fill="none"
+                        stroke={genreColors[genreIndex]}
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        filter="url(#lineShadow)"
+                      />
+                      {/* Data points */}
+                      {points.map((point, index) => (
+                        <circle
+                          key={index}
+                          cx={point.x}
+                          cy={point.y}
+                          r="4"
+                          fill={genreColors[genreIndex]}
+                        />
+                      ))}
+                    </g>
+                  );
+                })}
+              </svg>
+              
+              {/* Legend */}
+              <div className="chart-legend">
+                {topGenres.map((genre, index) => (
+                  <div key={genre} className="legend-item">
+                    <div 
+                      className="legend-color" 
+                      style={{ backgroundColor: genreColors[index] }}
+                    ></div>
+                    <span className="legend-text">{genre}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="no-chart-data">
+              <p>Not enough data to generate chart</p>
             </div>
           )}
         </div>
@@ -782,6 +962,12 @@ function App() {
           Top Genres
         </button>
         <button 
+          className={location.pathname === '/genres-over-time' ? 'active' : ''} 
+          onClick={() => navigate('/genres-over-time')}
+        >
+          Genres Over Time
+        </button>
+        <button 
           className={location.pathname === '/reading-time' ? 'active' : ''} 
           onClick={() => navigate('/reading-time')}
         >
@@ -874,6 +1060,9 @@ function App() {
           } />
           <Route path="/top-genres" element={
             result ? renderTopGenresPage() : <div>Loading...</div>
+          } />
+          <Route path="/genres-over-time" element={
+            result ? renderGenresOverTimePage() : <div>Loading...</div>
           } />
           <Route path="/reading-time" element={
             result ? renderReadingTimePage() : <div>Loading...</div>
