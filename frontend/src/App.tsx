@@ -165,7 +165,7 @@ function App() {
 
   const renderWelcomePage = () => (
     <div className="page-container">
-      <h1>Goodreads Wrapped 2025</h1>
+      <h1 className="welcome-title">Goodreads Wrapped 2025</h1>
       <p className="subtitle">Discover your reading year in review!</p>
       {/* <p style={{fontSize: '0.8rem', opacity: 0.7}}>
         Device: {isMobile ? '📱 Mobile' : '💻 Desktop'}
