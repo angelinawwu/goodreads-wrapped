@@ -263,19 +263,23 @@ function App() {
         <h2>📚 Your 2025 Books</h2>
         <p className="page-subtitle">Here's what you read this year</p>
       </div>
-      <div className="book-list-container">
+      <div className="book-grid-container">
         {result?.books && result.books.length > 0 ? (
-          <ul className="book-list">
+          <div className="book-grid">
             {result.books.map((book: any, index: number) => (
-              <li key={index} className="book-item">
-                <div className="book-title">{book.title}</div>
-                <div className="book-author">by {book.author}</div>
-                {book.userRating && (
-                  <div className="book-rating">⭐ {book.userRating}/5</div>
-                )}
-              </li>
+              <div key={index} className="book-grid-item">
+                <div className="book-cover-grid">
+                  {book.coverImage ? (
+                    <img src={book.coverImage} alt={book.title} />
+                  ) : (
+                    <div className="no-cover-grid">
+                      <span>📖</span>
+                    </div>
+                  )}
+                </div>
+              </div>
             ))}
-          </ul>
+          </div>
         ) : (
           <p className="no-books">No books found for 2025</p>
         )}
