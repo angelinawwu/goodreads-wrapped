@@ -119,6 +119,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
+  const [hoveredGenre, setHoveredGenre] = useState<string | null>(null);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -446,6 +447,7 @@ function App() {
           .map(([genre]) => genre)
       : [];
 
+
     // Map specific genres to consistent colors
     const genreColorMap: { [genre: string]: string } = {
       'fantasy': '#E0ABFF',           // Purple
@@ -552,16 +554,27 @@ function App() {
                     `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`
                   ).join(' ');
                   
+                  const isHovered = hoveredGenre === null || hoveredGenre === genre;
+                  const opacity = isHovered ? 1 : 0.2;
+                  const strokeWidth = isHovered ? (hoveredGenre === genre ? 4 : 3) : 2;
+                  
                   return (
-                    <g key={genre}>
+                    <g 
+                      key={genre}
+                      onMouseEnter={() => setHoveredGenre(genre)}
+                      onMouseLeave={() => setHoveredGenre(null)}
+                      style={{ cursor: 'pointer' }}
+                    >
                       <path
                         d={pathData}
                         fill="none"
                         stroke={genreColors[genreIndex]}
-                        strokeWidth="3"
+                        strokeWidth={strokeWidth}
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         filter="url(#lineShadow)"
+                        opacity={opacity}
+                        style={{ transition: 'opacity 0.2s ease, stroke-width 0.2s ease' }}
                       />
                       {/* Data points */}
                       {points.map((point, index) => (
@@ -571,6 +584,8 @@ function App() {
                           cy={point.y}
                           r="4"
                           fill={genreColors[genreIndex]}
+                          opacity={opacity}
+                          style={{ transition: 'opacity 0.2s ease' }}
                         />
                       ))}
                     </g>
@@ -580,15 +595,30 @@ function App() {
               
               {/* Legend */}
               <div className="chart-legend">
-                {topGenres.map((genre, index) => (
-                  <div key={genre} className="legend-item">
+                {topGenres.map((genre, index) => {
+                  const isHovered = hoveredGenre === null || hoveredGenre === genre;
+                  const opacity = isHovered ? 1 : 0.3;
+                  
+                  return (
                     <div 
-                      className="legend-color" 
-                      style={{ backgroundColor: genreColors[index] }}
-                    ></div>
-                    <span className="legend-text">{genre}</span>
-                  </div>
-                ))}
+                      key={genre} 
+                      className="legend-item"
+                      onMouseEnter={() => setHoveredGenre(genre)}
+                      onMouseLeave={() => setHoveredGenre(null)}
+                      style={{ 
+                        cursor: 'pointer',
+                        opacity: opacity,
+                        transition: 'opacity 0.2s ease'
+                      }}
+                    >
+                      <div 
+                        className="legend-color" 
+                        style={{ backgroundColor: genreColors[index] }}
+                      ></div>
+                      <span className="legend-text">{genre}</span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           ) : (
