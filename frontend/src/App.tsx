@@ -186,7 +186,7 @@ function App() {
   };
 
   const nextPage = () => {
-    const pageOrder = ['/books-read', '/average-rating', '/book-details', '/top-genres', '/genres-over-time', '/reading-time', '/dependability', '/biggest-hater', '/most-scathing-review', '/most-positive-review', '/book-list', '/complete'];
+    const pageOrder = ['/','/desktop', '/books-read', '/average-rating', '/book-details', '/top-genres', '/genres-over-time', '/reading-time', '/dependability', '/biggest-hater', '/most-scathing-review', '/most-positive-review', '/book-list', '/complete'];
     const currentPath = location.pathname;
     const currentIndex = pageOrder.indexOf(currentPath);
     if (currentIndex < pageOrder.length - 1) {
@@ -195,7 +195,7 @@ function App() {
   };
 
   const prevPage = () => {
-    const pageOrder = ['/books-read', '/average-rating', '/book-details', '/top-genres', '/genres-over-time', '/reading-time', '/dependability', '/biggest-hater', '/most-scathing-review', '/most-positive-review', '/book-list', '/complete'];
+    const pageOrder = ['/','/desktop', '/books-read', '/average-rating', '/book-details', '/top-genres', '/genres-over-time', '/reading-time', '/dependability', '/biggest-hater', '/most-scathing-review', '/most-positive-review', '/book-list', '/complete'];
     const currentPath = location.pathname;
     const currentIndex = pageOrder.indexOf(currentPath);
     if (currentIndex > 0) {
@@ -957,13 +957,15 @@ function App() {
 
   const renderDesktopView = () => (
     <div className="desktop-container">
-      <h2>Scan QR Code to View on Mobile</h2>
+      <h2>Goodreads Wrapped 2025 is best viewed on mobile.</h2>
+      <p>Scan QR Code to view on mobile, or click below to continue anyways.</p>
       {qrCodeUrl && (
         <div className="qr-section">
           <img src={qrCodeUrl} alt="QR Code" className="qr-code" />
-              </div>
-            )}
-      <p className="desktop-note">
+        </div>
+        )}
+      <button className="desktop-button" onClick={nextPage}>Continue</button>
+      {/* <p className="desktop-note">
         Or use the navigation below to view your stats:
       </p>
       <div className="desktop-nav">
@@ -1033,7 +1035,7 @@ function App() {
         >
           Book List
         </button>
-      </div>
+      </div> */}
     </div>
   );
 
