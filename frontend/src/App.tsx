@@ -3,6 +3,7 @@ import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import './App.css';
 import QRCode from 'qrcode';
 import GradientBlinds from './components/GradientBlinds';
+import Navigation from './components/Navigation';
 
 
 
@@ -241,9 +242,7 @@ function App() {
         <div className="stat-label">books</div>
       </div>
       
-      {/* Navigation areas */}
-      <div className="nav-left" onClick={prevPage}></div>
-      <div className="nav-right" onClick={nextPage}></div>
+      <Navigation onPrevPage={prevPage} onNextPage={nextPage} />
     </div>
   );
 
@@ -261,9 +260,7 @@ function App() {
         <p>Based on {result?.booksWithRatings || 0} books you rated</p>
       </div>
       
-      {/* Navigation areas */}
-      <div className="nav-left" onClick={prevPage}></div>
-      <div className="nav-right" onClick={nextPage}></div>
+      <Navigation onPrevPage={prevPage} onNextPage={nextPage} />
     </div>
   );
 
@@ -295,9 +292,7 @@ function App() {
           <p className="no-books">No books found for 2025</p>
         )}
       </div>
-      {/* Navigation areas */}
-      <div className="nav-left" onClick={prevPage}></div>
-      <div className="nav-right" onClick={nextPage}></div>
+      <Navigation onPrevPage={prevPage} onNextPage={nextPage} />
     </div>
   );
 
@@ -332,6 +327,7 @@ function App() {
           </div>
         )}
       </div>
+      <Navigation onPrevPage={prevPage} onNextPage={nextPage} />
     </div>
   );
 
@@ -385,9 +381,7 @@ function App() {
           </div>
         )}
       </div>
-      {/* Navigation areas */}
-      <div className="nav-left" onClick={prevPage}></div>
-      <div className="nav-right" onClick={nextPage}></div>
+      <Navigation onPrevPage={prevPage} onNextPage={nextPage} />
     </div>
   );
 
@@ -428,9 +422,7 @@ function App() {
           )}
         </div>
         
-        {/* Navigation areas */}
-        <div className="nav-left" onClick={prevPage}></div>
-        <div className="nav-right" onClick={nextPage}></div>
+        <Navigation onPrevPage={prevPage} onNextPage={nextPage} />
       </div>
     );
   };
@@ -628,9 +620,7 @@ function App() {
           )}
         </div>
         
-        {/* Navigation areas */}
-        <div className="nav-left" onClick={prevPage}></div>
-        <div className="nav-right" onClick={nextPage}></div>
+        <Navigation onPrevPage={prevPage} onNextPage={nextPage} />
       </div>
     );
   };
@@ -690,9 +680,7 @@ function App() {
         <p>Based on {result?.booksWithReadingTime || 0} books with reading dates</p>
       </div>
       
-      {/* Navigation areas */}
-      <div className="nav-left" onClick={prevPage}></div>
-      <div className="nav-right" onClick={nextPage}></div>
+      <Navigation onPrevPage={prevPage} onNextPage={nextPage} />
     </div>
   );
 
@@ -758,9 +746,7 @@ function App() {
         <p>Based on {result?.booksWithBothRatings || 0} books with both your rating and average rating</p>
       </div>
       
-      {/* Navigation areas */}
-      <div className="nav-left" onClick={prevPage}></div>
-      <div className="nav-right" onClick={nextPage}></div>
+      <Navigation onPrevPage={prevPage} onNextPage={nextPage} />
     </div>
   );
 
@@ -830,9 +816,7 @@ function App() {
       <p>Based on {result?.booksWithReviews || 0} books with reviews</p>
     </div>
     
-    {/* Navigation areas */}
-    <div className="nav-left" onClick={prevPage}></div>
-    <div className="nav-right" onClick={nextPage}></div>
+    <Navigation onPrevPage={prevPage} onNextPage={nextPage} />
   </div>
 );
   const renderMostPositiveReviewPage = () => (
@@ -901,9 +885,7 @@ function App() {
         <p>Based on {result?.booksWithReviews || 0} books with reviews</p>
       </div>
       
-      {/* Navigation areas */}
-      <div className="nav-left" onClick={prevPage}></div>
-      <div className="nav-right" onClick={nextPage}></div>
+      <Navigation onPrevPage={prevPage} onNextPage={nextPage} />
     </div>
   );
 
@@ -949,9 +931,7 @@ function App() {
         </p>
       </div>
       
-      {/* Navigation areas */}
-      <div className="nav-left" onClick={prevPage}></div>
-      <div className="nav-right" onClick={nextPage}></div>
+      <Navigation onPrevPage={prevPage} onNextPage={nextPage} />
     </div>
   );
 

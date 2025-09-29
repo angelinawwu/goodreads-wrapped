@@ -1,0 +1,74 @@
+/* Navigation Areas */
+.nav-left, .nav-right {
+  position: fixed;
+  top: 0;
+  width: 25%;
+  height: 100vh;
+  z-index: 10;
+  cursor: pointer;
+  pointer-events: auto;
+  background: transparent;
+  overflow: hidden;
+  align-items: center;
+  font-size: 2rem;
+  display: flex;
+  color: rgba(255, 255, 255, 0.3);
+  transition: all 0.2s ease;
+}
+
+.nav-left {
+  left: 0;
+  justify-content: flex-start;
+  padding-left: 6rem;
+}
+
+.nav-right {
+  right: 0;
+  justify-content: flex-end;
+  padding-right: 6rem;
+}
+
+.nav-left p, .nav-right p {
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  background: transparent;
+  transition: transform 0.2s ease;
+}
+
+/* Gradient overlay using pseudo-elements */
+.nav-left::before, .nav-right::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.nav-left::before {
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.15), transparent);
+}
+
+.nav-right::before {
+  background: linear-gradient(to left, rgba(255, 255, 255, 0.15), transparent);
+}
+/* Visual feedback on hover */
+.nav-left:hover::before, .nav-right:hover::before {
+  opacity: 1;
+}
+
+.nav-left:hover, .nav-right:hover {
+  color: white;
+}
+
+.nav-left:hover p, .nav-right:hover p {
+  transform: scale(1.05);
+}
+
