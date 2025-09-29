@@ -15,9 +15,9 @@ import ReadingTime from './components/pages/8_ReadingTime';
 import Dependability from './components/pages/9_Dependability';
 import BiggestHater from './components/pages/10_BiggestHater';
 import MostScathingReview from './components/pages/11_MostScathingReview';
-import MostPositiveReview from './components/pages/11_MostPositiveReview';
-import BookList from './components/pages/12_BookList';
-import Complete from './components/pages/13_Complete';
+import MostPositiveReview from './components/pages/12_MostPositiveReview';
+import BookList from './components/pages/13_BookList';
+import Complete from './components/pages/14_Complete';
 
 
 
