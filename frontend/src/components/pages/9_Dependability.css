@@ -18,7 +18,7 @@
 .dependability-number {
   font-size: 3rem;
   font-weight: bold;
-  color: #4ecdc4;
+  color: white;
   margin: 0.5rem 0;
 }
 
@@ -46,7 +46,7 @@
 .breakdown-number {
   font-size: 2rem;
   font-weight: bold;
-  color: #ffd700;
+  color: white;
 }
 
 .breakdown-label {
@@ -57,7 +57,7 @@
 
 .breakdown-divider {
   font-size: 1.2rem;
-  color: #ffd700;
+  color: white;
   font-weight: bold;
 }
 
@@ -71,7 +71,7 @@
 .dependability-message p {
   margin: 0;
   font-size: 1.1rem;
-  color: #4ecdc4;
+  color: white;
 }
 
 /* Responsive for Dependability */

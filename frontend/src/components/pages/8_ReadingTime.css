@@ -16,7 +16,7 @@
 .reading-time-number {
   font-size: 3rem;
   font-weight: bold;
-  color: #ffd700;
+  color: white;
   margin: 0.5rem 0;
 }
 
@@ -41,7 +41,7 @@
 
 .reading-days {
   font-size: 1.1rem;
-  color: #ffd700;
+  color: white;
   font-weight: bold;
 }
 

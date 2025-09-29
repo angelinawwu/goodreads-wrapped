@@ -16,7 +16,7 @@
 .detail-number {
   font-size: 2.5rem;
   font-weight: bold;
-  color: #ffd700;
+  color: white;
   margin: 0.5rem 0;
 }
 
@@ -74,7 +74,7 @@
 
 .book-info .book-pages {
   font-size: 0.9rem;
-  color: #ffd700;
+  color: white;
   font-weight: bold;
 }
 
