@@ -1,0 +1,26 @@
+/* Big Stat Display */
+.big-stat {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 4rem;
+  font-weight: bold;
+  margin: 0;
+  color: #ffd700;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.stat-label {
+  font-size: 1.2rem;
+  margin-top: 0.5rem;
+  opacity: 0.9;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .stat-number {
+    font-size: 3rem;
+  }
+}

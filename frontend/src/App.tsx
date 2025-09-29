@@ -4,6 +4,20 @@ import './App.css';
 import QRCode from 'qrcode';
 import GradientBlinds from './components/GradientBlinds';
 import Navigation from './components/Navigation';
+import WelcomePage from './components/pages/1_WelcomePage';
+import DesktopView from './components/pages/2_DesktopView';
+import BooksRead from './components/pages/3_BooksRead';
+import AverageRating from './components/pages/4_AverageRating';
+import BookDetails from './components/pages/5_BookDetails';
+import TopGenres from './components/pages/6_TopGenres';
+import GenresOverTime from './components/pages/7_GenresOverTime';
+import ReadingTime from './components/pages/8_ReadingTime';
+import Dependability from './components/pages/9_Dependability';
+import BiggestHater from './components/pages/10_BiggestHater';
+import MostScathingReview from './components/pages/11_MostScathingReview';
+import MostPositiveReview from './components/pages/11_MostPositiveReview';
+import BookList from './components/pages/12_BookList';
+import Complete from './components/pages/13_Complete';
 
 
 
@@ -205,552 +219,115 @@ function App() {
   };
 
   const renderWelcomePage = () => (
-    <div className="page-container">
-      <h1 className="welcome-title">Goodreads Wrapped 2025</h1>
-      <p className="subtitle">Discover your reading year in review!</p>
-      {/* <p style={{fontSize: '0.8rem', opacity: 0.7}}>
-        Device: {isMobile ? '📱 Mobile' : '💻 Desktop'}
-      </p> */}
-        
-        <form onSubmit={handleSubmit} className="username-form">
-          <div className="input-group">
-            <label htmlFor="username">Goodreads Username:</label>
-            <input
-              type="text"
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Enter your Goodreads username"
-              disabled={loading}
-            />
-          </div>
-        <button className="submit-button" type="submit" disabled={loading || !username.trim()}>
-            {loading ? 'Analyzing...' : 'Get My Reading Stats'}
-          </button>
-        </form>
-    </div>
+    <WelcomePage
+      username={username}
+      loading={loading}
+      onUsernameChange={setUsername}
+      onSubmit={handleSubmit}
+    />
   );
 
   const renderBooksReadPage = () => (
-    <div className="page-container">
-      <div className="page-header">
-        <h2>📖 Books Read</h2>
-        <p className="page-subtitle">In 2025, you read...</p>
-      </div>
-      <div className="big-stat">
-        <div className="stat-number">{result?.yearBooks || 0}</div>
-        <div className="stat-label">books</div>
-      </div>
-      
-      <Navigation onPrevPage={prevPage} onNextPage={nextPage} />
-    </div>
+    <BooksRead
+      yearBooks={result?.yearBooks}
+      onPrevPage={prevPage}
+      onNextPage={nextPage}
+    />
   );
 
   const renderAverageRatingPage = () => (
-    <div className="page-container">
-      <div className="page-header">
-        <h2>⭐ Average Rating</h2>
-        <p className="page-subtitle">Your average rating for 2025 books</p>
-      </div>
-      <div className="big-stat">
-        <div className="stat-number">{result?.averageRating?.toFixed(2) || '0.0'}</div>
-        <div className="stat-label">out of 5 stars</div>
-      </div>
-      <div className="rating-details">
-        <p>Based on {result?.booksWithRatings || 0} books you rated</p>
-      </div>
-      
-      <Navigation onPrevPage={prevPage} onNextPage={nextPage} />
-    </div>
+    <AverageRating
+      averageRating={result?.averageRating}
+      booksWithRatings={result?.booksWithRatings}
+      onPrevPage={prevPage}
+      onNextPage={nextPage}
+    />
   );
 
   const renderBookListPage = () => (
-    <div className="page-container">
-      <div className="page-header">
-        <h2>📚 Your 2025 Books</h2>
-        <p className="page-subtitle">Here's what you read this year</p>
-      </div>
-      <div className="book-grid-container">
-        {result?.books && result.books.length > 0 ? (
-          <div className="book-grid" data-count={result.books.length <= 12 ? result.books.length : 'auto'}>
-            {result.books.map((book: any, index: number) => (
-              <div key={index} className="book-grid-item">
-                <div className="book-cover-grid">
-                  {book.coverImage ? (
-                    <img src={book.coverImage} alt={book.title} />
-                  ) : (
-                    <div className="no-cover-grid">
-                      <span>📖</span>
-                    </div>
-                  )}
-                  <div className="book-title-tooltip">{book.title}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="no-books">No books found for 2025</p>
-        )}
-      </div>
-      <Navigation onPrevPage={prevPage} onNextPage={nextPage} />
-    </div>
+    <BookList
+      books={result?.books}
+      onPrevPage={prevPage}
+      onNextPage={nextPage}
+    />
   );
 
   const renderCompletePage = () => (
-    <div className="page-container">
-      <div className="page-header">
-        <h2>🎉 That's a Wrap!</h2>
-        <p className="page-subtitle">Thanks for exploring your reading year</p>
-      </div>
-      <div className="summary-stats">
-        <div className="summary-stat">
-          <div className="summary-number">{result?.yearBooks || 0}</div>
-          <div className="summary-label">Books Read</div>
-        </div>
-        <div className="summary-stat">
-          <div className="summary-number">{result?.pagesScraped || 0}</div>
-          <div className="summary-label">Pages Analyzed</div>
-        </div>
-      </div>
-      <div className="action-buttons">
-        <button className="restart-button" onClick={() => {
-          navigate('/');
-          setResult(null);
-          setUsername('');
-        }}>
-          Start Over
-        </button>
-        {!isMobile && qrCodeUrl && (
-          <div className="qr-section">
-            <p>Share on mobile:</p>
-            <img src={qrCodeUrl} alt="QR Code" className="qr-code" />
-          </div>
-        )}
-      </div>
-      <Navigation onPrevPage={prevPage} onNextPage={nextPage} />
-    </div>
+    <Complete
+      yearBooks={result?.yearBooks}
+      pagesScraped={result?.pagesScraped}
+      qrCodeUrl={qrCodeUrl}
+      isMobile={isMobile}
+      onRestart={() => {
+        navigate('/');
+        setResult(null);
+        setUsername('');
+      }}
+      onPrevPage={prevPage}
+      onNextPage={nextPage}
+    />
   );
 
   const renderBookDetailsPage = () => (
-    <div className="page-container">
-      <div className="page-header">
-        <h2>�� Book Details</h2>
-        <p className="page-subtitle">Your reading patterns in 2025</p>
-      </div>
-      
-      <div className="book-details-grid">
-        <div className="detail-card">
-          <h3>�� Average Length</h3>
-          <div className="detail-number">{result?.averagePages || 0}</div>
-          <div className="detail-label">pages per book</div>
-        </div>
-        
-        {result?.longestBook && (
-          <div className="detail-card book-card">
-            <h3>�� Longest Book</h3>
-            <div className="book-cover">
-              {result.longestBook.coverImage ? (
-                <img src={result.longestBook.coverImage} alt={result.longestBook.title} />
-              ) : (
-                <div className="no-cover">📖</div>
-              )}
-            </div>
-            <div className="book-info">
-              <div className="book-title">{result.longestBook.title}</div>
-              <div className="book-author">by {result.longestBook.author}</div>
-              <div className="book-pages">{result.longestBook.numPages} pages</div>
-            </div>
-          </div>
-        )}
-        
-        {result?.shortestBook && (
-          <div className="detail-card book-card">
-            <h3>�� Shortest Book</h3>
-            <div className="book-cover">
-              {result.shortestBook.coverImage ? (
-                <img src={result.shortestBook.coverImage} alt={result.shortestBook.title} />
-              ) : (
-                <div className="no-cover">📖</div>
-              )}
-            </div>
-            <div className="book-info">
-              <div className="book-title">{result.shortestBook.title}</div>
-              <div className="book-author">by {result.shortestBook.author}</div>
-              <div className="book-pages">{result.shortestBook.numPages} pages</div>
-            </div>
-          </div>
-        )}
-      </div>
-      <Navigation onPrevPage={prevPage} onNextPage={nextPage} />
-    </div>
+    <BookDetails
+      averagePages={result?.averagePages}
+      longestBook={result?.longestBook}
+      shortestBook={result?.shortestBook}
+      onPrevPage={prevPage}
+      onNextPage={nextPage}
+    />
   );
 
-  const renderTopGenresPage = () => {
-    const topGenres = result?.genreCounts 
-      ? Object.entries(result.genreCounts)
-          .sort(([,a], [,b]) => (b as number) - (a as number))
-          .slice(0, 5)
-      : [];
+  const renderTopGenresPage = () => (
+    <TopGenres
+      genreCounts={result?.genreCounts}
+      yearBooks={result?.yearBooks}
+      onPrevPage={prevPage}
+      onNextPage={nextPage}
+    />
+  );
 
-    return (
-      <div className="page-container">
-        <div className="page-header">
-          <h2>🏆 Top Genres</h2>
-          <p className="page-subtitle">Your favorite genres in 2025</p>
-        </div>
-        
-        <div className="top-genres-list">
-          {topGenres.length > 0 ? (
-            topGenres.map(([genre, count], index) => (
-              <div key={genre} className="genre-rank-item">
-                <div className="genre-rank">
-                  <span className="rank-number">#{index + 1}</span>
-                  </div>
-                <div className="genre-info">
-                  <div className="genre-name">{genre}</div>
-                  <div className="genre-fraction">{count as number}/{result?.yearBooks || 0} books</div>
-                  </div>
-                <div className="genre-percentage">
-                  {Math.round(((count as number) / (result?.yearBooks || 1)) * 100)}%
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="no-genres">
-              <p>No genre data available</p>
-            </div>
-          )}
-        </div>
-        
-        <Navigation onPrevPage={prevPage} onNextPage={nextPage} />
-      </div>
-    );
-  };
-
-  const renderGenresOverTimePage = () => {
-    const monthlyData = result?.monthlyGenreData;
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    
-    // Get top 5 genres for the chart
-    const topGenres = result?.genreCounts 
-      ? Object.entries(result.genreCounts)
-          .sort(([,a], [,b]) => (b as number) - (a as number))
-          .slice(0, 5)
-          .map(([genre]) => genre)
-      : [];
-
-
-    // Map specific genres to consistent colors
-    const genreColorMap: { [genre: string]: string } = {
-      'fantasy': '#E0ABFF',           // Purple
-      'romance': '#FFA5C3',           // Pink
-      'mystery': '#C297CF',           // Dark blue
-      'science fiction': '#8EF9C2',   // Blue
-      'thriller': '#FFB48F',          // Red
-      'historical fiction': '#CDF862', // Orange
-      'contemporary': '#8DD6F8',      // Green
-      'young adult': '#F5CB86',       // Yellow
-      'horror': '#E58C8C',            // Dark purple
-      'biography': '#CEB4A4',         // Gray
-      'non-fiction': '#B7B7B7',       // Teal
-      'memoir': '#f1c40f',            // Gold
-      'literary fiction': '#95a5a6',  // Light gray
-      'crime': '#C47F77',             // Dark red
-      'adventure': '#EDB380'          // Orange-red
-    };
-    
-    // Fallback colors for unmapped genres
-    const fallbackColors = [
-      '#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57',
-      '#fd79a8', '#fdcb6e', '#6c5ce7', '#a29bfe', '#74b9ff'
-    ];
-    
-    // Get colors for top genres
-    const genreColors = topGenres.map((genre, index) => 
-      genreColorMap[genre.toLowerCase()] || fallbackColors[index % fallbackColors.length]
-    );
-
-    return (
-      <div className="page-container">
-        <div className="page-header">
-          <h2>📈 Genres Over Time</h2>
-          <p className="page-subtitle">How your reading tastes evolved in 2025</p>
-        </div>
-        
-        <div className="chart-container">
-          {monthlyData && topGenres.length > 0 ? (
-            <div className="line-chart">
-              <svg viewBox="0 0 800 400" className="chart-svg">
-                {/* Define drop shadow filter */}
-                <defs>
-                  <filter id="lineShadow" x="-50%" y="-50%" width="200%" height="200%">
-                    <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="rgba(0,0,0,0.5)" floodOpacity="0.5"/>
-                  </filter>
-                </defs>
-                
-                {/* Chart background */}
-                <rect width="800" height="400" fill="transparent" />
-                
-                {/* Y-axis labels */}
-                {[0, 25, 50, 75, 100].map(value => (
-                  <g key={value}>
-                    <line 
-                      x1="80" 
-                      y1={350 - (value * 2.5)} 
-                      x2="750" 
-                      y2={350 - (value * 2.5)} 
-                      stroke="rgba(255,255,255,0.1)" 
-                      strokeWidth="1"
-                    />
-                    <text 
-                      x="70" 
-                      y={355 - (value * 2.5)} 
-                      fill="white" 
-                      fontSize="12" 
-                      textAnchor="end"
-                    >
-                      {value}%
-                    </text>
-                  </g>
-                ))}
-                
-                {/* X-axis labels */}
-                {months.map((month, index) => (
-                  <text 
-                    key={month}
-                    x={110 + (index * 55)} 
-                    y="380" 
-                    fill="white" 
-                    fontSize="12" 
-                    textAnchor="middle"
-                  >
-                    {month}
-                  </text>
-                ))}
-                
-                {/* Genre lines */}
-                {topGenres.map((genre, genreIndex) => {
-                  const points = months.map((_, monthIndex) => {
-                    const monthKey = `${2025}-${String(monthIndex + 1).padStart(2, '0')}`;
-                    const totalBooks = result?.monthlyBookTotals?.[monthKey] || 0;
-                    const genreCount = monthlyData[monthKey]?.[genre] || 0;
-                    const percentage = totalBooks > 0 ? (genreCount / totalBooks) * 100 : 0;
-                    
-                    return {
-                      x: 110 + (monthIndex * 55),
-                      y: 350 - (percentage * 2.5)
-                    };
-                  });
-                  
-                  const pathData = points.map((point, index) => 
-                    `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`
-                  ).join(' ');
-                  
-                  const isHovered = hoveredGenre === null || hoveredGenre === genre;
-                  const opacity = isHovered ? 1 : 0.2;
-                  const strokeWidth = isHovered ? (hoveredGenre === genre ? 4 : 3) : 2;
-                  
-                  return (
-                    <g 
-                      key={genre}
-                      onMouseEnter={() => setHoveredGenre(genre)}
-                      onMouseLeave={() => setHoveredGenre(null)}
-                      style={{ cursor: 'pointer' }}
-                    >
-                      <path
-                        d={pathData}
-                        fill="none"
-                        stroke={genreColors[genreIndex]}
-                        strokeWidth={strokeWidth}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        filter="url(#lineShadow)"
-                        opacity={opacity}
-                        style={{ transition: 'opacity 0.2s ease, stroke-width 0.2s ease' }}
-                      />
-                      {/* Data points */}
-                      {points.map((point, index) => (
-                        <circle
-                          key={index}
-                          cx={point.x}
-                          cy={point.y}
-                          r="4"
-                          fill={genreColors[genreIndex]}
-                          opacity={opacity}
-                          style={{ transition: 'opacity 0.2s ease' }}
-                        />
-                      ))}
-                    </g>
-                  );
-                })}
-              </svg>
-              
-              {/* Legend */}
-              <div className="chart-legend">
-                {topGenres.map((genre, index) => {
-                  const isHovered = hoveredGenre === null || hoveredGenre === genre;
-                  const opacity = isHovered ? 1 : 0.3;
-                  
-                  return (
-                    <div 
-                      key={genre} 
-                      className="legend-item"
-                      onMouseEnter={() => setHoveredGenre(genre)}
-                      onMouseLeave={() => setHoveredGenre(null)}
-                      style={{ 
-                        cursor: 'pointer',
-                        opacity: opacity,
-                        transition: 'opacity 0.2s ease'
-                      }}
-                    >
-                      <div 
-                        className="legend-color" 
-                        style={{ backgroundColor: genreColors[index] }}
-                      ></div>
-                      <span className="legend-text">{genre}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          ) : (
-            <div className="no-chart-data">
-              <p>Not enough data to generate chart</p>
-            </div>
-          )}
-        </div>
-        
-        <Navigation onPrevPage={prevPage} onNextPage={nextPage} />
-      </div>
-    );
-  };
+  const renderGenresOverTimePage = () => (
+    <GenresOverTime
+      genreCounts={result?.genreCounts}
+      monthlyGenreData={result?.monthlyGenreData}
+      monthlyBookTotals={result?.monthlyBookTotals}
+      onPrevPage={prevPage}
+      onNextPage={nextPage}
+    />
+  );
 
   const renderReadingTimePage = () => (
-    <div className="page-container">
-      <div className="page-header">
-        <h2>⏱️ Reading Speed</h2>
-        <p className="page-subtitle">How fast you read in 2025</p>
-      </div>
-      
-      <div className="reading-time-grid">
-        <div className="reading-time-stat">
-          <h3>📊 Average Time</h3>
-          <div className="reading-time-number">{result?.averageReadingTime?.toFixed(2) || '0.00'}</div>
-          <div className="reading-time-label">days per book</div>
-        </div>
-        
-        {result?.fastestRead && (
-          <div className="reading-time-card">
-            <h3>⚡ Fastest Read</h3>
-            <div className="book-cover">
-              {result.fastestRead.coverImage ? (
-                <img src={result.fastestRead.coverImage} alt={result.fastestRead.title} />
-              ) : (
-                <div className="no-cover">📖</div>
-              )}
-            </div>
-            <div className="book-info">
-              <div className="book-title">{result.fastestRead.title}</div>
-              <div className="book-author">by {result.fastestRead.author}</div>
-              <div className="reading-days">{result.fastestRead.readingDays} days</div>
-            </div>
-          </div>
-        )}
-        
-        {result?.slowestRead && (
-          <div className="reading-time-card">
-            <h3>🐌 Slowest Read</h3>
-            <div className="book-cover">
-              {result.slowestRead.coverImage ? (
-                <img src={result.slowestRead.coverImage} alt={result.slowestRead.title} />
-              ) : (
-                <div className="no-cover">📖</div>
-              )}
-            </div>
-            <div className="book-info">
-              <div className="book-title">{result.slowestRead.title}</div>
-              <div className="book-author">by {result.slowestRead.author}</div>
-              <div className="reading-days">{result.slowestRead.readingDays} days</div>
-            </div>
-          </div>
-        )}
-      </div>
-      
-      <div className="reading-time-details">
-        <p>Based on {result?.booksWithReadingTime || 0} books with reading dates</p>
-      </div>
-      
-      <Navigation onPrevPage={prevPage} onNextPage={nextPage} />
-    </div>
+    <ReadingTime
+      averageReadingTime={result?.averageReadingTime}
+      fastestRead={result?.fastestRead}
+      slowestRead={result?.slowestRead}
+      booksWithReadingTime={result?.booksWithReadingTime}
+      onPrevPage={prevPage}
+      onNextPage={nextPage}
+    />
   );
 
   const renderBiggestHaterPage = () => (
-    <div className="page-container">
-      <div className="page-header">
-        <h2>😤 Biggest Hater Moment</h2>
-        <p className="page-subtitle">When you disagreed with everyone else</p>
-      </div>
-      
-      {result?.biggestHaterMoment ? (
-        <div className="hater-moment-container">
-          <div className="hater-book-card">
-            <div className="book-cover">
-              {result.biggestHaterMoment.coverImage ? (
-                <img src={result.biggestHaterMoment.coverImage} alt={result.biggestHaterMoment.title} />
-              ) : (
-                <div className="no-cover">📖</div>
-              )}
-            </div>
-            <div className="book-info">
-              <div className="book-title">{result.biggestHaterMoment.title}</div>
-              <div className="book-author">by {result.biggestHaterMoment.author}</div>
-            </div>
-          </div>
-          
-          <div className="rating-comparison">
-            <div className="rating-display">
-              <div className="rating-label">Your Rating</div>
-              <div className="rating-stars user-rating">
-                {'⭐'.repeat(result.biggestHaterMoment.userRating || 0)}
-                <span className="rating-number">{result.biggestHaterMoment.userRating}/5</span>
-              </div>
-            </div>
-            
-            <div className="vs-divider">VS</div>
-            
-            <div className="rating-display">
-              <div className="rating-label">Everyone Else</div>
-              <div className="rating-stars avg-rating">
-                {'⭐'.repeat(Math.floor(result.biggestHaterMoment.avgRating || 0))}
-                <span className="rating-number">{result.biggestHaterMoment.avgRating?.toFixed(2)}/5</span>
-              </div>
-            </div>
-          </div>
-          
-          <div className="disparity-display">
-            <div className="disparity-number">{result.biggestDisparity?.toFixed(2)}</div>
-            <div className="disparity-label">stars difference</div>
-                </div>
-                
-          <div className="hater-message">
-            <p>You were {result.biggestDisparity?.toFixed(2)} stars more critical than the average reader!</p>
-          </div>
-        </div>
-      ) : (
-        <div className="no-hater-moment">
-          <p>No hater moments found - you're too agreeable! 😊</p>
-                  </div>
-                )}
-      
-      <div className="hater-details">
-        <p>Based on {result?.booksWithBothRatings || 0} books with both your rating and average rating</p>
-      </div>
-      
-      <Navigation onPrevPage={prevPage} onNextPage={nextPage} />
-    </div>
+    <BiggestHater
+      biggestHaterMoment={result?.biggestHaterMoment}
+      biggestDisparity={result?.biggestDisparity}
+      booksWithBothRatings={result?.booksWithBothRatings}
+      onPrevPage={prevPage}
+      onNextPage={nextPage}
+    />
   );
 
   const renderMostScathingReviewPage = () => (
+    <MostScathingReview
+      mostScathingReview={result?.mostScathingReview}
+      booksWithReviews={result?.booksWithReviews}
+      onPrevPage={prevPage}
+      onNextPage={nextPage}
+    />
+  );
+
+  const renderMostScathingReviewPageOLD = () => (
     <div className="page-container">
       <div className="page-header">
         <h2>🔥 Most Scathing Review</h2>
@@ -820,6 +397,15 @@ function App() {
   </div>
 );
   const renderMostPositiveReviewPage = () => (
+    <MostPositiveReview
+      mostPositiveReview={result?.mostPositiveReview}
+      booksWithReviews={result?.booksWithReviews}
+      onPrevPage={prevPage}
+      onNextPage={nextPage}
+    />
+  );
+
+  const renderMostPositiveReviewPageOLD = () => (
     <div className="page-container">
       <div className="page-header">
         <h2>🔥 Most Positive Review</h2>
@@ -878,8 +464,8 @@ function App() {
       ) : (
         <div className="no-positive-review">
           <p>No positive reviews found - are you a hater?</p>
-        </div>
-      )}
+              </div>
+            )}
       
       <div className="review-details">
         <p>Based on {result?.booksWithReviews || 0} books with reviews</p>
@@ -890,6 +476,17 @@ function App() {
   );
 
   const renderDependabilityPage = () => (
+    <Dependability
+      dependability={result?.dependability}
+      toReadReadCount={result?.toReadReadCount}
+      toReadAddedCount={result?.toReadAddedCount}
+      year={result?.year}
+      onPrevPage={prevPage}
+      onNextPage={nextPage}
+    />
+  );
+
+  const renderDependabilityPageOLD = () => (
     <div className="page-container">
       <div className="page-header">
         <h2>📋 Dependability</h2>
@@ -936,87 +533,10 @@ function App() {
   );
 
   const renderDesktopView = () => (
-    <div className="desktop-container">
-      <h2>Goodreads Wrapped 2025 is best viewed on mobile.</h2>
-      <p>Scan QR Code to view on mobile, or click below to continue anyways.</p>
-      {qrCodeUrl && (
-        <div className="qr-section">
-          <img src={qrCodeUrl} alt="QR Code" className="qr-code" />
-        </div>
-        )}
-      <button className="desktop-button" onClick={nextPage}>Continue</button>
-      {/* <p className="desktop-note">
-        Or use the navigation below to view your stats:
-      </p>
-      <div className="desktop-nav">
-        <button 
-          className={location.pathname === '/books-read' ? 'active' : ''} 
-          onClick={() => navigate('/books-read')}
-        >
-          Books Read
-        </button>
-        <button 
-          className={location.pathname === '/average-rating' ? 'active' : ''} 
-          onClick={() => navigate('/average-rating')}
-        >
-          Average Rating
-        </button>
-        <button 
-          className={location.pathname === '/book-details' ? 'active' : ''} 
-          onClick={() => navigate('/book-details')}
-        >
-          Book Details
-        </button>
-        <button 
-          className={location.pathname === '/top-genres' ? 'active' : ''} 
-          onClick={() => navigate('/top-genres')}
-        >
-          Top Genres
-        </button>
-        <button 
-          className={location.pathname === '/genres-over-time' ? 'active' : ''} 
-          onClick={() => navigate('/genres-over-time')}
-        >
-          Genres Over Time
-        </button>
-        <button 
-          className={location.pathname === '/reading-time' ? 'active' : ''} 
-          onClick={() => navigate('/reading-time')}
-        >
-          Reading Speed
-        </button>
-        <button 
-          className={location.pathname === '/dependability' ? 'active' : ''} 
-          onClick={() => navigate('/dependability')}
-        >
-          Dependability
-        </button>
-        <button 
-          className={location.pathname === '/biggest-hater' ? 'active' : ''} 
-          onClick={() => navigate('/biggest-hater')}
-        >
-          Biggest Hater
-        </button>
-        <button 
-          className={location.pathname === '/most-scathing-review' ? 'active' : ''} 
-          onClick={() => navigate('/most-scathing-review')}
-        >
-          Most Scathing Review
-        </button>
-        <button 
-          className={location.pathname === '/most-positive-review' ? 'active' : ''} 
-          onClick={() => navigate('/most-positive-review')}
-        >
-          Most Positive Review
-        </button>
-        <button 
-          className={location.pathname === '/book-list' ? 'active' : ''} 
-          onClick={() => navigate('/book-list')}
-        >
-          Book List
-        </button>
-      </div> */}
-    </div>
+    <DesktopView
+      qrCodeUrl={qrCodeUrl}
+      onContinue={nextPage}
+    />
   );
 
   return (

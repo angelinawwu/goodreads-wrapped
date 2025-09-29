@@ -1,3 +1,4 @@
+/* Global Styles */
 html, body {
   margin: 0;
   height: 100%;
@@ -7,1282 +8,312 @@ h1, h2, h3, h4, h5, h6, p {
   text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
 }
 
-
+/* App Layout */
 .App {
   text-align: center;
   width: 100vw;
-    height: 100vh;
+  height: 100vh;
   color: white;
-    overflow-x: visible;
-    overflow-y: auto;
-    position: relative;
-    font-family: "Fira Sans", sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+  overflow-x: visible;
+  overflow-y: auto;
+  position: relative;
+  font-family: "Fira Sans", sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-  .App-wrapper {
-    height: 100%;
-    /* aspect-ratio: 9/16; */
-    overflow: visible;
-    width: 100vw;
-  }
+.App-wrapper {
+  height: 100%;
+  overflow: visible;
+  width: 100vw;
+}
 
-  .background-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    height: 100%;
-    width: 100%;
-    z-index: 0;
-    pointer-events: auto;
-    background-color: #1d1d1d;
-    transform: translate(-50%, -50%);
+.background-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+  pointer-events: auto;
+  background-color: #1d1d1d;
+  transform: translate(-50%, -50%);
 }
 
 .App-header {
   padding: 2rem;
   margin: 0 auto;
-    min-height: calc(100% - 4rem);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    position: relative;
-    z-index: 1;
-    pointer-events: auto; /* Enable normal interaction */
-    overflow: visible; /* Allow tooltips to show outside */
-  }
-
-  /* Page Container */
-  .page-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: calc(100vh - 6rem); /* Full viewport height minus progress bar */
-    pointer-events: auto; /* Enable scrolling and interaction */
-    margin-top: 2rem; /* Space for progress bar */
-    position: relative;
-    z-index: 20; /* Higher than navigation areas */
-    overflow: visible; /* Allow tooltips to show outside */
-  }
-
-  /* Enable interaction on all interactive elements */
-  button, input, .book-list, .book-item, .desktop-nav, .username-form, .input-group {
-    pointer-events: auto;
-  }
-
-  /* Make sure scrollable areas work */
-  .book-list-container, .top-genres-list, .reading-time-grid, .book-details-grid {
-    pointer-events: auto;
-  }
-
-  .page-header {
-    margin-bottom: 1rem;
-    width: 100%;
-  }
-
-  .page-header h2 {
-    font-size: 2rem;
-    margin-bottom: 0.3rem;
-  }
-
-  .page-subtitle {
-    font-size: 1.2rem;
-    opacity: 0.8;
-    margin: 0;
-  }
-
-  .button-container {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    margin-top: 2rem;
-  }
-
-  button {
-    pointer-events: auto;
-  }
-
-
-  /* Instagram-style Segmented Progress Bar */
-  .progress-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    padding: 0.5rem 1rem;
-  }
-
-  .progress-segments {
-    display: flex;
-    gap: 4px;
-    height: 4px;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
-  }
-
-  .progress-segment {
-    flex: 1;
-    height: 100%;
-    border-radius: 2px;
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .progress-segment.incomplete {
-    background: rgba(255, 255, 255, 0.3);
-  }
-
-  .progress-segment.completed {
-    background: white;
-    box-shadow: 0 0 8px rgba(255, 107, 107, 0.3);
-  }
-
-
-  .welcome-title {
-    font-size: 4rem;
-    line-height: 1.1;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-  }
-
-  /* Big Stat Display */
-  .big-stat {
-    margin: 1rem 0;
-    text-align: center;
-  }
-
-  .stat-number {
-    font-size: 4rem;
-    font-weight: bold;
-    margin: 0;
-    color: #ffd700;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-  }
-
-  .stat-label {
-    font-size: 1.2rem;
-    margin-top: 0.5rem;
-    opacity: 0.9;
-  }
-
-  /* Navigation Buttons */
-  .next-button, .restart-button, .prev-button {
-    background: #ff6b6b;
-    color: white;
-    border: none;
-    padding: 1rem 2rem;
-    border-radius: 50px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 2rem;
-    min-width: 150px;
-  }
-
-  .next-button:hover, .restart-button:hover, .prev-button:hover {
-    background: #ff5252;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
-  }
-
-  /* Book Grid Page */
-  .book-grid-container {
-    width: 100%;
-    margin: 1rem 0;
-    height: 60vh;
-    overflow: visible;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .book-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
-    gap: 0.3rem;
-    padding: 0.5rem;
-    width: 100%;
-    max-width: 1000px;
-    height: 100%;
-    align-content: center;
-    justify-content: center;
-    z-index: 150;
-  }
-
-  /* Responsive grid based on number of items */
-  .book-grid[data-count="1"] { grid-template-columns: repeat(1, 1fr); }
-  .book-grid[data-count="2"] { grid-template-columns: repeat(2, 1fr); }
-  .book-grid[data-count="3"] { grid-template-columns: repeat(3, 1fr); }
-  .book-grid[data-count="4"] { grid-template-columns: repeat(2, 1fr); }
-  .book-grid[data-count="5"] { grid-template-columns: repeat(3, 1fr); }
-  .book-grid[data-count="6"] { grid-template-columns: repeat(3, 1fr); }
-  .book-grid[data-count="7"] { grid-template-columns: repeat(4, 1fr); }
-  .book-grid[data-count="8"] { grid-template-columns: repeat(4, 1fr); }
-  .book-grid[data-count="9"] { grid-template-columns: repeat(3, 1fr); }
-  .book-grid[data-count="10"] { grid-template-columns: repeat(5, 1fr); }
-  .book-grid[data-count="11"] { grid-template-columns: repeat(4, 1fr); }
-  .book-grid[data-count="12"] { grid-template-columns: repeat(4, 1fr); }
-
-  /* For larger collections, use responsive auto-fit */
-  @media (min-width: 768px) {
-    .book-grid {
-      grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
-    }
-  }
-
-  @media (max-width: 767px) {
-    .book-grid {
-      grid-template-columns: repeat(auto-fit, minmax(45px, 1fr));
-    }
-  }
-
-  .book-grid-item {
-    display: flex;
-    justify-content: center;
-    transition: transform 0.2s ease;
-  }
-
-  .book-grid-item:hover {
-    transform: scale(1.05);
-  }
-
-  .book-cover-grid {
-    width: 100%;
-    aspect-ratio: 2/3; /* Standard book cover ratio */
-    max-width: 80px;
-    max-height: 120px;
-    min-width: 40px;
-    min-height: 60px;
-    border-radius: 6px;
-    overflow: visible;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    position: relative;
-  }
-
-  .book-cover-grid img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 6px;
-  }
-
-  .book-title-tooltip {
-    position: absolute;
-    bottom: 105px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.9);
-    color: white;
-    padding: 0.5rem 0.8rem;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    font-weight: 500;
-    white-space: nowrap;
-    max-width: 200px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-    z-index: 9999;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    pointer-events: none;
-  }
-
-  .book-title-tooltip::after {
-    content: '';
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    border: 6px solid transparent;
-    border-top-color: rgba(0, 0, 0, 0.9);
-  }
-
-  .book-cover-grid:hover .book-title-tooltip {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .no-cover-grid {
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-  }
-
-
-  .no-books {
-    font-size: 1.2rem;
-    opacity: 0.7;
-    margin: 2rem 0;
-  }
-
-  /* Complete Page */
-  .summary-stats {
-    display: flex;
-    justify-content: center;
-    gap: 3rem;
-    margin: 3rem 0;
-  }
-
-  .summary-stat {
-    text-align: center;
-  }
-
-  .summary-number {
-  font-size: 3rem;
-    font-weight: bold;
-    color: #ffd700;
-  margin-bottom: 0.5rem;
+  min-height: calc(100% - 4rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
+  overflow: visible;
 }
 
-  .summary-label {
-    font-size: 1rem;
-    opacity: 0.8;
-  }
-
-  .action-buttons {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
-  }
-
-  .qr-section {
-    text-align: center;
-    margin: 2rem 0;
-  }
-
-  .qr-code {
-    max-width: 150px;
-    border-radius: 10px;
-  }
-
-  /* Desktop View */
-  .desktop-container {
-    padding: 2rem;
-    border-radius: 15px;
-    margin-bottom: 2rem;
-  }
-
-  .desktop-note {
-    font-size: 0.9rem;
-    opacity: 0.8;
-    margin: 1rem 0;
-  }
-
-  .desktop-nav {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  .desktop-nav button {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  .desktop-nav button:hover {
-    background: rgba(255, 255, 255, 0.3);
-  }
-
-  .desktop-nav button.active {
-    background: #ff6b6b;
-  }
-
-  /* Form Styles (unchanged) */
-.username-form {
-  padding: 2rem;
-  border-radius: 15px;
-  margin: 2rem 0;
-  text-align: left;
+/* Universal Page Container */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 6rem);
+  pointer-events: auto;
+  margin-top: 2rem;
+  position: relative;
+  z-index: 20;
+  overflow: visible;
 }
 
-  .submit-button {
-    pointer-events: auto;
+.page-header {
+  margin-bottom: 1rem;
+  width: 100%;
 }
 
-.input-group {
-  margin-bottom: 1.5rem;
-    pointer-events: auto;
+.page-header h2 {
+  font-size: 2rem;
+  margin-bottom: 0.3rem;
 }
 
-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: bold;
+.page-subtitle {
+  font-size: 1.2rem;
+  opacity: 0.8;
+  margin: 0;
 }
 
-input {
-  width: calc(100% - 2rem);
-  padding: 1rem;
-  border: none;
+/* Universal Interactive Elements */
+button, input, .book-list, .book-item, .desktop-nav, .username-form, .input-group {
+  pointer-events: auto;
+}
+
+.book-list-container, .top-genres-list, .reading-time-grid, .book-details-grid {
+  pointer-events: auto;
+}
+
+button {
+  pointer-events: auto;
+}
+
+/* Instagram-style Segmented Progress Bar */
+.progress-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 0.5rem 1rem;
+}
+
+.progress-segments {
+  display: flex;
+  gap: 4px;
+  height: 4px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+}
+
+.progress-segment {
+  flex: 1;
+  height: 100%;
+  border-radius: 2px;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-segment.incomplete {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.progress-segment.completed {
+  background: white;
+  box-shadow: 0 0 8px rgba(255, 107, 107, 0.3);
+}
+
+/* Universal Book Cover Styles */
+.book-cover {
+  width: 120px;
+  height: 180px;
   border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.book-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.no-cover {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.book-info {
+  text-align: center;
+}
+
+.book-info .book-title {
   font-size: 1.1rem;
-  background: rgba(255, 255, 255, 0.9);
-  color: #333;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.book-info .book-author {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin-bottom: 0.5rem;
+}
+
+.book-info .book-pages {
+  font-size: 0.9rem;
+  color: #ffd700;
+  font-weight: bold;
 }
 
 button:disabled {
   background: #ccc;
   cursor: not-allowed;
-    transform: none;
-  }
-
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .App-header {
-      padding: 0.5rem;
-      min-height: calc(100% - 1rem);
-    }
-    
-    .page-container {
-      height: calc(100% - 2.5rem);
-      margin-top: 1.5rem; /* Smaller margin on mobile */
-    }
-    
-    .progress-container {
-      padding: 0.3rem 0.5rem;
-    }
-    
-    .progress-segments {
-      height: 3px;
-      gap: 3px;
+  transform: none;
 }
 
-.stat-number {
-      font-size: 3rem;
-    }
-    
-    .page-header h2 {
-      font-size: 1.5rem;
-    }
-    
-    .detail-number, .reading-time-number {
-      font-size: 2rem;
-    }
-    
-    .summary-stats {
-      flex-direction: column;
-      gap: 2rem;
-    }
-    
-    .desktop-nav {
-      flex-direction: column;
-    }
-    
-    .book-grid-container {
-      height: 50vh;
-      padding-top: 2rem; /* Smaller padding on mobile */
-    }
-    
-    .book-cover-grid {
-      max-width: 60px;
-      max-height: 90px;
-      min-width: 35px;
-      min-height: 52px;
-    }
-    
-    .book-title-tooltip {
-      font-size: 0.7rem;
-      padding: 0.4rem 0.6rem;
-      max-width: 150px;
-      bottom: 80px;
-    }
+/* Universal Responsive Design */
+@media (max-width: 768px) {
+  .App-header {
+    padding: 0.5rem;
+    min-height: calc(100% - 1rem);
+  }
+  
+  .page-container {
+    height: calc(100% - 2.5rem);
+    margin-top: 1.5rem;
+  }
+  
+  .progress-container {
+    padding: 0.3rem 0.5rem;
+  }
+  
+  .progress-segments {
+    height: 3px;
+    gap: 3px;
   }
 
-  .rating-details {
-    margin-top: 1rem;
-    opacity: 0.8;
-    font-size: 0.9rem;
-  }
-
-  .rating-details p {
-    margin: 0;
-  }
-
-  /* Book Details Page */
-  .book-details-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    margin: 1rem 0;
-    max-width: 600px;
-  }
-
-  .detail-card {
-    padding: 1rem;
-    border-radius: 10px;
-    text-align: center;
-  }
-
-  .detail-number {
-  font-size: 2.5rem;
-  font-weight: bold;
-    color: #ffd700;
-    margin: 0.5rem 0;
-  }
-
-  .detail-label {
-    font-size: 1.1rem;
-    opacity: 0.8;
-  }
-
-  .book-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .book-cover {
-    width: 120px;
-    height: 180px;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  }
-
-  .book-cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .no-cover {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 3rem;
-    background: rgba(0, 0, 0, 0.3);
-  }
-
-  .book-info {
-    text-align: center;
-  }
-
-  .book-info .book-title {
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-  }
-
-  .book-info .book-author {
-    font-size: 0.9rem;
-    opacity: 0.8;
-    margin-bottom: 0.5rem;
-  }
-
-  .book-info .book-pages {
-    font-size: 0.9rem;
-    color: #ffd700;
-    font-weight: bold;
-  }
-
-  /* Responsive */
-  @media (min-width: 768px) {
-    .book-details-grid {
-      grid-template-columns: 1fr 1fr;
-    }
-    
-    .detail-card:first-child {
-      grid-column: 1 / -1;
-    }
-  }
-
-  /* Top Genres Page */
-  .top-genres-list {
-    max-width: 600px;
-    width: 100%;
-    margin: 1rem 0;
-  }
-
-  .genre-rank-item {
-    display: flex;
-    align-items: center;
-  margin: 0.5rem 0;
-    padding: 0.8rem;
-    border-radius: 10px;
-    transition: transform 0.2s ease;
-  }
-
-  .genre-rank-item:hover {
-    transform: translateY(-2px);
-  }
-
-  .genre-rank {
-    margin-right: 1.5rem;
-    min-width: 60px;
-  }
-
-  .rank-number {
+  .page-header h2 {
     font-size: 1.5rem;
-    font-weight: bold;
-    color: #ffd700;
-    background: rgba(255, 215, 0, 0.2);
-    padding: 0.5rem 1rem;
-    border-radius: 50%;
-    display: inline-block;
-    min-width: 40px;
-    text-align: center;
   }
-
-  .genre-info {
-    flex: 1;
-    text-align: left;
-  }
-
-  .genre-info .genre-name {
-    font-size: 1.3rem;
-    font-weight: bold;
-    margin-bottom: 0.3rem;
-  }
-
-  .genre-fraction {
-    font-size: 1rem;
-    opacity: 0.8;
-  color: #ffd700;
 }
 
-  .genre-percentage {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #ffd700;
-    min-width: 60px;
-    text-align: right;
-  }
-
-  .no-genres {
-    text-align: center;
-    padding: 2rem;
-    opacity: 0.7;
-  }
-
-  .no-genres p {
-    font-size: 1.2rem;
-    margin: 0;
-  }
-
-  /* Responsive for Top Genres */
-  @media (max-width: 768px) {
-    .genre-rank-item {
-      flex-direction: column;
-      text-align: center;
-      gap: 1rem;
-    }
-    
-    .genre-rank {
-      margin-right: 0;
-    }
-    
-    .genre-info {
-      text-align: center;
-    }
-    
-    .genre-percentage {
-      text-align: center;
-    }
-  }
-
-  /* Reading Time Page */
-  .reading-time-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    margin: 1rem 0;
-    max-width: 600px;
-  }
-
-  .reading-time-stat {
-    padding: 1rem;
-    border-radius: 10px;
-    text-align: center;
-  }
-
-  .reading-time-number {
-    font-size: 3rem;
-    font-weight: bold;
-    color: #ffd700;
-  margin: 0.5rem 0;
-  }
-
-  .reading-time-label {
-    font-size: 1.2rem;
-    opacity: 0.8;
-  }
-
-  .reading-time-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-  padding: 1rem;
-    border-radius: 10px;
-  }
-
-  .reading-time-card h3 {
-    margin: 0;
-    font-size: 1.3rem;
-  }
-
-  .reading-days {
-    font-size: 1.1rem;
-    color: #ffd700;
-    font-weight: bold;
-  }
-
-  .reading-time-details {
-    text-align: center;
-    margin: 1rem 0;
-    opacity: 0.8;
-  }
-
-  .reading-time-details p {
-    margin: 0;
-    font-size: 0.9rem;
-  }
-
-  /* Responsive for Reading Time */
-  @media (min-width: 768px) {
-    .reading-time-grid {
-      grid-template-columns: 1fr 1fr;
-    }
-    
-    .reading-time-stat {
-      grid-column: 1 / -1;
-    }
-  }
-
-  /* Biggest Hater Moment Page */
-  .hater-moment-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
-    margin: 2rem 0;
-    max-width: 600px;
-  }
-
-  .hater-book-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    padding: 2rem;
-    border-radius: 15px;
-    width: 100%;
-  }
-
-  .rating-comparison {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-    padding: 2rem;
-    border-radius: 15px;
-    width: 100%;
-  }
-
-  .rating-display {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    flex: 1;
-  }
-
-  .rating-label {
-    font-size: 0.9rem;
-    opacity: 0.8;
-    text-align: center;
-  }
-
-  .rating-stars {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 1.5rem;
-  }
-
-  .rating-number {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #ffd700;
-  }
-
-  .user-rating {
-    color: #ff6b6b;
-  }
-
-  .avg-rating {
-    color: #4ecdc4;
-  }
-
-  .vs-divider {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #ffd700;
-    background: rgba(255, 215, 0, 0.2);
-    padding: 0.5rem 1rem;
-    border-radius: 50%;
-    min-width: 60px;
-    text-align: center;
-  }
-
-  .disparity-display {
-    text-align: center;
-    background: rgba(255, 107, 107, 0.2);
-    padding: 1.5rem;
-    border-radius: 15px;
-    backdrop-filter: blur(10px);
-    width: 100%;
-  }
-
-  .disparity-number {
-    font-size: 3rem;
-    font-weight: bold;
-    color: #ff6b6b;
-    margin: 0.5rem 0;
-  }
-
-  .disparity-label {
-    font-size: 1.1rem;
-    opacity: 0.8;
-  }
-
-  .hater-message {
-    text-align: center;
-    padding: 1.5rem;
-    border-radius: 15px;
-    width: 100%;
-  }
-
-  .hater-message p {
-    margin: 0;
-    font-size: 1.1rem;
-    color: #ff6b6b;
-    font-weight: bold;
-  }
-
-  .no-hater-moment {
-    text-align: center;
-    padding: 3rem;
-    border-radius: 15px;
-    width: 100%;
-  }
-
-  .no-hater-moment p {
-    margin: 0;
-    font-size: 1.2rem;
-    color: #4ecdc4;
-  }
-
-  .hater-details {
-    text-align: center;
-    margin: 1rem 0;
-    opacity: 0.8;
-  }
-
-  .hater-details p {
-    margin: 0;
-    font-size: 0.9rem;
-  }
-
-  /* Responsive for Biggest Hater */
-  @media (max-width: 768px) {
-    .rating-comparison {
-      flex-direction: column;
-      gap: 1rem;
-    }
-  }
-
-  /* Dependability Page */
-  .dependability-stats {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    margin: 1rem 0;
-    max-width: 600px;
-  }
-
-  .dependability-main {
-    text-align: center;
-    padding: 1rem;
-    border-radius: 10px;
-    width: 100%;
-  }
-
-  .dependability-number {
-    font-size: 3rem;
-    font-weight: bold;
-    color: #4ecdc4;
-    margin: 0.5rem 0;
-  }
-
-  .dependability-label {
-    font-size: 1.2rem;
-    opacity: 0.8;
-  }
-
-  .dependability-breakdown {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.8rem;
-    border-radius: 10px;
-    width: 100%;
-  }
-
-  .breakdown-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex: 1;
-  }
-
-  .breakdown-number {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #ffd700;
-  }
-
-  .breakdown-label {
-    font-size: 0.9rem;
-    opacity: 0.8;
-    text-align: center;
-  }
-
-  .breakdown-divider {
-    font-size: 1.2rem;
-  color: #ffd700;
-  font-weight: bold;
+/* Fira Sans Font Classes */
+.fira-sans-condensed-thin {
+  font-family: "Fira Sans Condensed", sans-serif;
+  font-weight: 100;
+  font-style: normal;
 }
 
-  .dependability-message {
-    text-align: center;
-    padding: 1.5rem;
-    border-radius: 15px;
-    width: 100%;
-  }
+.fira-sans-condensed-extralight {
+  font-family: "Fira Sans Condensed", sans-serif;
+  font-weight: 200;
+  font-style: normal;
+}
 
-  .dependability-message p {
-    margin: 0;
-    font-size: 1.1rem;
-    color: #4ecdc4;
-  }
+.fira-sans-condensed-light {
+  font-family: "Fira Sans Condensed", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
 
-  /* Responsive for Dependability */
-  @media (max-width: 768px) {
-    .dependability-breakdown {
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-  }
+.fira-sans-condensed-regular {
+  font-family: "Fira Sans Condensed", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
 
-  /* Fira Sans */
+.fira-sans-condensed-medium {
+  font-family: "Fira Sans Condensed", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
 
-  .fira-sans-condensed-thin {
-    font-family: "Fira Sans Condensed", sans-serif;
-    font-weight: 100;
-    font-style: normal;
-  }
+.fira-sans-condensed-semibold {
+  font-family: "Fira Sans Condensed", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
 
-  .fira-sans-condensed-extralight {
-    font-family: "Fira Sans Condensed", sans-serif;
-    font-weight: 200;
-    font-style: normal;
-  }
+.fira-sans-condensed-bold {
+  font-family: "Fira Sans Condensed", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
 
-  .fira-sans-condensed-light {
-    font-family: "Fira Sans Condensed", sans-serif;
-    font-weight: 300;
-    font-style: normal;
-  }
+.fira-sans-condensed-extrabold {
+  font-family: "Fira Sans Condensed", sans-serif;
+  font-weight: 800;
+  font-style: normal;
+}
 
-  .fira-sans-condensed-regular {
-    font-family: "Fira Sans Condensed", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-  }
+.fira-sans-condensed-black {
+  font-family: "Fira Sans Condensed", sans-serif;
+  font-weight: 900;
+  font-style: normal;
+}
 
-  .fira-sans-condensed-medium {
-    font-family: "Fira Sans Condensed", sans-serif;
-    font-weight: 500;
-    font-style: normal;
-  }
+.fira-sans-condensed-thin-italic {
+  font-family: "Fira Sans Condensed", sans-serif;
+  font-weight: 100;
+  font-style: italic;
+}
 
-  .fira-sans-condensed-semibold {
-    font-family: "Fira Sans Condensed", sans-serif;
-    font-weight: 600;
-    font-style: normal;
-  }
+.fira-sans-condensed-extralight-italic {
+  font-family: "Fira Sans Condensed", sans-serif;
+  font-weight: 200;
+  font-style: italic;
+}
 
-  .fira-sans-condensed-bold {
-    font-family: "Fira Sans Condensed", sans-serif;
-    font-weight: 700;
-    font-style: normal;
-  }
+.fira-sans-condensed-light-italic {
+  font-family: "Fira Sans Condensed", sans-serif;
+  font-weight: 300;
+  font-style: italic;
+}
 
-  .fira-sans-condensed-extrabold {
-    font-family: "Fira Sans Condensed", sans-serif;
-    font-weight: 800;
-    font-style: normal;
-  }
+.fira-sans-condensed-regular-italic {
+  font-family: "Fira Sans Condensed", sans-serif;
+  font-weight: 400;
+  font-style: italic;
+}
 
-  .fira-sans-condensed-black {
-    font-family: "Fira Sans Condensed", sans-serif;
-    font-weight: 900;
-    font-style: normal;
-  }
+.fira-sans-condensed-medium-italic {
+  font-family: "Fira Sans Condensed", sans-serif;
+  font-weight: 500;
+  font-style: italic;
+}
 
-  .fira-sans-condensed-thin-italic {
-    font-family: "Fira Sans Condensed", sans-serif;
-    font-weight: 100;
-    font-style: italic;
-  }
+.fira-sans-condensed-semibold-italic {
+  font-family: "Fira Sans Condensed", sans-serif;
+  font-weight: 600;
+  font-style: italic;
+}
 
-  .fira-sans-condensed-extralight-italic {
-    font-family: "Fira Sans Condensed", sans-serif;
-    font-weight: 200;
-    font-style: italic;
-  }
+.fira-sans-condensed-bold-italic {
+  font-family: "Fira Sans Condensed", sans-serif;
+  font-weight: 700;
+  font-style: italic;
+}
 
-  .fira-sans-condensed-light-italic {
-    font-family: "Fira Sans Condensed", sans-serif;
-    font-weight: 300;
-    font-style: italic;
-  }
+.fira-sans-condensed-extrabold-italic {
+  font-family: "Fira Sans Condensed", sans-serif;
+  font-weight: 800;
+  font-style: italic;
+}
 
-  .fira-sans-condensed-regular-italic {
-    font-family: "Fira Sans Condensed", sans-serif;
-    font-weight: 400;
-    font-style: italic;
-  }
-
-  .fira-sans-condensed-medium-italic {
-    font-family: "Fira Sans Condensed", sans-serif;
-    font-weight: 500;
-    font-style: italic;
-  }
-
-  .fira-sans-condensed-semibold-italic {
-    font-family: "Fira Sans Condensed", sans-serif;
-    font-weight: 600;
-    font-style: italic;
-  }
-
-  .fira-sans-condensed-bold-italic {
-    font-family: "Fira Sans Condensed", sans-serif;
-    font-weight: 700;
-    font-style: italic;
-  }
-
-  .fira-sans-condensed-extrabold-italic {
-    font-family: "Fira Sans Condensed", sans-serif;
-    font-weight: 800;
-    font-style: italic;
-  }
-
-  .fira-sans-condensed-black-italic {
-    font-family: "Fira Sans Condensed", sans-serif;
-    font-weight: 900;
-    font-style: italic;
-  }
-
-  /* Most Scathing Review Styles */
-  .scathing-review-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
-    margin: 2rem 0;
-  }
-
-  .scathing-book-card {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    padding: 1rem;
-    max-width: 600px;
-    width: 100%;
-  }
-
-  .review-content {
-    padding: 1rem;
-    max-width: 700px;
-    width: 100%;
-  }
-
-  .review-text {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    font-style: italic;
-    margin-bottom: 2rem;
-    color: rgba(255, 255, 255, 0.9);
-    text-align: center;
-  }
-
-  .sentiment-stats {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
-  }
-
-  .sentiment-score {
-    text-align: center;
-  }
-
-  .sentiment-number {
-    font-size: 3rem;
-    font-weight: bold;
-    color: #ff6b6b;
-    margin-bottom: 0.5rem;
-  }
-
-  .sentiment-label {
-    font-size: 1rem;
-    opacity: 0.8;
-  }
-
-  .sentiment-breakdown {
-    display: flex;
-    gap: 2rem;
-  }
-
-  .sentiment-positive,
-  .sentiment-negative {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.9rem;
-  }
-
-  .sentiment-icon {
-    font-size: 1.2rem;
-  }
-
-  .scathing-message {
-    text-align: center;
-    font-size: 1.2rem;
-    color: #ff6b6b;
-    font-weight: bold;
-  }
-
-  .no-scathing-review {
-    text-align: center;
-    padding: 3rem;
-    border-radius: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-  }
-
-  .review-details {
-    text-align: center;
-    font-size: 0.9rem;
-    opacity: 0.7;
-    margin-top: 1rem;
-  }
-
-  /* Mobile responsiveness */
-  @media (max-width: 768px) {
-    .scathing-book-card {
-      flex-direction: column;
-      text-align: center;
-    }
-    
-    .sentiment-breakdown {
-      flex-direction: column;
-      gap: 1rem;
-    }
-    
-    .review-text {
-      font-size: 1rem;
-    }
-  }
-
-  /* Genres Over Time Chart Styles */
-  .chart-container {
-    width: 100%;
-    max-width: 900px;
-    margin: 1rem 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .line-chart {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .chart-svg {
-    width: 100%;
-    height: auto;
-    max-width: 800px;
-    border-radius: 10px;
-    padding: 1rem;
-  }
-
-  .chart-legend {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 1rem;
-  }
-
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .legend-color {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-  }
-
-  .legend-text {
-    font-size: 0.9rem;
-    color: white;
-    font-weight: 500;
-  }
-
-  .no-chart-data {
-    text-align: center;
-    padding: 3rem;
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 1.1rem;
-  }
-
-  /* Mobile chart responsiveness */
-  @media (max-width: 768px) {
-    .chart-svg {
-      padding: 0.5rem;
-    }
-    
-    .chart-legend {
-      gap: 0.5rem;
-    }
-    
-    .legend-text {
-      font-size: 0.8rem;
-    }
+.fira-sans-condensed-black-italic {
+  font-family: "Fira Sans Condensed", sans-serif;
+  font-weight: 900;
+  font-style: italic;
 }

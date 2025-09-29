@@ -1,0 +1,44 @@
+/* Most Positive Review Styles */
+.positive-review-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.positive-book-card {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem;
+  max-width: 600px;
+  width: 100%;
+}
+
+.positive-message {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #4ecdc4;
+  font-weight: bold;
+}
+
+.no-positive-review {
+  text-align: center;
+  padding: 3rem;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Override sentiment number color for positive review */
+.positive-review-container .sentiment-number {
+  color: #4ecdc4;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .positive-book-card {
+    flex-direction: column;
+    text-align: center;
+  }
+}

@@ -1,0 +1,9 @@
+.rating-details {
+  margin-top: 1rem;
+  opacity: 0.8;
+  font-size: 0.9rem;
+}
+
+.rating-details p {
+  margin: 0;
+}

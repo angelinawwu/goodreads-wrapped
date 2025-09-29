@@ -1,0 +1,91 @@
+/* Dependability Page */
+.dependability-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem 0;
+  max-width: 600px;
+}
+
+.dependability-main {
+  text-align: center;
+  padding: 1rem;
+  border-radius: 10px;
+  width: 100%;
+}
+
+.dependability-number {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #4ecdc4;
+  margin: 0.5rem 0;
+}
+
+.dependability-label {
+  font-size: 1.2rem;
+  opacity: 0.8;
+}
+
+.dependability-breakdown {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem;
+  border-radius: 10px;
+  width: 100%;
+}
+
+.breakdown-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.breakdown-number {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ffd700;
+}
+
+.breakdown-label {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  text-align: center;
+}
+
+.breakdown-divider {
+  font-size: 1.2rem;
+  color: #ffd700;
+  font-weight: bold;
+}
+
+.dependability-message {
+  text-align: center;
+  padding: 1.5rem;
+  border-radius: 15px;
+  width: 100%;
+}
+
+.dependability-message p {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #4ecdc4;
+}
+
+/* Responsive for Dependability */
+@media (max-width: 768px) {
+  .dependability-breakdown {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .dependability-number {
+    font-size: 2rem;
+  }
+  
+  .breakdown-number {
+    font-size: 1.5rem;
+  }
+}
