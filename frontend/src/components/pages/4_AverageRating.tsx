@@ -1,6 +1,7 @@
 import React from 'react';
 import Navigation from '../Navigation';
 import './4_AverageRating.css';
+import { motion } from 'framer-motion';
 
 interface AverageRatingProps {
   averageRating?: number;
@@ -18,15 +19,45 @@ const AverageRating: React.FC<AverageRatingProps> = ({
   return (
     <div className="page-container">
       <div className="page-header">
-        <h2>⭐ Average Rating</h2>
-        <p className="page-subtitle">Your average rating for 2025 books</p>
+        <motion.h2 className="page-title"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          ⭐ Average Rating
+        </motion.h2>
+        <motion.p className="page-subtitle"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          Your average rating for 2025 books
+        </motion.p>
       </div>
       <div className="big-stat">
-        <div className="stat-number">{averageRating?.toFixed(2) || '0.0'}</div>
-        <div className="stat-label">out of 5 stars</div>
+        <motion.div className="stat-number"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+        >
+          {averageRating?.toFixed(2) || '0.0'}
+        </motion.div>
+        <motion.div className="stat-label"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.9 }}
+        >
+          out of 5 stars
+        </motion.div>
       </div>
       <div className="rating-details">
-        <p>Based on {booksWithRatings || 0} books you rated</p>
+        <motion.p className="rating-details-text"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 1.2 }}
+        >
+          Based on {booksWithRatings || 0} books you rated
+        </motion.p>
       </div>
       
       <Navigation onPrevPage={onPrevPage} onNextPage={onNextPage} />
