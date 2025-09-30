@@ -96,15 +96,25 @@ const scrapeBookGenres = async (bookUrl: string): Promise<string[]> => {
     );
     
     if (!bookKey) return [];
+
+    const nonGenres = [
+      'fiction', 'non-fiction', 'nonfiction', 'adult', 'young-adult', 'ya', 'children', 'kids',
+      'audiobook', 'book-club', 'book club', 'library', 'owned', 'to-read', 'currently-reading',
+      'read', 'favorites', 'favourites', 'recommended', 'modern', 'queer', 'lgbt', 'lgbtq',
+      'new', 'old', 'popular', 'bestseller', 'award-winning', 'series', 'standalone', 
+      'novel', 'book', 'story', 'tale', 'narrative', 'literature', 'writing', 'author', 
+      'publisher', 'edition', 'format', 'hardcover', 'paperback', 'ebook', 'kindle', 
+      'digital', 'print', 'audio', 'review', 'rating', 'star', 'page', 'chapter', 
+      'volume', 'part', 'collection', 'anthology', 'trilogy', 'series', 'chronicles', 
+      'saga', 'cycle', 'prequel', 'sequel', 'companion', 'tie-in', 'crossover',
+      'genres', 'adult fiction', 'literary fiction', 'contemporary', 'coming of age',
+      'friendship', 'summer'
+    ];
     
     const bookGenres = apolloState[bookKey].bookGenres;
     const genres = bookGenres
       .map((g: any) => g.genre.name.toLowerCase())
-      .filter((name: string) => {
-        // Add your filters here
-        const nonGenres = ['fiction', 'audiobook', 'book club', 'adult'];
-        return !nonGenres.includes(name);
-      });
+      .filter((name: string) => !nonGenres.includes(name));
     
     console.log(`Found genres: ${genres.join(', ')}`);
     return genres;
