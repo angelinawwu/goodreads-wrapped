@@ -20,7 +20,6 @@
     "cheerio": "^1.1.2",
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "puppeteer": "^24.18.0",
     "qrcode": "^1.5.4",
     "sentiment": "^5.0.2",
     "ts-node": "^10.9.2",
