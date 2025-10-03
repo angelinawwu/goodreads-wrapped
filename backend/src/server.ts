@@ -3,6 +3,8 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 import cors from 'cors';
 import Sentiment from 'sentiment';
+import fs from 'fs';
+import path from 'path';
 
 
 interface Book {
@@ -697,6 +699,37 @@ app.post('/store-data', (req, res) => {
 app.get('/get-data/:userId', (req, res) => {
   const data = userDataStore[req.params.userId];
   res.json(data || { error: 'Data not found' });
+});
+
+// Email subscription endpoint
+app.post('/api/subscribe', (req, res) => {
+  try {
+    const { email } = req.body;
+    
+    if (!email || !email.includes('@')) {
+      return res.status(400).json({ error: 'Valid email required' });
+    }
+    
+    // Create emails directory if it doesn't exist
+    const emailsDir = path.join(__dirname, '..', 'emails');
+    if (!fs.existsSync(emailsDir)) {
+      fs.mkdirSync(emailsDir, { recursive: true });
+    }
+    
+    // Append email to subscribers.txt
+    const emailFile = path.join(emailsDir, 'subscribers.txt');
+    const timestamp = new Date().toISOString();
+    const emailEntry = `${timestamp} - ${email}\n`;
+    
+    fs.appendFileSync(emailFile, emailEntry);
+    
+    console.log(`New email subscription: ${email}`);
+    
+    res.json({ success: true, message: 'Email subscribed successfully' });
+  } catch (error) {
+    console.error('Error saving email:', error);
+    res.status(500).json({ error: 'Failed to save email' });
+  }
 });
 
 // Keep your existing app.listen() code below this

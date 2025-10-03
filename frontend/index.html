@@ -23,7 +23,7 @@
       color: white;
       overflow: hidden;
       position: relative;
-      background-color: #1d1d1d;
+      background-color: #0a0a0a;
     }
     
     /* GradientBlinds background container */
@@ -55,6 +55,7 @@
       font-size: 4rem;
       margin-bottom: 1rem;
       animation: float 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
     }
     
     @keyframes float {
@@ -65,7 +66,11 @@
     h1 {
       font-size: 3.5rem;
       margin-bottom: 1rem;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      text-shadow: 
+        0 0 10px rgba(147, 51, 234, 0.5),
+        0 0 20px rgba(147, 51, 234, 0.3),
+        0 0 30px rgba(147, 51, 234, 0.2),
+        2px 2px 4px rgba(0,0,0,0.3);
     }
     
     @keyframes fadeIn {
@@ -77,6 +82,9 @@
       font-size: 1.5rem;
       margin-bottom: 2rem;
       opacity: 0.9;
+      text-shadow: 
+        0 0 8px rgba(255, 255, 255, 0.3),
+        0 0 16px rgba(255, 255, 255, 0.2);
     }
     
     .description {
@@ -84,6 +92,16 @@
       line-height: 1.6;
       margin-bottom: 2rem;
       opacity: 0.8;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+
+    .description a {
+      color: #a855f7;
+      text-decoration: none;
+    }
+
+    .description a:hover {
+      color: #9333ea;
     }
     
     .notify-form {
@@ -98,31 +116,53 @@
       padding-left: 1.5rem;
       padding-top: 1rem;
       padding-bottom: 1rem;
-      border: none;
+      border: 2px solid rgba(255, 255, 255, 0.2);
       border-radius: 50px;
       font-size: 1rem;
       outline: none;
       pointer-events: auto;
       font-family: 'Fira Sans', sans-serif;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+    
+    .notify-form input:focus {
+      border-color: rgba(147, 51, 234, 0.5);
+      box-shadow: 
+        0 0 20px rgba(147, 51, 234, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    
+    .notify-form input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
     }
     
     .notify-form button {
       padding: 1rem 2rem;
-      background: #ff6b6b;
+      background: linear-gradient(135deg, #9333ea, #a855f7);
       color: white;
-      border: none;
+      border: 2px solid rgba(147, 51, 234, 0.3);
       border-radius: 50px;
       font-size: 1rem;
       font-weight: bold;
       cursor: pointer;
       transition: all 0.3s ease;
       pointer-events: auto;
+      box-shadow: 
+        0 0 20px rgba(147, 51, 234, 0.4),
+        0 0 40px rgba(147, 51, 234, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
     }
     
     .notify-form button:hover {
-      background: #ff5252;
+      background: linear-gradient(135deg, #7c3aed, #9333ea);
       transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+      box-shadow: 
+        0 0 30px rgba(147, 51, 234, 0.6),
+        0 0 60px rgba(147, 51, 234, 0.4),
+        0 5px 15px rgba(147, 51, 234, 0.4);
     }
     
     @media (max-width: 768px) {
@@ -143,20 +183,22 @@
     <h1>Goodreads Wrapped</h1>
     <p class="subtitle">Coming Soon</p>
     <p class="description">
-      Discover your reading year in review! Just like Spotify Wrapped, 
+      Discover your reading year in review! Like Spotify Wrapped, 
       but for your Goodreads books. Track your stats and reading habits 
       in one sharable experience.
     </p>
     
-    <form class="notify-form" id="notifyForm">
+    <form class="notify-form" id="notifyForm" action="http://localhost:3001/api/subscribe" method="POST">
       <input 
         type="email" 
         placeholder="Enter your email for updates" 
         required
         id="emailInput"
+        name="email"
       />
       <button type="submit">Notify Me</button>
     </form>
+    <p class="description">Made with ❤️ by <a href="https://angelinawwu.com" target="_blank">Angelina Wu</a></p>
     
   </div>
 
@@ -278,8 +320,8 @@ void main() {
       return [r, g, b];
     }
     
-    // Prepare color stops
-    const gradientColors = ['#4B1405', '#740480', '#080971'];
+      // Prepare color stops
+      const gradientColors = ['#13001A', '#08000D', '#000000'];
     const colorArray = [];
     for (let i = 0; i < 8; i++) {
       const idx = i % gradientColors.length;
@@ -297,12 +339,12 @@ void main() {
         uColors: { value: colorArray },
         uColorCount: { value: 3 },
         uAngle: { value: 20 },
-        uNoise: { value: 0.3 },
+        uNoise: { value: 0.1 },
         uBlindCount: { value: 12 },
         uBlindMinWidth: { value: 50 },
         uSpotlightRadius: { value: 0.5 },
         uSpotlightSoftness: { value: 2 },
-        uSpotlightOpacity: { value: 0.3 },
+        uSpotlightOpacity: { value: 0.1 },
         uMirrorGradient: { value: false }
       },
       transparent: true
@@ -331,11 +373,68 @@ void main() {
 
   <!-- Form handler -->
   <script>
-    document.getElementById('notifyForm').addEventListener('submit', function(e) {
+    document.getElementById('notifyForm').addEventListener('submit', async function(e) {
       e.preventDefault();
+      
       const email = document.getElementById('emailInput').value;
-      alert('Thanks for your interest! We\'ll notify you at ' + email + ' when we launch.');
-      document.getElementById('emailInput').value = '';
+      const button = this.querySelector('button[type="submit"]');
+      const originalText = button.textContent;
+      
+      // Show loading state
+      button.textContent = 'Subscribing...';
+      button.disabled = true;
+      
+      try {
+        const response = await fetch('http://localhost:3001/api/subscribe', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email: email })
+        });
+        
+        if (response.ok) {
+          // Show success message
+          const successDiv = document.createElement('div');
+          successDiv.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid rgba(147, 51, 234, 0.5);
+            box-shadow: 0 0 30px rgba(147, 51, 234, 0.3);
+            z-index: 1000;
+            text-align: center;
+            backdrop-filter: blur(10px);
+          `;
+          successDiv.innerHTML = `
+            <h3 style="margin: 0 0 1rem 0; color: #a855f7;">🎉 Thank You!</h3>
+            <p style="margin: 0;">We'll notify you at <strong>${email}</strong> when we launch!</p>
+          `;
+          
+          document.body.appendChild(successDiv);
+          
+          // Remove message after 3 seconds
+          setTimeout(() => {
+            document.body.removeChild(successDiv);
+          }, 3000);
+          
+          // Clear form
+          document.getElementById('emailInput').value = '';
+        } else {
+          throw new Error('Failed to subscribe');
+        }
+      } catch (error) {
+        alert('Sorry, something went wrong. Please try again later.');
+      } finally {
+        // Reset button
+        button.textContent = originalText;
+        button.disabled = false;
+      }
     });
   </script>
 </body>
