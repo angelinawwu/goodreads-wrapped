@@ -1,28 +1,24 @@
-import { put, list } from '@vercel/blob';
-
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     const { email } = req.body;
     
-    // Get existing subscribers
-    const { blobs } = await list({ prefix: 'subscribers-' });
-    const subscribers = new Set();
+    const SHEET_URL = process.env.GOOGLE_SHEET_URL;
     
-    for (const blob of blobs) {
-      const response = await fetch(blob.url);
-      const data = await response.text();
-      data.split('\n').forEach(e => subscribers.add(e.trim()));
+    if (!SHEET_URL) {
+      return res.status(500).json({ error: 'GOOGLE_SHEET_URL not configured' });
     }
     
-    // Add new email
-    subscribers.add(email);
-    
-    // Save updated list
-    await put(`subscribers-${Date.now()}.txt`, Array.from(subscribers).join('\n'), {
-      access: 'public',
-    });
-    
-    return res.status(200).json({ success: true });
+    try {
+      await fetch(SHEET_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, timestamp: new Date().toISOString() })
+      });
+      
+      return res.status(200).json({ success: true });
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
   }
   return res.status(405).json({ error: 'Method not allowed' });
 }
