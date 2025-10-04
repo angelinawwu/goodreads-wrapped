@@ -1,0 +1,272 @@
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Goodreads Wrapped - Coming Soon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;family=Instrument+Serif:ital@0;1&amp;display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Instrument Serif', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: black;
+      overflow: hidden;
+      position: relative;
+      background-color: #F6FAFD;
+    }
+    
+    
+    .container {
+      text-align: center;
+      z-index: 1;
+      padding: 2rem;
+      width: 100%;
+      max-width: 1500px;
+      position: relative;
+    }
+    
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+    
+    h1 {
+      font-size: 7.5rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .subtitle-coming-soon {
+      font-size: 3.25rem;
+      margin-bottom: 5rem;
+      opacity: 0.9;
+      text-shadow: 
+        0 0 8px rgba(255, 255, 255, 0.3),
+        0 0 16px rgba(255, 255, 255, 0.2);
+    }
+    
+    .form-container {
+      display: flex;
+      flex-direction: column;
+      max-width: 700px;
+      margin: 0 auto 2rem;
+    }
+
+    .input-title {
+      font-size: 1.5rem;
+      margin-bottom: 0.25rem;
+      opacity: 0.8;
+      text-align: left;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+
+    .description {
+      font-size: 1.5rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      opacity: 0.8;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+
+    .description a {
+      color: black;
+      text-decoration: underline;
+      transition: color 0.3s ease;
+    }
+
+    .description a:hover {
+      color: #FFD2F5;
+    }
+    
+    .notify-form {
+      display: flex;
+      gap: 1rem;
+      width: 100%;
+    }
+    
+    .notify-form input {
+      flex: 1;
+      padding-left: 18px;
+      padding-right: 18px;
+      height: 60px;
+      border: 1px solid #7D8DA6;
+      border-radius: 12px;
+      font-size: 1.5rem;
+      outline: none;
+      pointer-events: auto;
+      font-family: 'Instrument Serif', sans-serif;
+      background: #EDF0F5;
+      color: black;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      box-sizing: border-box;
+    }
+    .notify-form input::placeholder {
+      color: #7D8DA6 !important;
+      opacity: 1;
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+    .notify-form input::-webkit-input-placeholder {
+      color: #7D8DA6 !important;
+      opacity: 1;
+      font-size: 1.5rem;
+    }
+    .notify-form input::-moz-placeholder {
+      color: #7D8DA6 !important;
+      opacity: 1;
+      font-size: 1.5rem;
+    }
+    .notify-form input:-ms-input-placeholder {
+      color: #7D8DA6 !important;
+      opacity: 1;
+      font-size: 1.5rem;
+    }
+    
+    .notify-form input:focus {
+      border-color: rgba(0,0,0, 0.5);
+      box-shadow: 
+        0 0 20px #FFA5EC,
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    
+    .notify-form input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .notify-form button {
+      padding: 18px 24px;
+      height: 60px;
+      background: #FFD2F5;
+      color: black;
+      border: 1px solid #6F4967;
+      border-radius: 12px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      pointer-events: auto;
+      display: flex;
+      align-items: center;
+      box-sizing: border-box;
+    }
+    
+    .notify-form button:hover {
+      background: #FFA5EC;
+    }
+    
+    @media (max-width: 768px) {
+      h1 { font-size: 2.5rem; }
+      .subtitle { font-size: 1.2rem; }
+      .notify-form { flex-direction: column; }
+      .notify-form button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+    <noscript></noscript>
+    <div id="root" style="display: none;"></div>
+
+  <!-- Content -->
+  <div class="container">
+    <h1>Coming soon.</h1>
+    <p class="subtitle-coming-soon">Your reading year, wrapped.</p>
+    <div class="form-container">
+      <p class="input-title">
+        Be the first to know when we launch.
+      </p>
+      
+      <form class="notify-form" id="notifyForm" action="http://localhost:3001/api/subscribe" method="POST">
+      <input type="email" placeholder="Email address" required="" id="emailInput" name="email">
+      <button type="submit">Notify me</button>
+      </form>
+    </div>
+    <p class="description">Made with &lt;3 by <a href="https://angelinawwu.com" target="_blank">Angelina Wu</a></p>
+    
+  </div>
+
+
+  <!-- Form handler -->
+  <script>
+    document.getElementById('notifyForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('emailInput').value;
+      const button = this.querySelector('button[type="submit"]');
+      const originalText = button.textContent;
+      
+      // Show loading state
+      button.textContent = 'Subscribing...';
+      button.disabled = true;
+      
+      try {
+        const response = await fetch('http://localhost:3001/api/subscribe', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email: email })
+        });
+        
+        if (response.ok) {
+          // Show success message
+          const successDiv = document.createElement('div');
+          successDiv.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #F6FAFD;
+            color: black;
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid #7D8DA6;
+            z-index: 1000;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            font-size: 1.5rem;
+          `;
+          successDiv.innerHTML = `
+            <h3 style="margin: 0 0 1rem 0; color: #a855f7;">Thank you!</h3>
+            <p style="margin: 0;">We'll notify you at <strong>${email}</strong> when we launch!</p>
+          `;
+          
+          document.body.appendChild(successDiv);
+          
+          // Remove message after 3 seconds
+          setTimeout(() => {
+            document.body.removeChild(successDiv);
+          }, 3000);
+          
+          // Clear form
+          document.getElementById('emailInput').value = '';
+        } else {
+          throw new Error('Failed to subscribe');
+        }
+      } catch (error) {
+        alert('Sorry, something went wrong. Please try again later.');
+      } finally {
+        // Reset button
+        button.textContent = originalText;
+        button.disabled = false;
+      }
+    });
+  </script>
+
+</body></html>
