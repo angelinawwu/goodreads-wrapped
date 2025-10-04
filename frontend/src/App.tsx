@@ -3,7 +3,7 @@ import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import './App.css';
 import QRCode from 'qrcode';
 import GradientBlinds from './components/GradientBlinds';
-import Navigation from './components/Navigation';
+// import Navigation from './components/Navigation';
 import WelcomePage from './components/pages/1_WelcomePage';
 import DesktopView from './components/pages/2_DesktopView';
 import BooksRead from './components/pages/3_BooksRead';
@@ -134,7 +134,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
-  const [hoveredGenre, setHoveredGenre] = useState<string | null>(null);
+  // const [hoveredGenre, setHoveredGenre] = useState<string | null>(null);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -327,75 +327,75 @@ function App() {
     />
   );
 
-  const renderMostScathingReviewPageOLD = () => (
-    <div className="page-container">
-      <div className="page-header">
-        <h2>🔥 Most Scathing Review</h2>
-        <p className="page-subtitle">Your most critical review of 2025</p>
-      </div>
+  // const renderMostScathingReviewPageOLD = () => (
+  //   <div className="page-container">
+  //     <div className="page-header">
+  //       <h2>🔥 Most Scathing Review</h2>
+  //       <p className="page-subtitle">Your most critical review of 2025</p>
+  //     </div>
       
-      {result?.mostScathingReview ? (
-        <div className="scathing-review-container">
-          <div className="scathing-book-card">
-            <div className="book-cover">
-              {result.mostScathingReview.coverImage ? (
-                <img src={result.mostScathingReview.coverImage} alt={result.mostScathingReview.title} />
-              ) : (
-                <div className="no-cover">📖</div>
-              )}
-            </div>
-            <div className="book-info">
-              <div className="book-title">{result.mostScathingReview.title}</div>
-              <div className="book-author">by {result.mostScathingReview.author}</div>
-              {result.mostScathingReview.userRating && (
-                <div className="book-rating">⭐ {result.mostScathingReview.userRating}/5</div>
-              )}
-            </div>
-          </div>
+  //     {result?.mostScathingReview ? (
+  //       <div className="scathing-review-container">
+  //         <div className="scathing-book-card">
+  //           <div className="book-cover">
+  //             {result.mostScathingReview.coverImage ? (
+  //               <img src={result.mostScathingReview.coverImage} alt={result.mostScathingReview.title} />
+  //             ) : (
+  //               <div className="no-cover">📖</div>
+  //             )}
+  //           </div>
+  //           <div className="book-info">
+  //             <div className="book-title">{result.mostScathingReview.title}</div>
+  //             <div className="book-author">by {result.mostScathingReview.author}</div>
+  //             {result.mostScathingReview.userRating && (
+  //               <div className="book-rating">⭐ {result.mostScathingReview.userRating}/5</div>
+  //             )}
+  //           </div>
+  //         </div>
           
-          <div className="review-content">
-            <div className="review-text">
-              "{result.mostScathingReview.sentiment?.fullReview || 'No review text available'}"
-            </div>
+  //         <div className="review-content">
+  //           <div className="review-text">
+  //             "{result.mostScathingReview.sentiment?.fullReview || 'No review text available'}"
+  //           </div>
             
-            <div className="sentiment-stats">
-              <div className="sentiment-score">
-                <div className="sentiment-number">
-                  {result.mostScathingReview.sentiment?.comparative?.toFixed(3) || '0.000'}
-                </div>
-                <div className="sentiment-label">sentiment score</div>
-              </div>
+  //           <div className="sentiment-stats">
+  //             <div className="sentiment-score">
+  //               <div className="sentiment-number">
+  //                 {result.mostScathingReview.sentiment?.comparative?.toFixed(3) || '0.000'}
+  //               </div>
+  //               <div className="sentiment-label">sentiment score</div>
+  //             </div>
               
-              <div className="sentiment-breakdown">
-                <div className="sentiment-positive">
-                  <span className="sentiment-icon">😊</span>
-                  <span>{result.mostScathingReview.sentiment?.positive?.length || 0} positive words</span>
-                </div>
-                <div className="sentiment-negative">
-                  <span className="sentiment-icon">😠</span>
-                  <span>{result.mostScathingReview.sentiment?.negative?.length || 0} negative words</span>
-                </div>
-              </div>
-            </div>
-          </div>
+  //             <div className="sentiment-breakdown">
+  //               <div className="sentiment-positive">
+  //                 <span className="sentiment-icon">😊</span>
+  //                 <span>{result.mostScathingReview.sentiment?.positive?.length || 0} positive words</span>
+  //               </div>
+  //               <div className="sentiment-negative">
+  //                 <span className="sentiment-icon">😠</span>
+  //                 <span>{result.mostScathingReview.sentiment?.negative?.length || 0} negative words</span>
+  //               </div>
+  //             </div>
+  //           </div>
+  //         </div>
           
-        <div className="scathing-message">
-          <p>This was your most critical review of the year! 💥</p>
-        </div>
-              </div>
-            ) : (
-      <div className="no-scathing-review">
-        <p>No scathing reviews found - you're too nice! ��</p>
-                  </div>
-                )}
+  //       <div className="scathing-message">
+  //         <p>This was your most critical review of the year! 💥</p>
+  //       </div>
+  //             </div>
+  //           ) : (
+  //     <div className="no-scathing-review">
+  //       <p>No scathing reviews found - you're too nice! ��</p>
+  //                 </div>
+  //               )}
     
-    <div className="review-details">
-      <p>Based on {result?.booksWithReviews || 0} books with reviews</p>
-    </div>
+  //   <div className="review-details">
+  //     <p>Based on {result?.booksWithReviews || 0} books with reviews</p>
+  //   </div>
     
-    <Navigation onPrevPage={prevPage} onNextPage={nextPage} />
-  </div>
-);
+  //   <Navigation onPrevPage={prevPage} onNextPage={nextPage} />
+  // </div>
+// );
   const renderMostPositiveReviewPage = () => (
     <MostPositiveReview
       mostPositiveReview={result?.mostPositiveReview}
@@ -405,75 +405,75 @@ function App() {
     />
   );
 
-  const renderMostPositiveReviewPageOLD = () => (
-    <div className="page-container">
-      <div className="page-header">
-        <h2>🔥 Most Positive Review</h2>
-        <p className="page-subtitle">Your most positive review of 2025</p>
-      </div>
+  // const renderMostPositiveReviewPageOLD = () => (
+  //   <div className="page-container">
+  //     <div className="page-header">
+  //       <h2>🔥 Most Positive Review</h2>
+  //       <p className="page-subtitle">Your most positive review of 2025</p>
+  //     </div>
       
-      {result?.mostPositiveReview ? (
-        <div className="scathing-review-container">
-          <div className="scathing-book-card">
-            <div className="book-cover">
-              {result.mostPositiveReview.coverImage ? (
-                <img src={result.mostPositiveReview.coverImage} alt={result.mostPositiveReview.title} />
-              ) : (
-                <div className="no-cover">📖</div>
-              )}
-            </div>
-            <div className="book-info">
-              <div className="book-title">{result.mostPositiveReview.title}</div>
-              <div className="book-author">by {result.mostPositiveReview.author}</div>
-              {result.mostPositiveReview.userRating && (
-                <div className="book-rating">⭐ {result.mostPositiveReview.userRating}/5</div>
-              )}
-            </div>
-          </div>
+  //     {result?.mostPositiveReview ? (
+  //       <div className="scathing-review-container">
+  //         <div className="scathing-book-card">
+  //           <div className="book-cover">
+  //             {result.mostPositiveReview.coverImage ? (
+  //               <img src={result.mostPositiveReview.coverImage} alt={result.mostPositiveReview.title} />
+  //             ) : (
+  //               <div className="no-cover">📖</div>
+  //             )}
+  //           </div>
+  //           <div className="book-info">
+  //             <div className="book-title">{result.mostPositiveReview.title}</div>
+  //             <div className="book-author">by {result.mostPositiveReview.author}</div>
+  //             {result.mostPositiveReview.userRating && (
+  //               <div className="book-rating">⭐ {result.mostPositiveReview.userRating}/5</div>
+  //             )}
+  //           </div>
+  //         </div>
           
-          <div className="review-content">
-            <div className="review-text">
-              "{result.mostPositiveReview.sentiment?.fullReview || 'No review text available'}"
-            </div>
+  //         <div className="review-content">
+  //           <div className="review-text">
+  //             "{result.mostPositiveReview.sentiment?.fullReview || 'No review text available'}"
+  //           </div>
             
-            <div className="sentiment-stats">
-              <div className="sentiment-score">
-                <div className="sentiment-number">
-                  {result.mostPositiveReview.sentiment?.comparative?.toFixed(3) || '0.000'}
-                </div>
-                <div className="sentiment-label">sentiment score</div>
-                  </div>
+  //           <div className="sentiment-stats">
+  //             <div className="sentiment-score">
+  //               <div className="sentiment-number">
+  //                 {result.mostPositiveReview.sentiment?.comparative?.toFixed(3) || '0.000'}
+  //               </div>
+  //               <div className="sentiment-label">sentiment score</div>
+  //                 </div>
               
-              <div className="sentiment-breakdown">
-                <div className="sentiment-positive">
-                  <span className="sentiment-icon">😊</span>
-                  <span>{result.mostPositiveReview.sentiment?.positive?.length || 0} positive words</span>
-                  </div>
-                <div className="sentiment-negative">
-                  <span className="sentiment-icon">😠</span>
-                  <span>{result.mostPositiveReview.sentiment?.negative?.length || 0} negative words</span>
-                </div>
-              </div>
-            </div>
-          </div>
+  //             <div className="sentiment-breakdown">
+  //               <div className="sentiment-positive">
+  //                 <span className="sentiment-icon">😊</span>
+  //                 <span>{result.mostPositiveReview.sentiment?.positive?.length || 0} positive words</span>
+  //                 </div>
+  //               <div className="sentiment-negative">
+  //                 <span className="sentiment-icon">😠</span>
+  //                 <span>{result.mostPositiveReview.sentiment?.negative?.length || 0} negative words</span>
+  //               </div>
+  //             </div>
+  //           </div>
+  //         </div>
           
-          <div className="positive-message">
-            <p>This was your most positive review of the year! 💥</p>
-          </div>
-        </div>
-      ) : (
-        <div className="no-positive-review">
-          <p>No positive reviews found - are you a hater?</p>
-              </div>
-            )}
+  //         <div className="positive-message">
+  //           <p>This was your most positive review of the year! 💥</p>
+  //         </div>
+  //       </div>
+  //     ) : (
+  //       <div className="no-positive-review">
+  //         <p>No positive reviews found - are you a hater?</p>
+  //             </div>
+  //           )}
       
-      <div className="review-details">
-        <p>Based on {result?.booksWithReviews || 0} books with reviews</p>
-      </div>
+  //     <div className="review-details">
+  //       <p>Based on {result?.booksWithReviews || 0} books with reviews</p>
+  //     </div>
       
-      <Navigation onPrevPage={prevPage} onNextPage={nextPage} />
-    </div>
-  );
+  //     <Navigation onPrevPage={prevPage} onNextPage={nextPage} />
+  //   </div>
+  // );
 
   const renderDependabilityPage = () => (
     <Dependability
@@ -486,51 +486,51 @@ function App() {
     />
   );
 
-  const renderDependabilityPageOLD = () => (
-    <div className="page-container">
-      <div className="page-header">
-        <h2>📋 Dependability</h2>
-        <p className="page-subtitle">How well you follow through on your reading goals</p>
-      </div>
+  // const renderDependabilityPageOLD = () => (
+  //   <div className="page-container">
+  //     <div className="page-header">
+  //       <h2>📋 Dependability</h2>
+  //       <p className="page-subtitle">How well you follow through on your reading goals</p>
+  //     </div>
       
-      <div className="dependability-stats">
-        <div className="dependability-main">
-          <div className="dependability-number">
-            {result?.dependability ? (result.dependability * 100).toFixed(1) : '0.0'}%
-          </div>
-          <div className="dependability-label">follow-through rate</div>
-        </div>
+  //     <div className="dependability-stats">
+  //       <div className="dependability-main">
+  //         <div className="dependability-number">
+  //           {result?.dependability ? (result.dependability * 100).toFixed(1) : '0.0'}%
+  //         </div>
+  //         <div className="dependability-label">follow-through rate</div>
+  //       </div>
         
-        <div className="dependability-breakdown">
-          <div className="breakdown-item">
-            <div className="breakdown-number">{result?.toReadReadCount || 0}</div>
-            <div className="breakdown-label">books read in {result?.year || '2025'}</div>
-          </div>
-          <div className="breakdown-divider">of</div>
-          <div className="breakdown-item">
-            <div className="breakdown-number">{(result?.toReadAddedCount || 0) + (result?.toReadReadCount || 0)}</div>
-            <div className="breakdown-label">total books added in {result?.year || '2025'}</div>
-          </div>
-        </div>
-      </div>
+  //       <div className="dependability-breakdown">
+  //         <div className="breakdown-item">
+  //           <div className="breakdown-number">{result?.toReadReadCount || 0}</div>
+  //           <div className="breakdown-label">books read in {result?.year || '2025'}</div>
+  //         </div>
+  //         <div className="breakdown-divider">of</div>
+  //         <div className="breakdown-item">
+  //           <div className="breakdown-number">{(result?.toReadAddedCount || 0) + (result?.toReadReadCount || 0)}</div>
+  //           <div className="breakdown-label">total books added in {result?.year || '2025'}</div>
+  //         </div>
+  //       </div>
+  //     </div>
       
-      <div className="dependability-message">
-        <p>
-          {result?.dependability && result.dependability >= 0.8 
-            ? "You're incredibly reliable with your reading goals! 🎯"
-            : result?.dependability && result.dependability >= 0.5
-            ? "You're doing well at following through on your reading plans! 📚"
-            : "There's always room to improve your reading follow-through! 💪"
-          }
-        </p>
-        <p style={{fontSize: '0.9rem', opacity: 0.8, marginTop: '0.5rem'}}>
-          This measures how many books you read in {result?.year || '2025'} that were also added to your shelves in {result?.year || '2025'}.
-        </p>
-      </div>
+  //     <div className="dependability-message">
+  //       <p>
+  //         {result?.dependability && result.dependability >= 0.8 
+  //           ? "You're incredibly reliable with your reading goals! 🎯"
+  //           : result?.dependability && result.dependability >= 0.5
+  //           ? "You're doing well at following through on your reading plans! 📚"
+  //           : "There's always room to improve your reading follow-through! 💪"
+  //         }
+  //       </p>
+  //       <p style={{fontSize: '0.9rem', opacity: 0.8, marginTop: '0.5rem'}}>
+  //         This measures how many books you read in {result?.year || '2025'} that were also added to your shelves in {result?.year || '2025'}.
+  //       </p>
+  //     </div>
       
-      <Navigation onPrevPage={prevPage} onNextPage={nextPage} />
-    </div>
-  );
+  //     <Navigation onPrevPage={prevPage} onNextPage={nextPage} />
+  //   </div>
+  // );
 
   const renderDesktopView = () => (
     <DesktopView
