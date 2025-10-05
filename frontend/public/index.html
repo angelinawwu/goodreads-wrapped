@@ -1,10 +1,73 @@
-<html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Goodreads Wrapped - Coming Soon</title>
+  
+  <!-- Primary Meta Tags -->
+  <title>Goodreads Wrapped - Your Reading Year, Wrapped</title>
+  <meta name="title" content="Goodreads Wrapped - Your Reading Year, Wrapped">
+  <meta name="description" content="Discover your personalized reading insights with Goodreads Wrapped. Get beautiful stats on your books read, favorite genres, reading habits, and more. Coming soon!">
+  <meta name="keywords" content="goodreads wrapped, reading stats, book statistics, goodreads analytics, reading year in review, book tracker, reading habits, goodreads insights">
+  <meta name="author" content="Angelina Wu">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://goodreads-wrapped.vercel.app/">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://goodreads-wrapped.vercel.app/">
+  <meta property="og:title" content="Goodreads Wrapped - Your Reading Year, Wrapped">
+  <meta property="og:description" content="Discover your personalized reading insights with Goodreads Wrapped. Get beautiful stats on your books read, favorite genres, reading habits, and more. Coming soon!">
+  <meta property="og:image" content="https://goodreads-wrapped.vercel.app/logo512.png">
+  <meta property="og:site_name" content="Goodreads Wrapped">
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://goodreads-wrapped.vercel.app/">
+  <meta property="twitter:title" content="Goodreads Wrapped - Your Reading Year, Wrapped">
+  <meta property="twitter:description" content="Discover your personalized reading insights with Goodreads Wrapped. Get beautiful stats on your books read, favorite genres, reading habits, and more. Coming soon!">
+  <meta property="twitter:image" content="https://goodreads-wrapped.vercel.app/logo512.png">
+  
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#F6FAFD">
+  <meta name="msapplication-TileColor" content="#F6FAFD">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="apple-touch-icon" sizes="192x192" href="/logo192.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="/logo512.png">
+  
+  <!-- Preload Critical Assets -->
+  <link rel="preload" as="image" href="/gradient1.svg">
+  <link rel="preload" as="image" href="/gradient2.svg">
+  <link rel="preload" as="image" href="/gradient3.svg">
+  
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
   <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;family=Instrument+Serif:ital@0;1&amp;display=swap" rel="stylesheet">
+  
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Goodreads Wrapped",
+    "description": "Discover your personalized reading insights with Goodreads Wrapped. Get beautiful stats on your books read, favorite genres, reading habits, and more.",
+    "url": "https://goodreads-wrapped.vercel.app/",
+    "applicationCategory": "LifestyleApplication",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Angelina Wu",
+      "url": "https://angelinawwu.com"
+    }
+  }
+  </script>
   <style>
     * {
       margin: 0;
@@ -259,26 +322,38 @@
   </style>
 </head>
 <body>
-    <noscript></noscript>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root" style="display: none;"></div>
 
-  <!-- Content -->
-  <div class="container">
-    <h1>Coming soon.</h1>
-    <p class="subtitle-coming-soon">Your reading year, wrapped.</p>
-    <div class="form-container">
+  <!-- Main Content -->
+  <main class="container">
+    <header>
+      <h1>Coming soon.</h1>
+      <p class="subtitle-coming-soon">Your reading year, wrapped.</p>
+    </header>
+    
+    <section class="form-container" aria-label="Email signup form">
       <p class="input-title">
         Be the first to know when we launch.
       </p>
       
-      <form class="notify-form" id="notifyForm" action="http://localhost:3001/api/subscribe" method="POST">
-      <input type="email" placeholder="Email address" required="" id="emailInput" name="email">
-      <button type="submit">Notify me</button>
+      <form class="notify-form" id="notifyForm" action="http://localhost:3001/api/subscribe" method="POST" aria-label="Subscribe to launch notification">
+        <input 
+          type="email" 
+          placeholder="Email address" 
+          required 
+          id="emailInput" 
+          name="email"
+          aria-label="Email address"
+          autocomplete="email">
+        <button type="submit" aria-label="Subscribe to notifications">Notify me</button>
       </form>
-    </div>
-    <p class="description">Made with &lt;3 by <a href="https://angelinawwu.com" target="_blank">Angelina Wu</a></p>
+    </section>
     
-  </div>
+    <footer class="description">
+      Made with &lt;3 by <a href="https://angelinawwu.com" target="_blank" rel="noopener noreferrer">Angelina Wu</a>
+    </footer>
+  </main>
 
 
   <!-- Form handler -->
