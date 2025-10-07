@@ -83,3 +83,31 @@ button:disabled {
   transform: none;
   opacity: 0.6;
 }
+
+/* 3D Book Model Styles */
+.book-container {
+  margin: 2rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.book-model {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .book-model {
+    width: 300px !important;
+    height: 375px !important;
+  }
+  
+  .book-container {
+    margin: 1rem 0;
+  }
+}
