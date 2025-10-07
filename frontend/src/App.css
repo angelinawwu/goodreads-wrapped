@@ -125,6 +125,7 @@ button, input, .book-list, .book-item, .desktop-nav, .username-form, .input-grou
 
 button {
   pointer-events: auto;
+  background: #FFD2F5;
 }
 
 /* Instagram-style Segmented Progress Bar */
