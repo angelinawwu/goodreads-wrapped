@@ -14,8 +14,11 @@
   align-items: center;
   gap: 1rem;
   padding: 2rem;
-  border-radius: 15px;
+  border-radius: 12px;
   width: 100%;
+  background: rgba(237, 240, 245, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .rating-comparison {
@@ -23,8 +26,11 @@
   align-items: center;
   gap: 2rem;
   padding: 2rem;
-  border-radius: 15px;
+  border-radius: 12px;
   width: 100%;
+  background: rgba(237, 240, 245, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .rating-display {
@@ -39,6 +45,8 @@
   font-size: 0.9rem;
   opacity: 0.8;
   text-align: center;
+  font-family: 'Instrument Serif', serif;
+  color: black;
 }
 
 .rating-stars {
@@ -51,77 +59,90 @@
 .rating-number {
   font-size: 1.2rem;
   font-weight: bold;
-  color: #ffd700;
+  color: black;
+  font-family: 'Instrument Serif', serif;
 }
 
 .user-rating {
-  color: #ff6b6b;
+  color: black;
 }
 
 .avg-rating {
-  color: #4ecdc4;
+  color: black;
 }
 
 .vs-divider {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #ffd700;
-  background: rgba(255, 215, 0, 0.2);
+  color: black;
+  background: rgba(255, 210, 245, 0.4);
   padding: 0.5rem 1rem;
   border-radius: 50%;
   min-width: 60px;
   text-align: center;
+  font-family: 'Instrument Serif', serif;
 }
 
 .disparity-display {
   text-align: center;
-  background: rgba(255, 107, 107, 0.2);
+  background: rgba(255, 165, 236, 0.2);
   padding: 1.5rem;
-  border-radius: 15px;
+  border-radius: 12px;
   backdrop-filter: blur(10px);
   width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .disparity-number {
   font-size: 3rem;
   font-weight: bold;
-  color: #ff6b6b;
+  color: black;
   margin: 0.5rem 0;
+  font-family: 'Instrument Serif', serif;
 }
 
 .disparity-label {
   font-size: 1.1rem;
   opacity: 0.8;
+  font-family: 'Instrument Serif', serif;
+  color: black;
 }
 
 .hater-message {
   text-align: center;
   padding: 1.5rem;
-  border-radius: 15px;
+  border-radius: 12px;
   width: 100%;
+  background: rgba(255, 210, 245, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .hater-message p {
   margin: 0;
   font-size: 1.1rem;
-  color: #ff6b6b;
+  color: black;
   font-weight: bold;
+  font-family: 'Instrument Serif', serif;
 }
 
 .no-hater-moment {
   text-align: center;
   padding: 3rem;
-  border-radius: 15px;
+  border-radius: 12px;
   width: 100%;
+  background: rgba(237, 240, 245, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .no-hater-moment p {
   margin: 0;
   font-size: 1.2rem;
-  color: #4ecdc4;
+  color: black;
+  font-family: 'Instrument Serif', serif;
 }
 
-.hater-details {
+.hater-details {  
   text-align: center;
   margin: 1rem 0;
   opacity: 0.8;
@@ -130,6 +151,8 @@
 .hater-details p {
   margin: 0;
   font-size: 0.9rem;
+  font-family: 'Instrument Serif', serif;
+  color: black;
 }
 
 /* Responsive for Biggest Hater */

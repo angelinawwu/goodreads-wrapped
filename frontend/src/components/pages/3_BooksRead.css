@@ -8,14 +8,17 @@
   font-size: 4rem;
   font-weight: bold;
   margin: 0;
-  color: white;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  color: black;
+  font-family: 'Instrument Serif', serif;
+  text-shadow: none;
 }
 
 .stat-label {
   font-size: 1.2rem;
   margin-top: 0.5rem;
   opacity: 0.9;
+  font-family: 'Instrument Serif', serif;
+  color: black;
 }
 
 /* Responsive Design */

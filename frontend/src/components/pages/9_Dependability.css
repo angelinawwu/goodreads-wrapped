@@ -11,20 +11,26 @@
 .dependability-main {
   text-align: center;
   padding: 1rem;
-  border-radius: 10px;
+  border-radius: 12px;
   width: 100%;
+  background: rgba(237, 240, 245, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .dependability-number {
   font-size: 3rem;
   font-weight: bold;
-  color: white;
+  color: black;
   margin: 0.5rem 0;
+  font-family: 'Instrument Serif', serif;
 }
 
 .dependability-label {
   font-size: 1.2rem;
   opacity: 0.8;
+  font-family: 'Instrument Serif', serif;
+  color: black;
 }
 
 .dependability-breakdown {
@@ -32,8 +38,11 @@
   align-items: center;
   gap: 1rem;
   padding: 0.8rem;
-  border-radius: 10px;
+  border-radius: 12px;
   width: 100%;
+  background: rgba(237, 240, 245, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .breakdown-item {
@@ -46,32 +55,39 @@
 .breakdown-number {
   font-size: 2rem;
   font-weight: bold;
-  color: white;
+  color: black;
+  font-family: 'Instrument Serif', serif;
 }
 
 .breakdown-label {
   font-size: 0.9rem;
   opacity: 0.8;
   text-align: center;
+  font-family: 'Instrument Serif', serif;
+  color: black;
 }
 
 .breakdown-divider {
   font-size: 1.2rem;
-  color: white;
+  color: black;
   font-weight: bold;
+  font-family: 'Instrument Serif', serif;
 }
 
 .dependability-message {
   text-align: center;
   padding: 1.5rem;
-  border-radius: 15px;
+  border-radius: 12px;
   width: 100%;
+  background: rgba(255, 210, 245, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .dependability-message p {
   margin: 0;
   font-size: 1.1rem;
-  color: white;
+  color: black;
+  font-family: 'Instrument Serif', serif;
 }
 
 /* Responsive for Dependability */

@@ -14,25 +14,32 @@
   padding: 1rem;
   max-width: 600px;
   width: 100%;
+  background: rgba(237, 240, 245, 0.3);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .positive-message {
   text-align: center;
   font-size: 1.2rem;
-  color: #4ecdc4;
+  color: #FFD2F5;
   font-weight: bold;
+  font-family: 'Instrument Serif', serif;
 }
 
 .no-positive-review {
   text-align: center;
   padding: 3rem;
-  border-radius: 15px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(237, 240, 245, 0.3);
+  backdrop-filter: blur(10px);
 }
 
 /* Override sentiment number color for positive review */
 .positive-review-container .sentiment-number {
-  color: #4ecdc4;
+  color: #FFD2F5;
 }
 
 /* Mobile responsiveness */

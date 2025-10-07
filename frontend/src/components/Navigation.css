@@ -12,7 +12,7 @@
   align-items: center;
   font-size: 2rem;
   display: flex;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(0, 0, 0, 0.3);
   transition: all 0.2s ease;
 }
 
@@ -53,11 +53,11 @@
 }
 
 .nav-left::before {
-  background: linear-gradient(to right, rgba(255, 255, 255, 0.15), transparent);
+  background: linear-gradient(to right, rgba(255, 210, 245, 0.2), transparent);
 }
 
 .nav-right::before {
-  background: linear-gradient(to left, rgba(255, 255, 255, 0.15), transparent);
+  background: linear-gradient(to left, rgba(255, 210, 245, 0.2), transparent);
 }
 /* Visual feedback on hover */
 .nav-left:hover::before, .nav-right:hover::before {
@@ -65,7 +65,7 @@
 }
 
 .nav-left:hover, .nav-right:hover {
-  color: white;
+  color: black;
 }
 
 .nav-left:hover p, .nav-right:hover p {

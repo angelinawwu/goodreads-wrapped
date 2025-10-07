@@ -1,19 +1,21 @@
 .welcome-title {
   font-size: 4rem;
   line-height: 1.1;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  font-family: 'Instrument Serif', serif;
+  text-shadow: none;
 }
 
 .subtitle {
   font-size: 1.2rem;
   opacity: 0.8;
   margin: 0;
+  font-family: 'Instrument Serif', serif;
 }
 
 /* Form Styles */
 .username-form {
   padding: 2rem;
-  border-radius: 15px;
+  border-radius: 12px;
   margin: 2rem 0;
   text-align: left;
 }
@@ -27,40 +29,57 @@ label {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: bold;
+  font-family: 'Instrument Serif', serif;
+  color: black;
 }
 
 input {
-  width: calc(100% - 2rem);
-  padding: 1rem;
-  border: none;
-  border-radius: 8px;
+  width: calc(100% - 2.5rem);
+  padding: 1rem 1.25rem;
+  border: 1px solid black;
+  border-radius: 12px;
   font-size: 1.1rem;
-  background: rgba(255, 255, 255, 0.9);
-  color: #333;
+  font-family: 'Instrument Serif', serif;
+  background: rgba(237, 240, 245, 0.5);
+  color: black;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+input:focus {
+  border-color: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 20px #FFA5EC;
+  outline: none;
+}
+
+input::placeholder {
+  color: rgba(0, 0, 0, 0.5);
 }
 
 .submit-button {
-  background: #ff6b6b;
-  color: white;
-  border: none;
+  background: #FFD2F5;
+  color: black;
+  border: 1px solid black;
   padding: 1rem 2rem;
-  border-radius: 50px;
+  border-radius: 12px;
   font-size: 1.1rem;
+  font-family: 'Instrument Serif', serif;
   cursor: pointer;
-  /* transition: all 0.3s ease; */
+  transition: all 0.3s ease;
   margin-top: 2rem;
   min-width: 150px;
   pointer-events: auto;
 }
 
 .submit-button:hover {
-  background: #ff5252;
+  background: #FFA5EC;
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+  box-shadow: 0 5px 15px rgba(255, 165, 236, 0.4);
 }
 
 button:disabled {
-  background: #ccc;
+  background: rgba(0, 0, 0, 0.2);
   cursor: not-allowed;
   transform: none;
+  opacity: 0.6;
 }

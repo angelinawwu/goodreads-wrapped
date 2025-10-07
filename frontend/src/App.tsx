@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import './App.css';
 import QRCode from 'qrcode';
-import GradientBlinds from './components/GradientBlinds';
 import Navigation from './components/Navigation';
 import WelcomePage from './components/pages/1_WelcomePage';
 import DesktopView from './components/pages/2_DesktopView';
@@ -543,20 +542,7 @@ function App() {
     <div className="App">
       <div className="App-wrapper">
         <div className="background-container">
-          <GradientBlinds
-            gradientColors={['#EF6B46', '#ED5EFD', '#4447EA']}
-            angle={20}
-            noise={0.3}
-            blindCount={12}
-            blindMinWidth={50}
-            spotlightRadius={0.5}
-            spotlightSoftness={2}
-            spotlightOpacity={0.3}
-            mouseDampening={0.1}
-            distortAmount={0}
-            shineDirection="left"
-            mixBlendMode="normal"
-          />
+          {/* GradientBlinds hidden - using static gradient SVG files instead */}
         </div>
         
         {/* Instagram-style Segmented Progress Bar */}

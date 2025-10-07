@@ -10,12 +10,16 @@
   align-items: center;
   margin: 0.5rem 0;
   padding: 0.8rem;
-  border-radius: 10px;
-  transition: transform 0.2s ease;
+  border-radius: 12px;
+  background: rgba(237, 240, 245, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
 }
 
 .genre-rank-item:hover {
   transform: translateY(-2px);
+  background: rgba(255, 210, 245, 0.3);
 }
 
 .genre-rank {
@@ -26,13 +30,14 @@
 .rank-number {
   font-size: 1.5rem;
   font-weight: bold;
-  color: white;
-  background: rgba(255, 215, 0, 0.2);
+  color: black;
+  background: rgba(255, 210, 245, 0.4);
   padding: 0.5rem 1rem;
   border-radius: 50%;
   display: inline-block;
   min-width: 40px;
   text-align: center;
+  font-family: 'Instrument Serif', serif;
 }
 
 .genre-info {
@@ -44,20 +49,24 @@
   font-size: 1.3rem;
   font-weight: bold;
   margin-bottom: 0.3rem;
+  font-family: 'Instrument Serif', serif;
+  color: black;
 }
 
 .genre-fraction {
   font-size: 1rem;
   opacity: 0.8;
-  color: white;
+  color: black;
+  font-family: 'Instrument Serif', serif;
 }
 
 .genre-percentage {
   font-size: 1.5rem;
   font-weight: bold;
-  color: white;
+  color: black;
   min-width: 60px;
   text-align: right;
+  font-family: 'Instrument Serif', serif;
 }
 
 .no-genres {
@@ -69,6 +78,8 @@
 .no-genres p {
   font-size: 1.2rem;
   margin: 0;
+  font-family: 'Instrument Serif', serif;
+  color: black;
 }
 
 /* Responsive for Top Genres */
