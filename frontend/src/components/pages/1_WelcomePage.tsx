@@ -14,6 +14,12 @@ const BookModel: React.FC = () => {
 
   useEffect(() => {
     if (!mountRef.current) return;
+    
+    // Check if canvas already exists
+    if (mountRef.current.querySelector('canvas')) {
+      console.log('Canvas already exists, skipping initialization');
+      return;
+    }
 
     // Scene setup
     const scene = new THREE.Scene();
@@ -32,12 +38,22 @@ const BookModel: React.FC = () => {
     mountRef.current.appendChild(renderer.domElement);
 
     // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
     
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
     directionalLight.position.set(1, 1, 1);
     scene.add(directionalLight);
+
+    // Overhead light
+    const overheadLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    overheadLight.position.set(0, 5, 2);
+    scene.add(overheadLight);
+
+    // Optional: Add a subtle point light for highlights
+    const pointLight = new THREE.PointLight(0xffffff, 0.4);
+    pointLight.position.set(-2, 2, 3);
+    scene.add(pointLight);
 
     // Animation loop
     const animate = () => {
@@ -83,11 +99,13 @@ const BookModel: React.FC = () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
-      if (mountRef.current && renderer.domElement) {
+      if (mountRef.current && renderer.domElement && mountRef.current.contains(renderer.domElement)) {
         mountRef.current.removeChild(renderer.domElement);
       }
       renderer.dispose();
       modelRef.current = null;
+      rendererRef.current = null;
+      sceneRef.current = null;
     };
   }, []);
 
@@ -109,57 +127,64 @@ const WelcomePage: React.FC<WelcomePageProps> = ({
 }) => {
   return (
     <div className="page-container">
-      <motion.h1 className="welcome-title"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        Goodreads Wrapped 2025
-      </motion.h1>
-      <motion.p className="subtitle"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.3 }}
-      >
-        Discover your reading year in review!
-      </motion.p>
+      <div className="welcome-layout">
+        {/* Left Side - Content */}
+        <div className="welcome-content">
+          <motion.h1 className="welcome-title"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            Goodreads Wrapped 2025
+          </motion.h1>
+          <motion.p className="subtitle"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            Discover your reading year in review!
+          </motion.p>
+            
+          <form onSubmit={onSubmit} className="username-form">
+            <motion.div className="input-group"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+            >
+              <label htmlFor="username">Goodreads Username:</label>
+              <input
+                type="text"
+                id="username"
+                value={username}
+                onChange={(e) => onUsernameChange(e.target.value)}
+                placeholder="Enter your Goodreads username"
+                disabled={loading}
+              />
+            </motion.div>
+            <motion.button className="submit-button"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.9 }}
+              type="submit"
+              disabled={loading || !username.trim()}
+            >
+              {loading ? 'Analyzing...' : 'Get My Reading Stats'}
+            </motion.button>
+          </form>
+        </div>
 
-      {/* 3D Book Model */}
-      <motion.div 
-        className="book-container"
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5, delay: 0.4 }}
-      >
-        <BookModel />
-      </motion.div>
-        
-      <form onSubmit={onSubmit} className="username-form">
-        <motion.div className="input-group"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-        >
-          <label htmlFor="username">Goodreads Username:</label>
-          <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={(e) => onUsernameChange(e.target.value)}
-            placeholder="Enter your Goodreads username"
-            disabled={loading}
-          />
-        </motion.div>
-        <motion.button className="submit-button"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.9 }}
-          type="submit"
-          disabled={loading || !username.trim()}
-        >
-          {loading ? 'Analyzing...' : 'Get My Reading Stats'}
-        </motion.button>
-      </form>
+        {/* Right Side - 3D Book Model */}
+        <div className="welcome-book">
+          <motion.div 
+            className="book-container"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
+            <BookModel />
+          </motion.div>
+        </div>
+      </div>
     </div>
   );
 };
