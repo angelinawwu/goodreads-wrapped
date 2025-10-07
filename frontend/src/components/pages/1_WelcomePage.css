@@ -1,34 +1,8 @@
-/* Welcome Page Layout */
-.welcome-layout {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  gap: 2rem;
-  align-items: center;
-}
-
-.welcome-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-right: 1rem;
-}
-
-.welcome-book {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .welcome-title {
   font-size: 4rem;
   line-height: 1.1;
   font-family: 'Instrument Serif', serif;
   text-shadow: none;
-  margin-bottom: 1rem;
-  text-align: center;
 }
 
 .subtitle {
@@ -36,7 +10,6 @@
   opacity: 0.8;
   margin: 0;
   font-family: 'Instrument Serif', serif;
-  text-align: center;
 }
 
 /* Form Styles */
@@ -109,55 +82,4 @@ button:disabled {
   cursor: not-allowed;
   transform: none;
   opacity: 0.6;
-}
-
-/* 3D Book Model Styles */
-.book-container {
-  margin: 2rem 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.book-model {
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .welcome-layout {
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .welcome-content {
-    padding-right: 0;
-    order: 2;
-  }
-  
-  .welcome-book {
-    order: 1;
-  }
-  
-  .welcome-title {
-    font-size: 2.5rem;
-    text-align: center;
-  }
-  
-  .subtitle {
-    text-align: center;
-  }
-  
-  .book-model {
-    width: 300px !important;
-    height: 375px !important;
-  }
-  
-  .book-container {
-    margin: 1rem 0;
-  }
 }

@@ -46,9 +46,9 @@ p {
   z-index: 0;
   pointer-events: auto;
   background: 
-    url('/src/assets/gradient3.svg'),
-    url('/src/assets/gradient2.svg'),
-    url('/src/assets/gradient1.svg');
+    url('/gradient3.svg'),
+    url('/gradient2.svg'),
+    url('/gradient1.svg');
   background-position: center center, center center, center center;
   background-repeat: no-repeat, no-repeat, no-repeat;
   background-color: #F6FAFD;

@@ -542,6 +542,7 @@ function App() {
     <div className="App">
       <div className="App-wrapper">
         <div className="background-container">
+          {/* GradientBlinds hidden - using static gradient SVG files instead */}
         </div>
         
         {/* Instagram-style Segmented Progress Bar */}
