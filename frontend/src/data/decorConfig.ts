@@ -7,37 +7,34 @@ export interface DecorItem {
 
 export const decorMap: { [key: string]: DecorItem[] } = {
   '/': [
-    { id: 1, position: 'top' },
-    { id: 2, position: 'bottom' }
+    { id: 9, position: 'frame-c' }
   ],
   '/desktop': [
-    { id: 3, position: 'top' },
-    { id: 4, position: 'bottom' }
+    { id: 2, position: 'frame' },
   ],
   '/books-read': [
-    { id: 5, position: 'top' }
+    { id: 3, position: 'top' }
   ],
   '/average-rating': [
-    { id: 6, position: 'bottom' }
+    { id: 4, position: 'top' }
   ],
   '/book-details': [
-    { id: 8, position: 'corner-tr' },
-    { id: 8, position: 'corner-bl' }
+    { id: 5, position: 'bottom' },
   ],
   '/top-genres': [
-    { id: 9, position: 'top' }
+    { id: 6, position: 'top' }
   ],
   '/genres-over-time': [
-    { id: 10, position: 'bottom' }
+    { id: 7, position: 'top' }
   ],
   '/reading-time': [
-    { id: 1, position: 'top' }
+    { id: 8, position: 'top' }
   ],
   '/dependability': [
-    { id: 2, position: 'bottom' }
+    { id: 9, position: 'frame' }
   ],
   '/biggest-hater': [
-    { id: 3, position: 'top' }
+    { id: 10, position: 'frame' }
   ],
   '/most-scathing-review': [
     { id: 4, position: 'bottom' }

@@ -17,7 +17,7 @@ const WelcomePage: React.FC<WelcomePageProps> = ({
 }) => {
   return (
     <div className="page-container">
-      <motion.h1 className="welcome-title"
+      <motion.h1 className="welcome-title text-xl"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -46,6 +46,7 @@ const WelcomePage: React.FC<WelcomePageProps> = ({
             onChange={(e) => onUsernameChange(e.target.value)}
             placeholder="Enter your Goodreads username"
             disabled={loading}
+            className="w-full"
           />
         </motion.div>
         <motion.button className="submit-button"

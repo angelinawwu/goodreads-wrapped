@@ -48,7 +48,7 @@
   font-size: 0.9rem;
   color: black;
   font-weight: 500;
-  font-family: 'Instrument Serif', serif;
+  font-family: var(--font-main);
 }
 
 .no-chart-data {
@@ -56,7 +56,7 @@
   padding: 3rem;
   color: rgba(0, 0, 0, 0.7);
   font-size: 1.1rem;
-  font-family: 'Instrument Serif', serif;
+  font-family: var(--font-main);
 }
 
 /* Mobile chart responsiveness */

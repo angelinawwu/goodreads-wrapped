@@ -6,6 +6,7 @@ export type DecorPosition =
   | 'bottom' 
   | 'center' 
   | 'frame' 
+  | 'frame-c'
   | 'corner-tl' 
   | 'corner-tr' 
   | 'corner-bl' 

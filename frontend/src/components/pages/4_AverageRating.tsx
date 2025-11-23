@@ -17,7 +17,7 @@ const AverageRating: React.FC<AverageRatingProps> = ({
   onNextPage 
 }) => {
   return (
-    <div className="page-container">
+    <div className="rating-page-container">
       <div className="page-header">
         <motion.h2 className="page-title"
           initial={{ opacity: 0, y: 20 }}

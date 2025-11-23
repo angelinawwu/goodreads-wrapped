@@ -23,13 +23,13 @@
   font-weight: bold;
   color: black;
   margin: 0.5rem 0;
-  font-family: 'Instrument Serif', serif;
+  font-family: var(--font-main);
 }
 
 .dependability-label {
   font-size: 1.2rem;
   opacity: 0.8;
-  font-family: 'Instrument Serif', serif;
+  font-family: var(--font-main);
   color: black;
 }
 
@@ -56,14 +56,14 @@
   font-size: 2rem;
   font-weight: bold;
   color: black;
-  font-family: 'Instrument Serif', serif;
+  font-family: var(--font-main);
 }
 
 .breakdown-label {
   font-size: 0.9rem;
   opacity: 0.8;
   text-align: center;
-  font-family: 'Instrument Serif', serif;
+  font-family: var(--font-main);
   color: black;
 }
 
@@ -71,7 +71,7 @@
   font-size: 1.2rem;
   color: black;
   font-weight: bold;
-  font-family: 'Instrument Serif', serif;
+  font-family: var(--font-main);
 }
 
 .dependability-message {
@@ -87,7 +87,7 @@
   margin: 0;
   font-size: 1.1rem;
   color: black;
-  font-family: 'Instrument Serif', serif;
+  font-family: var(--font-main);
 }
 
 /* Responsive for Dependability */

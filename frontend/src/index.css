@@ -1,14 +1,17 @@
+@import "tailwindcss";
+
 :root {
   --color-vintage-bg: #f5f5dc;
   --color-vintage-text: #3b2f2f;
   --color-vintage-accent: #800000;
+  --color-vintage-accent-light: #933c3c;
   --color-vintage-highlight: #556b2f;
   
   --font-main: 'EB Garamond', serif;
   --font-display: 'EB Garamond', serif;
 
   font-family: var(--font-main);
-  line-height: 1.5;
+  line-height: 1;
   font-weight: 400;
 
   color-scheme: light;
@@ -41,7 +44,7 @@ body {
 
 h1 {
   font-size: 3.2em;
-  line-height: 1.1;
+  line-height: 1;
   font-family: var(--font-display);
   color: var(--color-vintage-accent);
 }

@@ -21,13 +21,13 @@
   font-weight: bold;
   color: black;
   margin: 0.5rem 0;
-  font-family: 'Instrument Serif', serif;
+  font-family: var(--font-main);
 }
 
 .detail-label {
   font-size: 1.1rem;
   opacity: 0.8;
-  font-family: 'Instrument Serif', serif;
+  font-family: var(--font-main);
   color: black;
 }
 
@@ -72,7 +72,7 @@
   font-size: 1.1rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
-  font-family: 'Instrument Serif', serif;
+  font-family: var(--font-main);
   color: black;
 }
 
@@ -80,7 +80,7 @@
   font-size: 0.9rem;
   opacity: 0.8;
   margin-bottom: 0.5rem;
-  font-family: 'Instrument Serif', serif;
+  font-family: var(--font-main);
   color: black;
 }
 
@@ -88,7 +88,7 @@
   font-size: 0.9rem;
   color: black;
   font-weight: bold;
-  font-family: 'Instrument Serif', serif;
+  font-family: var(--font-main);
 }
 
 /* Responsive */

@@ -2,11 +2,17 @@
   margin-top: 1rem;
   opacity: 0.8;
   font-size: 0.9rem;
-  font-family: 'Instrument Serif', serif;
+  font-family: var(--font-main);
   color: black;
 }
 
 .rating-details p {
   margin: 0;
-  font-family: 'Instrument Serif', serif;
+  font-family: var(--font-main);
+}
+
+.rating-page-container {
+  padding-top: 14rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
