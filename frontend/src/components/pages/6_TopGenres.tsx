@@ -1,6 +1,7 @@
 import React from 'react';
 import Navigation from '../Navigation';
 import './6_TopGenres.css';
+import { motion } from 'framer-motion';
 
 interface TopGenresProps {
   genreCounts?: { [key: string]: number };
@@ -24,8 +25,20 @@ const TopGenres: React.FC<TopGenresProps> = ({
   return (
     <div className="page-container">
       <div className="page-header">
-        <h2>🏆 Top Genres</h2>
-        <p className="page-subtitle">Your favorite genres in 2025</p>
+        <motion.h2 className="page-title"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          🏆 Top Genres
+        </motion.h2>
+        <motion.p className="page-subtitle"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          Your favorite genres in 2025
+        </motion.p>
       </div>
       
       <div className="top-genres-list">

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HD7TX47VM3"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-HD7TX47VM3');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Primary Meta Tags -->
+  <title>Goodreads Wrapped - Your Reading Year, Wrapped</title>
+  <meta name="title" content="Goodreads Wrapped - Your Reading Year, Wrapped">
+  <meta name="description" content="Discover your personalized reading insights with Goodreads Wrapped. Get beautiful stats on your books read, favorite genres, reading habits, and more. Coming soon!">
+  <meta name="keywords" content="goodreads wrapped, reading stats, book statistics, goodreads analytics, reading year in review, book tracker, reading habits, goodreads insights, your year in books">
+  <meta name="author" content="Angelina Wu">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://goodreadswrapped.com/">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://goodreadswrapped.com/">
+  <meta property="og:title" content="Goodreads Wrapped - Your Reading Year, Wrapped">
+  <meta property="og:description" content="Discover your personalized reading insights with Goodreads Wrapped. Get beautiful stats on your books read, favorite genres, reading habits, and more. Coming soon!">
+  <meta property="og:image" content="https://goodreadswrapped.com/GRW-LandingDemo.png">
+  <meta property="og:site_name" content="Goodreads Wrapped">
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://goodreadswrapped.com/">
+  <meta property="twitter:title" content="Goodreads Wrapped - Your Reading Year, Wrapped">
+  <meta property="twitter:description" content="Discover your personalized reading insights with Goodreads Wrapped. Get beautiful stats on your books read, favorite genres, reading habits, and more. Coming soon!">
+  <meta property="twitter:image" content="https://goodreadswrapped.com/GRW-LandingDemo.png">
+  
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#F6FAFD">
+  <meta name="msapplication-TileColor" content="#F6FAFD">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/GRW-Favicon.png">
+  <link rel="apple-touch-icon" href="/GRW-Favicon.png">
+  <link rel="shortcut icon" href="/GRW-Favicon.png">
+  
+  <!-- Preload Critical Assets -->
+  <link rel="preload" as="image" href="/gradient1.svg">
+  <link rel="preload" as="image" href="/gradient2.svg">
+  <link rel="preload" as="image" href="/gradient3.svg">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;family=Instrument+Serif:ital@0;1&amp;display=swap" rel="stylesheet">
+  
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Goodreads Wrapped",
+    "description": "Discover your personalized reading insights with Goodreads Wrapped. Get beautiful stats on your books read, favorite genres, reading habits, and more.",
+    "url": "https://goodreadswrapped.com/",
+    "applicationCategory": "LifestyleApplication",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Angelina Wu",
+      "url": "https://angelinawwu.com"
+    },
+    "image": "https://goodreadswrapped.com/GRW-LandingDemo.png"
+  }
+  </script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html, body {
+      overflow-x: hidden;
+      max-width: 100vw;
+      max-height: 100vh;
+      overflow-y: hidden;
+    }
+    
+    body {
+      font-family: 'Instrument Serif', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: black;
+      overflow-y: auto;
+      position: relative;
+      background: 
+        url('gradient3.svg'),
+        url('gradient2.svg'),
+        url('gradient1.svg');
+      background-position: center center, center center, center center;
+      background-repeat: no-repeat, no-repeat, no-repeat;
+      background-color: #F6FAFD;
+    }
+    
+    /* Landscape orientation - width-based */
+    @media (orientation: landscape) {
+      body {
+        background-size: 100vw auto, 100vw auto, 100vw auto;
+      }
+    }
+    
+    /* Portrait orientation - height-based */
+    @media (orientation: portrait) {
+      body {
+        background-size: auto 100vh, auto 100vh, auto 100vh;
+      }
+    }
+    
+    
+    .container {
+        text-align: center;
+        z-index: 1;
+        padding: 2rem;
+        width: 100%;
+        max-width: 1500px;
+        position: relative;
+        box-sizing: border-box; /* This makes padding included in width */
+      }
+    
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+    
+    h1 {
+      font-size: 7.5rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .subtitle-coming-soon {
+      font-size: 3.25rem;
+      margin-bottom: 5rem;
+      opacity: 0.9;
+      text-shadow: 
+        0 0 8px rgba(255, 255, 255, 0.3),
+        0 0 16px rgba(255, 255, 255, 0.2);
+    }
+    
+    .form-container {
+      display: flex;
+      flex-direction: column;
+      max-width: 700px;
+      width: 100%;
+      margin: 0 auto 2rem;
+      box-sizing: border-box;
+    }
+
+    .input-title {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      margin-left: 1.12rem;
+      opacity: 0.8;
+      text-align: left;
+    }
+
+    .description {
+      font-size: 1.5rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      opacity: 0.8;
+    }
+
+    .description a {
+      color: black;
+      text-decoration: underline;
+      transition: color 0.3s ease;
+    }
+
+    .description a:hover {
+      color: #FFD2F5;
+    }
+    
+    .notify-form {
+      display: flex;
+      gap: 1rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    
+    .notify-form input {
+      flex: 1;
+      padding-left: 18px;
+      padding-right: 18px;
+      height: 60px;
+      border: 1px solid black;
+      border-radius: 12px;
+      font-size: 1.5rem;
+      outline: none;
+      pointer-events: auto;
+      font-family: 'Instrument Serif', sans-serif;
+      background: rgba(237, 240, 245, 0.5);
+      color: black;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      box-sizing: border-box;
+      min-width: 0; /* IMPORTANT: allows flex item to shrink below content size */
+      max-width: 100%;
+    }
+
+    .notify-form input::placeholder {
+      color: rgba(0, 0, 0, 0.5) !important;
+      opacity: 1;
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+    .notify-form input::-webkit-input-placeholder {
+      color: rgba(0, 0, 0, 0.5) !important;
+      opacity: 1;
+      font-size: 1.5rem;
+    }
+    .notify-form input::-moz-placeholder {
+      color: rgba(0, 0, 0, 0.5) !important;
+      opacity: 1;
+      font-size: 1.5rem;
+    }
+    .notify-form input:-ms-input-placeholder {
+      color: rgba(0, 0, 0, 0.5) !important;
+      opacity: 1;
+      font-size: 1.5rem;
+    }
+    
+    .notify-form input:focus {
+      border-color: rgba(0,0,0, 0.5);
+      box-shadow: 
+        0 0 20px #FFA5EC,
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    
+    .notify-form input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .notify-form button {
+      padding: 18px 24px;
+      height: 60px;
+      background: #FFD2F5;
+      color: black;
+      border: 1px solid black;
+      border-radius: 12px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      pointer-events: auto;
+      display: flex;
+      align-items: center;
+      box-sizing: border-box;
+      width: fit-content;
+      flex-shrink: 0;
+    }
+    
+    .notify-form button:hover {
+      background: #FFA5EC;
+    }
+    
+    @media (max-width: 768px) {
+    h1 { 
+      font-size: 3.5rem !important;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    .subtitle-coming-soon { 
+      font-size: 1.5rem !important; 
+      margin-bottom: 3rem !important;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    .notify-form { 
+      /* flex-direction: column;  */
+      align-items: stretch;
+      gap: 0.5rem;
+      text-align: left;
+    }
+    
+    .notify-form input { 
+      width: 100%;
+      min-width: 0;
+      padding-left: 12px;
+      padding-right: 12px;
+      font-size: 1.25rem;
+    }
+    .notify-form input::placeholder {
+      font-size: 1.25rem !important;
+    }
+    .notify-form button {
+      font-size: 1.25rem;
+      padding: 14px 20px;
+    }
+    .input-title { 
+      font-size: 1.25rem; 
+      margin-left: 0.75rem;
+    }
+    .description { 
+      font-size: 1.25rem;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    .container { 
+      padding: 1.5rem;
+    }
+    .form-container { 
+      padding: 0;
+      max-width: 100%;
+      width: 100%;
+    }
+  }
+  </style>
+</head>
+<body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root" style="display: none;"></div>
+
+  <!-- Main Content -->
+  <main class="container">
+    <header>
+      <h1>Coming soon.</h1>
+      <p class="subtitle-coming-soon">Your reading year, wrapped.</p>
+    </header>
+    
+    <section class="form-container" aria-label="Email signup form">
+      <p class="input-title">
+        Be the first to know when we launch.
+      </p>
+      
+      <form class="notify-form" id="notifyForm" action="http://localhost:3001/api/subscribe" method="POST" aria-label="Subscribe to launch notification">
+        <input 
+          type="email" 
+          placeholder="Email address" 
+          required 
+          id="emailInput" 
+          name="email"
+          aria-label="Email address"
+          autocomplete="email">
+        <button type="submit" aria-label="Subscribe to notifications">Notify me</button>
+      </form>
+    </section>
+    
+    <footer class="description">
+      Made with &lt;3 by <a href="https://angelinawwu.com" target="_blank" rel="noopener noreferrer">Angelina Wu</a>
+    </footer>
+  </main>
+
+
+  <!-- Form handler -->
+  <script>
+    document.getElementById('notifyForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('emailInput').value;
+      const button = this.querySelector('button[type="submit"]');
+      const originalText = button.textContent;
+      
+      // Show loading state
+      button.textContent = 'Subscribing...';
+      button.disabled = true;
+      
+      try {
+        const response = await fetch('/api/subscribe', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email: email })
+        });
+        
+        if (response.ok) {
+          // Show success message
+          const successDiv = document.createElement('div');
+          successDiv.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #F6FAFD;
+            color: black;
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid #7D8DA6;
+            z-index: 1000;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            font-size: 1.5rem;
+            width: 30rem;
+            max-width: 90vw;
+          `;
+          successDiv.innerHTML = `
+            <h3 style="margin: 0 0 1rem 0; color: black;">Thank you!</h3>
+            <p style="margin: 0;">We'll notify you at <strong>${email}</strong> when we launch.</p>
+          `;
+          
+          document.body.appendChild(successDiv);
+          
+          // Remove message after 3 seconds
+          setTimeout(() => {
+            document.body.removeChild(successDiv);
+          }, 3000);
+          
+          // Clear form
+          document.getElementById('emailInput').value = '';
+        } else {
+          throw new Error('Failed to subscribe');
+        }
+      } catch (error) {
+        alert('Sorry, something went wrong. Please try again later.');
+      } finally {
+        // Reset button
+        button.textContent = originalText;
+        button.disabled = false;
+      }
+    });
+  </script>
+
+</body>
+</html>

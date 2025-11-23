@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Goodreads Wrapped - Coming Soon</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    /* Animated background */
+    body::before {
+      content: '';
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: moveBackground 20s linear infinite;
+    }
+    
+    @keyframes moveBackground {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(50px, 50px); }
+    }
+    
+    .container {
+      text-align: center;
+      z-index: 1;
+      padding: 2rem;
+      max-width: 600px;
+    }
+    
+    .logo {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+    
+    h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      animation: fadeIn 1s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .subtitle {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+      animation: fadeIn 1.5s ease-in;
+    }
+    
+    .description {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      opacity: 0.8;
+      animation: fadeIn 2s ease-in;
+    }
+    
+    .notify-form {
+      display: flex;
+      gap: 1rem;
+      max-width: 500px;
+      margin: 0 auto 2rem;
+      animation: fadeIn 2.5s ease-in;
+    }
+    
+    .notify-form input {
+      flex: 1;
+      padding: 1rem;
+      border: none;
+      border-radius: 50px;
+      font-size: 1rem;
+      outline: none;
+    }
+    
+    .notify-form button {
+      padding: 1rem 2rem;
+      background: #ff6b6b;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .notify-form button:hover {
+      background: #ff5252;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      margin-top: 3rem;
+    }
+    
+    .social-links a {
+      color: white;
+      font-size: 1.5rem;
+      transition: transform 0.3s ease;
+    }
+    
+    .social-links a:hover {
+      transform: scale(1.2);
+    }
+    
+    @media (max-width: 768px) {
+      h1 { font-size: 2.5rem; }
+      .subtitle { font-size: 1.2rem; }
+      .notify-form { flex-direction: column; }
+      .notify-form button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">📚✨</div>
+    <h1>Goodreads Wrapped</h1>
+    <p class="subtitle">Coming Soon</p>
+    <p class="description">
+      Discover your reading year in review! Just like Spotify Wrapped, 
+      but for your Goodreads books. Track your stats, favorite genres, 
+      and reading habits all in one beautiful experience.
+    </p>
+    
+    <form class="notify-form" id="notifyForm">
+      <input 
+        type="email" 
+        placeholder="Enter your email for updates" 
+        required
+        id="emailInput"
+      />
+      <button type="submit">Notify Me</button>
+    </form>
+    
+    <p style="font-size: 0.9rem; opacity: 0.7;">
+      Expected Launch: Q1 2025
+    </p>
+  </div>
+
+  <script>
+    document.getElementById('notifyForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('emailInput').value;
+      alert('Thanks for your interest! We\'ll notify you at ' + email + ' when we launch.');
+      document.getElementById('emailInput').value = '';
+    });
+  </script>
+</body>
+</html>
