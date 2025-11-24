@@ -3,11 +3,12 @@ import type { DecorPosition } from '../components/Decor';
 export interface DecorItem {
   id: number;
   position: DecorPosition;
+  className?: string;
 }
 
 export const decorMap: { [key: string]: DecorItem[] } = {
   '/': [
-    { id: 9, position: 'frame-c' }
+    { id: 9, position: 'frame-c', className: 'scale-125 origin-center' }
   ],
   '/desktop': [
     { id: 2, position: 'frame' },

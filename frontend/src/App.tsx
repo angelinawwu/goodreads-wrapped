@@ -376,7 +376,7 @@ function App() {
               
               {/* Dynamic Decor Elements */}
               {currentDecor.map((decor, index) => (
-                <Decor key={`${location.pathname}-${index}`} id={decor.id} position={decor.position} />
+                <Decor key={`${location.pathname}-${index}`} id={decor.id} position={decor.position} className={decor.className || ''} />
               ))}
               
               {/* Instagram-style Segmented Progress Bar */}

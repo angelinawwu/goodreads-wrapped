@@ -4,6 +4,7 @@
   --color-vintage-bg: #f5f5dc;
   --color-vintage-text: #3b2f2f;
   --color-vintage-accent: #800000;
+  --color-vintage-accent-disabled: #905454;
   --color-vintage-accent-light: #933c3c;
   --color-vintage-highlight: #556b2f;
   
@@ -42,28 +43,26 @@ body {
   min-height: 100vh;
 }
 
-h1 {
+/* h1 {
   font-size: 3.2em;
   line-height: 1;
   font-family: var(--font-display);
   color: var(--color-vintage-accent);
-}
+} */
 
 button {
   border-radius: 12px;
   border: 1px solid var(--color-vintage-text);
-  padding: 0.6em 1.2em;
-  font-size: 1em;
   font-weight: 500;
   font-family: var(--font-display);
-  background-color: var(--color-vintage-bg);
-  color: var(--color-vintage-text);
+  background-color: var(--color-vintage-accent);
+  color: var(--color-vintage-bg);
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 2px 2px 0px rgba(59, 47, 47, 0.2);
 }
 button:hover {
-  background-color: #e8e8c8;
+  background-color: var(--color-vintage-accent-light);
   transform: translateY(-1px);
   box-shadow: 3px 3px 0px rgba(59, 47, 47, 0.3);
 }

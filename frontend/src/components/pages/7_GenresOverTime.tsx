@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Navigation from '../Navigation';
-import './7_GenresOverTime.css';
 
 interface GenresOverTimeProps {
   genreCounts?: { [key: string]: number };
@@ -86,16 +85,16 @@ const GenresOverTime: React.FC<GenresOverTimeProps> = ({
   };
 
   return (
-    <div className="page-container">
-      <div className="page-header">
-        <h2>📈 Genres Over Time</h2>
-        <p className="page-subtitle">How your reading tastes evolved in 2025</p>
+    <div className="page-container flex flex-col items-center justify-center min-h-[60vh] mt-8 relative z-20">
+      <div className="mb-4 w-full text-center">
+        <h2 className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]">📈 Genres Over Time</h2>
+        <p className="text-[1.1rem] opacity-80 m-0 font-[var(--font-main)] italic">How your reading tastes evolved in 2025</p>
       </div>
       
-      <div className="chart-container">
+      <div className="w-full max-w-[900px] my-4 flex flex-col items-center">
         {monthlyGenreData && topGenres.length > 0 ? (
-          <div className="line-chart">
-            <svg viewBox="0 0 800 400" className="chart-svg">
+          <div className="w-full flex flex-col items-center gap-4">
+            <svg viewBox="0 0 800 400" className="w-full h-auto max-w-[800px] rounded-[10px] p-4 max-md:p-2">
               {/* Define drop shadow filter */}
               <defs>
                 <filter id="lineShadow" x="-50%" y="-50%" width="200%" height="200%">
@@ -199,7 +198,7 @@ const GenresOverTime: React.FC<GenresOverTimeProps> = ({
             </svg>
             
             {/* Legend */}
-            <div className="chart-legend">
+            <div className="flex flex-wrap justify-center gap-4 mt-4 max-md:gap-2">
               {topGenres.map((genre, index) => {
                 const isHovered = hoveredGenre === null || hoveredGenre === genre;
                 const opacity = isHovered ? 1 : 0.3;
@@ -207,7 +206,7 @@ const GenresOverTime: React.FC<GenresOverTimeProps> = ({
                 return (
                   <div 
                     key={genre} 
-                    className="legend-item"
+                    className="flex items-center gap-2"
                     onMouseEnter={() => setHoveredGenre(genre)}
                     onMouseLeave={() => setHoveredGenre(null)}
                     style={{ 
@@ -217,17 +216,17 @@ const GenresOverTime: React.FC<GenresOverTimeProps> = ({
                     }}
                   >
                     <div 
-                      className="legend-color" 
+                      className="w-4 h-4 rounded-full" 
                       style={{ backgroundColor: genreColors[index] }}
                     ></div>
-                    <span className="legend-text">{genre}</span>
+                    <span className="text-[0.9rem] text-black font-medium font-[var(--font-main)] max-md:text-[0.8rem]">{genre}</span>
                   </div>
                 );
               })}
             </div>
           </div>
         ) : (
-          <div className="no-chart-data">
+          <div className="text-center p-12 text-[rgba(0,0,0,0.7)] text-[1.1rem] font-[var(--font-main)]">
             <p>Not enough data to generate chart</p>
           </div>
         )}
