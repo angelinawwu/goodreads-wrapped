@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import Navigation from '../Navigation';
+import { motion } from 'framer-motion';
+import { containerVariantsSlow, itemVariants } from '../motionVariants';
 
 interface GenresOverTimeProps {
   genreCounts?: { [key: string]: number };
@@ -85,16 +87,33 @@ const GenresOverTime: React.FC<GenresOverTimeProps> = ({
   };
 
   return (
-    <div className="page-container flex flex-col items-center justify-center min-h-[60vh] mt-8 relative z-20">
-      <div className="mb-4 w-full text-center">
+    <motion.div 
+      className="page-container flex flex-col items-center justify-center min-h-[60vh] mt-8 relative z-20"
+      variants={containerVariantsSlow}
+      initial="hidden"
+      animate="visible"
+    >
+      <motion.div 
+        className="mb-4 w-full text-center"
+        variants={itemVariants}
+      >
         <h2 className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]">📈 Genres Over Time</h2>
         <p className="text-[1.1rem] opacity-80 m-0 font-[var(--font-main)] italic">How your reading tastes evolved in 2025</p>
-      </div>
+      </motion.div>
       
-      <div className="w-full max-w-[900px] my-4 flex flex-col items-center">
+      <motion.div 
+        className="w-full max-w-[900px] my-4 flex flex-col items-center"
+        variants={containerVariantsSlow}
+        initial="hidden"
+        animate="visible"
+      >
         {monthlyGenreData && topGenres.length > 0 ? (
           <div className="w-full flex flex-col items-center gap-4">
-            <svg viewBox="0 0 800 400" className="w-full h-auto max-w-[800px] rounded-[10px] p-4 max-md:p-2">
+            <motion.svg 
+              viewBox="0 0 800 400" 
+              className="w-full h-auto max-w-[800px] rounded-[10px] p-4 max-md:p-2"
+              variants={itemVariants}
+            >
               {/* Define drop shadow filter */}
               <defs>
                 <filter id="lineShadow" x="-50%" y="-50%" width="200%" height="200%">
@@ -169,7 +188,7 @@ const GenresOverTime: React.FC<GenresOverTimeProps> = ({
                     onMouseLeave={() => setHoveredGenre(null)}
                     style={{ cursor: 'pointer' }}
                   >
-                    <path
+                    <motion.path
                       d={pathData}
                       fill="none"
                       stroke={genreColors[genreIndex]}
@@ -179,10 +198,16 @@ const GenresOverTime: React.FC<GenresOverTimeProps> = ({
                       filter="url(#lineShadow)"
                       opacity={opacity}
                       style={{ transition: 'opacity 0.2s ease, stroke-width 0.2s ease' }}
+                      initial={{ pathLength: 0, opacity: 0 }}
+                      animate={{ pathLength: 1, opacity: opacity }}
+                      transition={{ 
+                        pathLength: { duration: 1.5, delay: genreIndex * 0.2, ease: "easeOut" },
+                        opacity: { duration: 0.2 }
+                      }}
                     />
                     {/* Data points */}
                     {points.map((point, index) => (
-                      <circle
+                      <motion.circle
                         key={index}
                         cx={point.x}
                         cy={point.y}
@@ -190,21 +215,34 @@ const GenresOverTime: React.FC<GenresOverTimeProps> = ({
                         fill={genreColors[genreIndex]}
                         opacity={opacity}
                         style={{ transition: 'opacity 0.2s ease' }}
+                        initial={{ scale: 0, opacity: 0 }}
+                        animate={{ scale: 1, opacity: opacity }}
+                        transition={{ 
+                          delay: (genreIndex * 0.2) + (index * 0.1) + 1.5,
+                          type: "spring",
+                          stiffness: 200,
+                          damping: 15
+                        }}
                       />
                     ))}
                   </g>
                 );
               })}
-            </svg>
+            </motion.svg>
             
             {/* Legend */}
-            <div className="flex flex-wrap justify-center gap-4 mt-4 max-md:gap-2">
+            <motion.div 
+              className="flex flex-wrap justify-center gap-4 mt-4 max-md:gap-2"
+              variants={containerVariantsSlow}
+              initial="hidden"
+              animate="visible"
+            >
               {topGenres.map((genre, index) => {
                 const isHovered = hoveredGenre === null || hoveredGenre === genre;
                 const opacity = isHovered ? 1 : 0.3;
                 
                 return (
-                  <div 
+                  <motion.div 
                     key={genre} 
                     className="flex items-center gap-2"
                     onMouseEnter={() => setHoveredGenre(genre)}
@@ -214,26 +252,30 @@ const GenresOverTime: React.FC<GenresOverTimeProps> = ({
                       opacity: opacity,
                       transition: 'opacity 0.2s ease'
                     }}
+                    variants={itemVariants}
                   >
                     <div 
                       className="w-4 h-4 rounded-full" 
                       style={{ backgroundColor: genreColors[index] }}
                     ></div>
                     <span className="text-[0.9rem] text-black font-medium font-[var(--font-main)] max-md:text-[0.8rem]">{genre}</span>
-                  </div>
+                  </motion.div>
                 );
               })}
-            </div>
+            </motion.div>
           </div>
         ) : (
-          <div className="text-center p-12 text-[rgba(0,0,0,0.7)] text-[1.1rem] font-[var(--font-main)]">
+          <motion.div 
+            className="text-center p-12 text-[rgba(0,0,0,0.7)] text-[1.1rem] font-[var(--font-main)]"
+            variants={itemVariants}
+          >
             <p>Not enough data to generate chart</p>
-          </div>
+          </motion.div>
         )}
-      </div>
+      </motion.div>
       
       <Navigation onPrevPage={onPrevPage} onNextPage={onNextPage} />
-    </div>
+    </motion.div>
   );
 };
 

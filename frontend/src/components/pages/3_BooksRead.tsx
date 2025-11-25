@@ -1,6 +1,8 @@
 import React from 'react';
 import Navigation from '../Navigation';
 import { motion } from 'framer-motion';
+import { containerVariantsSlow, itemVariants, heroVariants } from '../motionVariants';
+import AnimatedCounter from '../AnimatedCounter';
 
 interface BooksReadProps {
   yearBooks?: number;
@@ -8,44 +10,58 @@ interface BooksReadProps {
   onNextPage: () => void;
 }
 
-const BooksRead: React.FC<BooksReadProps> = ({ yearBooks, onPrevPage, onNextPage }) => {
+const BooksRead: React.FC<BooksReadProps> = ({ yearBooks = 0, onPrevPage, onNextPage }) => {
   return (
-    <div className="page-container flex flex-col items-center justify-center min-h-[60vh] mt-8 relative z-20">
-      <div className="mb-4 w-full text-center">
-        <motion.h2 className="text-2xl font-medium mb-2 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+    <motion.div 
+      className="page-container flex flex-col items-center justify-center min-h-[60vh] mt-8 relative z-20"
+      variants={containerVariantsSlow}
+      initial="hidden"
+      animate="visible"
+    >
+      {/* Intro Text */}
+      <motion.div 
+        variants={itemVariants} 
+        className="text-center mb-6 w-full"
+      >
+        <motion.h2 
+          className="text-xl md:text-2xl font-bold tracking-wider uppercase text-[var(--color-vintage-accent)] font-[var(--font-display)] mb-2"
+          variants={itemVariants}
         >
-          Books Read
+          The Results Are In
         </motion.h2>
-        <motion.p className="text-lg opacity-80 m-0 font-[var(--font-main)]"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.15 }}
+        <motion.p 
+          className="text-lg md:text-xl font-light text-[var(--color-vintage-text)] mt-1 font-[var(--font-main)]"
+          variants={itemVariants}
         >
-          In 2025, you read...
+          In 2025, you devoured...
         </motion.p>
-      </div>
-      <div className="my-4 text-center">
-        <motion.div className="text-6xl font-medium m-0 text-black font-[var(--font-main)] shadow-none"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
+      </motion.div>
+
+      {/* Hero Section with Large Number */}
+      <div className="relative flex items-center justify-center w-full aspect-square max-w-[300px] my-8">
+        {/* The Big Number */}
+        <motion.div 
+          className="relative z-20 font-black text-[6rem] md:text-[8rem] leading-none text-[var(--color-vintage-accent)] drop-shadow-lg font-[var(--font-display)]"
+          variants={heroVariants}
+          initial="hidden"
+          animate="visible"
         >
-          {yearBooks || 0}
-        </motion.div>
-        <motion.div className="text-lg mt-2 opacity-90 font-[var(--font-main)] text-black"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.45 }}
-        >
-          books
+          <AnimatedCounter value={yearBooks} />
         </motion.div>
       </div>
+
+      {/* Bottom Label */}
+      <motion.div 
+        variants={itemVariants} 
+        className="z-20 mb-12"
+      >
+        <span className="text-3xl md:text-4xl font-black italic tracking-tighter text-[var(--color-vintage-accent)] font-[var(--font-display)]">
+          BOOKS
+        </span>
+      </motion.div>
       
       <Navigation onPrevPage={onPrevPage} onNextPage={onNextPage} />
-    </div>
+    </motion.div>
   );
 };
 

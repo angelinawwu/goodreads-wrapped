@@ -1,4 +1,6 @@
 import React from 'react';
+import { motion } from 'framer-motion';
+import { slideVariants, slideVariantsTop, fadeScaleVariants } from './motionVariants';
 
 export type DecorPosition = 
   | 'top' 
@@ -50,6 +52,16 @@ const getImageClasses = (position: DecorPosition): string => {
   return 'block max-w-full h-auto';
 };
 
+const getAnimationVariants = (position: DecorPosition) => {
+  if (position === 'top') {
+    return slideVariantsTop;
+  }
+  if (position === 'bottom') {
+    return slideVariants;
+  }
+  return fadeScaleVariants;
+};
+
 const Decor: React.FC<DecorProps> = ({ 
   id = 1, 
   position = 'center', 
@@ -59,18 +71,25 @@ const Decor: React.FC<DecorProps> = ({
   // Ensure id is between 1-10
   const safeId = Math.max(1, Math.min(10, Math.floor(id)));
   const imagePath = `/decor/decor-${safeId}.jpg`;
+  const variants = getAnimationVariants(position);
 
   return (
-    <div 
+    <motion.div 
       className={`${getPositionClasses(position)} ${className}`}
       style={style}
+      variants={variants}
+      initial="hidden"
+      animate="visible"
+      transition={{
+        delay: 0.5 // Animate in after initial page content
+      }}
     >
       <img 
         src={imagePath} 
         alt="Vintage ornamentation" 
         className={getImageClasses(position)}
       />
-    </div>
+    </motion.div>
   );
 };
 

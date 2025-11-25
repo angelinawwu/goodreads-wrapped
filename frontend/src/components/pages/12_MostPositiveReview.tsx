@@ -1,5 +1,8 @@
 import React from 'react';
 import Navigation from '../Navigation';
+import { motion } from 'framer-motion';
+import { containerVariantsSlow, itemVariants, fadeScaleVariants, slideVariants } from '../motionVariants';
+import AnimatedCounter from '../AnimatedCounter';
 
 interface SentimentData {
   score: number;
@@ -25,78 +28,148 @@ interface MostPositiveReviewProps {
 
 const MostPositiveReview: React.FC<MostPositiveReviewProps> = ({ 
   mostPositiveReview, 
-  booksWithReviews,
+  booksWithReviews = 0,
   onPrevPage, 
   onNextPage 
 }) => {
   return (
-    <div className="page-container flex flex-col items-center justify-center min-h-[60vh] mt-8 relative z-20">
-      <div className="mb-4 w-full text-center">
+    <motion.div 
+      className="page-container flex flex-col items-center justify-center min-h-[60vh] mt-8 relative z-20"
+      variants={containerVariantsSlow}
+      initial="hidden"
+      animate="visible"
+    >
+      <motion.div 
+        className="mb-4 w-full text-center"
+        variants={itemVariants}
+      >
         <h2 className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]">🌟 Most Positive Review</h2>
         <p className="text-[1.1rem] opacity-80 m-0 font-[var(--font-main)] italic">Your most positive review of 2025</p>
-      </div>
+      </motion.div>
       
       {mostPositiveReview ? (
-        <div className="flex flex-col items-center gap-8 my-8">
-          <div className="flex items-center gap-6 p-4 max-w-[600px] w-full bg-[rgba(237,240,245,0.3)] backdrop-blur-[10px] rounded-xl border border-[rgba(0,0,0,0.1)] max-md:flex-col max-md:text-center">
-            <div className="w-[120px] h-[180px] rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.15)] border border-[rgba(0,0,0,0.1)] flex-shrink-0">
+        <motion.div 
+          className="flex flex-col items-center gap-8 my-8"
+          variants={containerVariantsSlow}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.div 
+            className="flex items-center gap-6 p-4 max-w-[600px] w-full bg-[rgba(237,240,245,0.3)] backdrop-blur-[10px] rounded-xl border border-[rgba(0,0,0,0.1)] max-md:flex-col max-md:text-center"
+            variants={fadeScaleVariants}
+          >
+            <motion.div 
+              className="w-[120px] h-[180px] rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.15)] border border-[rgba(0,0,0,0.1)] flex-shrink-0"
+              variants={fadeScaleVariants}
+            >
               {mostPositiveReview.coverImage ? (
                 <img src={mostPositiveReview.coverImage} alt={mostPositiveReview.title} className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-[3rem] bg-[rgba(237,240,245,0.5)] text-black">📖</div>
               )}
-            </div>
+            </motion.div>
             <div className="text-center md:text-left">
-              <div className="text-[1.1rem] font-bold mb-2 font-[var(--font-main)] text-black">{mostPositiveReview.title}</div>
-              <div className="text-[0.9rem] opacity-80 mb-2 font-[var(--font-main)] text-black">by {mostPositiveReview.author}</div>
+              <motion.div 
+                className="text-[1.1rem] font-bold mb-2 font-[var(--font-main)] text-black"
+                variants={itemVariants}
+              >
+                {mostPositiveReview.title}
+              </motion.div>
+              <motion.div 
+                className="text-[0.9rem] opacity-80 mb-2 font-[var(--font-main)] text-black"
+                variants={itemVariants}
+              >
+                by {mostPositiveReview.author}
+              </motion.div>
               {mostPositiveReview.userRating && (
-                <div className="text-[1rem] font-bold text-black font-[var(--font-main)]">⭐ {mostPositiveReview.userRating}/5</div>
+                <motion.div 
+                  className="text-[1rem] font-bold text-black font-[var(--font-main)]"
+                  variants={itemVariants}
+                >
+                  ⭐ {mostPositiveReview.userRating}/5
+                </motion.div>
               )}
             </div>
-          </div>
+          </motion.div>
           
-          <div className="p-4 max-w-[700px] w-full">
-            <div className="text-[1.1rem] leading-relaxed italic mb-8 text-black text-center font-[var(--font-main)] opacity-90 max-md:text-[1rem]">
+          <motion.div 
+            className="p-4 max-w-[700px] w-full"
+            variants={containerVariantsSlow}
+            initial="hidden"
+            animate="visible"
+          >
+            <motion.div 
+              className="text-[1.1rem] leading-relaxed italic mb-8 text-black text-center font-[var(--font-main)] opacity-90 max-md:text-[1rem]"
+              variants={slideVariants}
+            >
               "{mostPositiveReview.sentiment?.fullReview || 'No review text available'}"
-            </div>
+            </motion.div>
             
-            <div className="flex flex-col items-center gap-6">
-              <div className="text-center">
-                <div className="text-[3rem] font-bold text-[#FFD2F5] mb-2 font-[var(--font-main)] max-md:text-[2rem]">
-                  {mostPositiveReview.sentiment?.comparative?.toFixed(3) || '0.000'}
-                </div>
-                <div className="text-[1rem] opacity-80 font-[var(--font-main)] text-black">sentiment score</div>
-              </div>
+            <motion.div 
+              className="flex flex-col items-center gap-6"
+              variants={containerVariantsSlow}
+              initial="hidden"
+              animate="visible"
+            >
+              <motion.div 
+                className="text-center"
+                variants={itemVariants}
+              >
+                <motion.div 
+                  className="text-[3rem] font-bold text-[#FFD2F5] mb-2 font-[var(--font-main)] max-md:text-[2rem]"
+                  variants={itemVariants}
+                >
+                  <AnimatedCounter value={mostPositiveReview.sentiment?.comparative || 0} decimals={3} />
+                </motion.div>
+                <motion.div 
+                  className="text-[1rem] opacity-80 font-[var(--font-main)] text-black"
+                  variants={itemVariants}
+                >
+                  sentiment score
+                </motion.div>
+              </motion.div>
               
-              <div className="flex gap-8 max-md:flex-col max-md:gap-4">
+              <motion.div 
+                className="flex gap-8 max-md:flex-col max-md:gap-4"
+                variants={itemVariants}
+              >
                 <div className="flex items-center gap-2 text-[0.9rem] font-[var(--font-main)] text-black">
                   <span className="text-[1.2rem]">😊</span>
-                  <span>{mostPositiveReview.sentiment?.positive?.length || 0} positive words</span>
+                  <span><AnimatedCounter value={mostPositiveReview.sentiment?.positive?.length || 0} /> positive words</span>
                 </div>
                 <div className="flex items-center gap-2 text-[0.9rem] font-[var(--font-main)] text-black">
                   <span className="text-[1.2rem]">😠</span>
-                  <span>{mostPositiveReview.sentiment?.negative?.length || 0} negative words</span>
+                  <span><AnimatedCounter value={mostPositiveReview.sentiment?.negative?.length || 0} /> negative words</span>
                 </div>
-              </div>
-            </div>
-          </div>
+              </motion.div>
+            </motion.div>
+          </motion.div>
           
-          <div className="text-center text-[1.2rem] text-[#FFD2F5] font-bold font-[var(--font-main)]">
+          <motion.div 
+            className="text-center text-[1.2rem] text-[#FFD2F5] font-bold font-[var(--font-main)]"
+            variants={itemVariants}
+          >
             <p>This was your most positive review of the year! ✨</p>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       ) : (
-        <div className="text-center p-12 rounded-xl border border-[rgba(0,0,0,0.1)] bg-[rgba(237,240,245,0.3)] backdrop-blur-[10px]">
+        <motion.div 
+          className="text-center p-12 rounded-xl border border-[rgba(0,0,0,0.1)] bg-[rgba(237,240,245,0.3)] backdrop-blur-[10px]"
+          variants={itemVariants}
+        >
           <p className="m-0 text-[1.2rem] text-black font-[var(--font-main)]">No positive reviews found - are you a hater?</p>
-        </div>
+        </motion.div>
       )}
       
-      <div className="text-center text-[0.9rem] opacity-70 mt-4 font-[var(--font-main)] text-black">
-        <p>Based on {booksWithReviews || 0} books with reviews</p>
-      </div>
+      <motion.div 
+        className="text-center text-[0.9rem] opacity-70 mt-4 font-[var(--font-main)] text-black"
+        variants={itemVariants}
+      >
+        <p>Based on <AnimatedCounter value={booksWithReviews} /> books with reviews</p>
+      </motion.div>
       
       <Navigation onPrevPage={onPrevPage} onNextPage={onNextPage} />
-    </div>
+    </motion.div>
   );
 };
 
