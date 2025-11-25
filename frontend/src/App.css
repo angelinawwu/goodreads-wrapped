@@ -4,18 +4,17 @@ html, body {
   height: 100%;
   overflow: hidden; /* Prevent main scrollbar, we'll scroll inside the phone */
   max-width: 100vw;
+  color: var(--color-vintage-text);
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   text-shadow: none;
-  color: var(--color-vintage-text);
 }
 
 p {
   font-family: var(--font-main);
   text-shadow: none;
-  color: var(--color-vintage-text);
 }
 
 /* App Layout */
@@ -153,14 +152,12 @@ p {
 }
 
 .page-header {
-  margin-bottom: 1rem;
   width: 100%;
   text-align: center;
 }
 
 .page-header h2 {
   font-size: 2rem;
-  margin-bottom: 0.3rem;
   font-family: var(--font-display);
   color: var(--color-vintage-accent);
 }
@@ -267,14 +264,6 @@ button, input, .book-list, .book-item, .desktop-nav, .username-form, .input-grou
   font-family: var(--font-main);
 }
 
-button:disabled {
-  background: rgba(0, 0, 0, 0.1);
-  cursor: not-allowed;
-  transform: none;
-  opacity: 0.6;
-  box-shadow: none;
-}
-
 /* Responsive Design */
 @media (max-width: 768px) {
   .App {
@@ -287,10 +276,5 @@ button:disabled {
 
   .page-container {
     min-height: 80vh;
-    margin-top: 1rem;
-  }
-  
-  .page-header h2 {
-    font-size: 1.8rem;
   }
 }

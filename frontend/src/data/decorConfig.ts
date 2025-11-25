@@ -8,10 +8,10 @@ export interface DecorItem {
 
 export const decorMap: { [key: string]: DecorItem[] } = {
   '/': [
-    { id: 9, position: 'frame-c', className: 'scale-125 origin-center' }
+    { id: 9, position: 'frame-c', className: 'scale-150 origin-center' }
   ],
   '/desktop': [
-    { id: 2, position: 'frame' },
+    { id: 2, position: 'frame', className: 'scale-110 origin-center top-5' },
   ],
   '/books-read': [
     { id: 3, position: 'top' }

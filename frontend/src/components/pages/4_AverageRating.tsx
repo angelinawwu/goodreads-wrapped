@@ -28,7 +28,7 @@ const AverageRating: React.FC<AverageRatingProps> = ({
         <motion.p className="text-[1.1rem] opacity-80 m-0 font-[var(--font-main)] italic"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
+          transition={{ duration: 0.5, delay: 0.15 }}
         >
           Your average rating for 2025 books
         </motion.p>
@@ -37,14 +37,14 @@ const AverageRating: React.FC<AverageRatingProps> = ({
         <motion.div className="text-[4rem] font-bold m-0 text-black font-[var(--font-main)] shadow-none md:text-[3rem]"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
         >
           {averageRating?.toFixed(2) || '0.0'}
         </motion.div>
         <motion.div className="text-[1.2rem] mt-2 opacity-90 font-[var(--font-main)] text-black"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.9 }}
+          transition={{ duration: 0.5, delay: 0.45 }}
         >
           out of 5 stars
         </motion.div>
@@ -53,7 +53,7 @@ const AverageRating: React.FC<AverageRatingProps> = ({
         <motion.p className="m-0 font-[var(--font-main)]"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 1.2 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
         >
           Based on {booksWithRatings || 0} books you rated
         </motion.p>

@@ -2,6 +2,7 @@
 
 :root {
   --color-vintage-bg: #f5f5dc;
+  --color-vintage-light: #f3f1ee;
   --color-vintage-text: #3b2f2f;
   --color-vintage-accent: #800000;
   --color-vintage-accent-disabled: #905454;
@@ -51,20 +52,26 @@ body {
 } */
 
 button {
-  border-radius: 12px;
-  border: 1px solid var(--color-vintage-text);
+  border-radius: 8px;
   font-weight: 500;
   font-family: var(--font-display);
   background-color: var(--color-vintage-accent);
   color: var(--color-vintage-bg);
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 2px 2px 0px rgba(59, 47, 47, 0.2);
 }
 button:hover {
   background-color: var(--color-vintage-accent-light);
-  transform: translateY(-1px);
-  box-shadow: 3px 3px 0px rgba(59, 47, 47, 0.3);
+  transform: scale(1.02);
+}
+button:active {
+  transform: scale(0.98);
+}
+button:disabled {
+  background: var(--color-vintage-accent-disabled);
+  cursor: not-allowed;
+  transform: none;
+  opacity: 0.6;
+  box-shadow: none;
 }
 button:focus,
 button:focus-visible {

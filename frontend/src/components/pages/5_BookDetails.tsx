@@ -40,7 +40,7 @@ const BookDetails: React.FC<BookDetailsProps> = ({
         <motion.p className="text-[1.1rem] opacity-80 m-0 font-[var(--font-main)] italic"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
+          transition={{ duration: 0.5, delay: 0.15 }}
         >
           Your reading patterns in 2025
         </motion.p>
@@ -51,21 +51,21 @@ const BookDetails: React.FC<BookDetailsProps> = ({
           <motion.h3
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
           >
             📏 Average Length
           </motion.h3>
           <motion.div className="text-[2rem] font-bold text-black my-2 font-[var(--font-main)] md:text-[2.5rem]"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.9 }}
+            transition={{ duration: 0.5, delay: 0.45 }}
           >
             {averagePages || 0}
           </motion.div>
           <motion.div className="text-[1.1rem] opacity-80 font-[var(--font-main)] text-black"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 1.2 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
           >
             pages per book
           </motion.div>
@@ -76,14 +76,14 @@ const BookDetails: React.FC<BookDetailsProps> = ({
             <motion.h3
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 1.5 }}
+              transition={{ duration: 0.5, delay: 0.75 }}
             >
               📚 Longest Book
             </motion.h3>
             <motion.div className="w-[120px] h-[180px] rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.15)] border border-[rgba(0,0,0,0.1)]"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 1.8 }}
+              transition={{ duration: 0.5, delay: 0.9 }}
             >
               {longestBook.coverImage ? (
                 <img src={longestBook.coverImage} alt={longestBook.title} className="w-full h-full object-cover" />
@@ -95,21 +95,21 @@ const BookDetails: React.FC<BookDetailsProps> = ({
               <motion.div className="text-[1.1rem] font-bold mb-2 font-[var(--font-main)] text-black"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 2.1 }}
+                transition={{ duration: 0.5, delay: 1.05 }}
               >
                 {longestBook.title}
               </motion.div>
               <motion.div className="text-[0.9rem] opacity-80 mb-2 font-[var(--font-main)] text-black"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 2.4 }}
+                transition={{ duration: 0.5, delay: 1.2 }}
               >
                 by {longestBook.author}
               </motion.div>
               <motion.div className="text-[0.9rem] text-black font-bold font-[var(--font-main)]"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 2.7 }}
+                transition={{ duration: 0.5, delay: 1.35 }}
               >
                 {longestBook.numPages} pages
               </motion.div>
@@ -122,14 +122,14 @@ const BookDetails: React.FC<BookDetailsProps> = ({
             <motion.h3
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 1.5 }}
+              transition={{ duration: 0.5, delay: 0.75 }}
             >
               📖 Shortest Book
             </motion.h3>
             <motion.div className="w-[120px] h-[180px] rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.15)] border border-[rgba(0,0,0,0.1)]"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 1.8 }}
+              transition={{ duration: 0.5, delay: 0.9 }}
             >
               {shortestBook.coverImage ? (
                 <img src={shortestBook.coverImage} alt={shortestBook.title} className="w-full h-full object-cover" />
@@ -141,21 +141,21 @@ const BookDetails: React.FC<BookDetailsProps> = ({
               <motion.div className="text-[1.1rem] font-bold mb-2 font-[var(--font-main)] text-black"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 2.1 }}
+                transition={{ duration: 0.5, delay: 1.05 }}
               >
                 {shortestBook.title}
               </motion.div>
               <motion.div className="text-[0.9rem] opacity-80 mb-2 font-[var(--font-main)] text-black"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 2.4 }}
+                transition={{ duration: 0.5, delay: 1.2 }}
               >
                 by {shortestBook.author}
               </motion.div>
               <motion.div className="text-[0.9rem] text-black font-bold font-[var(--font-main)]"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 2.7 }}
+                transition={{ duration: 0.5, delay: 1.35 }}
               >
                 {shortestBook.numPages} pages
               </motion.div>
