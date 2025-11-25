@@ -46,7 +46,7 @@ const Dependability: React.FC<DependabilityProps> = ({
         animate="visible"
       >
         <motion.div 
-          className="text-center p-4 rounded-xl w-full bg-[rgba(237,240,245,0.3)] backdrop-blur-[10px] border border-[rgba(0,0,0,0.1)]"
+          className="text-center p-4 rounded-xl w-full"
           variants={itemVariants}
         >
           <motion.div 
@@ -64,7 +64,7 @@ const Dependability: React.FC<DependabilityProps> = ({
         </motion.div>
         
         <motion.div 
-          className="flex items-center gap-4 p-3 rounded-xl w-full bg-[rgba(237,240,245,0.3)] backdrop-blur-[10px] border border-[rgba(0,0,0,0.1)] max-md:flex-col max-md:gap-2"
+          className="flex items-center gap-4 p-3 rounded-xl w-full max-md:flex-col max-md:gap-2"
           variants={itemVariants}
         >
           <div className="flex flex-col items-center flex-1">
@@ -100,7 +100,7 @@ const Dependability: React.FC<DependabilityProps> = ({
       </motion.div>
       
       <motion.div 
-        className="text-center p-6 rounded-xl w-full bg-[rgba(255,210,245,0.2)] border border-[rgba(0,0,0,0.1)]"
+        className="text-center p-6 rounded-xl w-full"
         variants={itemVariants}
       >
         <p className="m-0 text-[1.1rem] text-black font-[var(--font-main)]">

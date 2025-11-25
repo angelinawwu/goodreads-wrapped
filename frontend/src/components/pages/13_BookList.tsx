@@ -33,7 +33,7 @@ const BookList: React.FC<BookListProps> = ({ books, onPrevPage, onNextPage }) =>
 
   return (
     <motion.div 
-      className="page-container flex flex-col items-center justify-center min-h-[60vh] mt-8 relative z-20"
+      className="page-container flex flex-col items-center justify-center mt-8 relative z-20"
       variants={containerVariantsSlow}
       initial="hidden"
       animate="visible"
@@ -48,7 +48,7 @@ const BookList: React.FC<BookListProps> = ({ books, onPrevPage, onNextPage }) =>
       <div className="w-full my-4 h-[60vh] overflow-visible flex items-center justify-center max-md:h-[50vh] max-md:pt-8">
         {books && books.length > 0 ? (
           <motion.div 
-            className="grid gap-1 p-2 w-full max-w-[1000px] h-full content-center justify-center z-[150] md:grid-cols-[repeat(auto-fit,minmax(60px,1fr))] max-md:grid-cols-[repeat(auto-fit,minmax(45px,1fr))]"
+            className="grid gap-1 p-2 w-full h-full content-center justify-center z-[150] md:grid-cols-[repeat(auto-fit,minmax(60px,1fr))] max-md:grid-cols-[repeat(auto-fit,minmax(45px,1fr))]"
             style={bookCount <= 12 ? gridStyle : undefined}
             variants={containerVariantsSlow}
             initial="hidden"
@@ -67,17 +67,17 @@ const BookList: React.FC<BookListProps> = ({ books, onPrevPage, onNextPage }) =>
                   damping: 15
                 }}
               >
-                <div className="w-full aspect-[2/3] max-w-[80px] max-h-[120px] min-w-[40px] min-h-[60px] rounded-lg overflow-visible shadow-[0_2px_8px_rgba(0,0,0,0.15)] border border-[rgba(0,0,0,0.1)] relative group max-md:max-w-[60px] max-md:max-h-[90px] max-md:min-w-[35px] max-md:min-h-[52px]">
+                <div className="w-full aspect-[2/3] max-w-[80px] max-h-[120px] min-w-[40px] min-h-[60px] rounded-lg overflow-visible relative group max-md:max-w-[60px] max-md:max-h-[90px] max-md:min-w-[35px] max-md:min-h-[52px] z-[100]">
                   {book.coverImage ? (
                     <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover rounded-lg" />
                   ) : (
-                    <div className="w-full h-full bg-[rgba(237,240,245,0.5)] flex items-center justify-center text-[2rem] text-black">
+                    <div className="w-full h-full flex items-center justify-center text-[2rem] text-black">
                       <span>📖</span>
                     </div>
                   )}
-                  <div className="absolute bottom-[105px] left-1/2 -translate-x-1/2 bg-[rgba(0,0,0,0.9)] text-white py-2 px-3 rounded-lg text-[0.8rem] font-medium font-[var(--font-main)] whitespace-nowrap max-w-[200px] overflow-hidden text-ellipsis opacity-0 invisible transition-all duration-300 z-[9999] shadow-[0_4px_12px_rgba(0,0,0,0.3)] pointer-events-none group-hover:opacity-100 group-hover:visible max-md:text-[0.7rem] max-md:py-1.5 max-md:px-2.5 max-md:max-w-[150px] max-md:bottom-[80px]">
+                  <div className="absolute bottom-[105px] left-1/2 -translate-x-1/2 bg-[var(--color-vintage-accent)] text-[var(--color-vintage-bg)] py-2 px-3 rounded-lg text-[0.8rem] font-medium font-[var(--font-main)] whitespace-nowrap max-w-[200px] overflow-hidden text-ellipsis opacity-0 invisible transition-all duration-300 z-[99999] pointer-events-none group-hover:opacity-100 group-hover:visible max-md:text-[0.7rem] max-md:py-1.5 max-md:px-2.5 max-md:max-w-[150px] max-md:bottom-[80px]">
                     {book.title}
-                    <div className="absolute top-full left-1/2 -translate-x-1/2 border-[6px] border-transparent border-t-[rgba(0,0,0,0.9)]"></div>
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 border-[6px] border-transparent border-t-[var(--color-vintage-text)]"></div>
                   </div>
                 </div>
               </motion.div>

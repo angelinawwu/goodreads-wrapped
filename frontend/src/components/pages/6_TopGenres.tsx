@@ -38,7 +38,7 @@ const TopGenres: React.FC<TopGenresProps> = ({
           className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]"
           variants={itemVariants}
         >
-          🏆 Top Genres
+          Top Genres
         </motion.h2>
         <motion.p 
           className="text-[1.1rem] opacity-80 m-0 font-[var(--font-main)] italic"
@@ -69,7 +69,7 @@ const TopGenres: React.FC<TopGenresProps> = ({
                 <div className="flex-1 text-left max-md:text-center">
                   <div className="text-[1.3rem] font-bold mb-1 font-[var(--font-main)] text-black">{genre}</div>
                   <div className="text-[1rem] opacity-80 text-black font-[var(--font-main)]">
-                    <AnimatedCounter value={count as number} />/<AnimatedCounter value={yearBooks} /> books
+                    <AnimatedCounter value={count as number} /> books
                   </div>
                 </div>
                 <div className="text-[1.5rem] font-bold text-black min-w-[60px] text-right font-[var(--font-main)] max-md:text-center">

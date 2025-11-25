@@ -19,7 +19,7 @@ const AverageRating: React.FC<AverageRatingProps> = ({
 }) => {
   return (
     <motion.div 
-      className="pt-56 px-8"
+      className="pt-64 px-8"
       variants={containerVariantsSlow}
       initial="hidden"
       animate="visible"
@@ -29,13 +29,13 @@ const AverageRating: React.FC<AverageRatingProps> = ({
         variants={itemVariants}
       >
         <motion.h2 
-          className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]"
+          className="text-2xl font-medium mb-2 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
           variants={itemVariants}
         >
-          ⭐ Average Rating
+          Average Rating
         </motion.h2>
         <motion.p 
-          className="text-[1.1rem] opacity-80 m-0 font-[var(--font-main)] italic"
+          className="text-lg opacity-80 m-0 font-[var(--font-main)]"
           variants={itemVariants}
         >
           Your average rating for 2025 books
@@ -43,7 +43,7 @@ const AverageRating: React.FC<AverageRatingProps> = ({
       </motion.div>
       <div className="my-8 text-center">
         <motion.div 
-          className="text-[5rem] md:text-[6rem] font-black m-0 text-[var(--color-vintage-accent)] font-[var(--font-display)] shadow-none"
+          className="text-6xl font-medium m-0 text-[var(--color-vintage-accent)] font-[var(--font-display)] shadow-none"
           variants={heroVariants}
           initial="hidden"
           animate="visible"
@@ -51,14 +51,14 @@ const AverageRating: React.FC<AverageRatingProps> = ({
           <AnimatedCounter value={averageRating} decimals={2} />
         </motion.div>
         <motion.div 
-          className="text-[1.2rem] mt-2 opacity-90 font-[var(--font-main)] text-black"
+          className="text-lg mt-2 opacity-90 font-[var(--font-main)] text-black"
           variants={itemVariants}
         >
           out of 5 stars
         </motion.div>
       </div>
       <motion.div 
-        className="mt-4 opacity-80 text-[0.9rem] font-[var(--font-main)] text-black text-center"
+        className="mt-4 opacity-80 text-lg font-[var(--font-main)] text-black text-center"
         variants={itemVariants}
       >
         <p className="m-0 font-[var(--font-main)]">

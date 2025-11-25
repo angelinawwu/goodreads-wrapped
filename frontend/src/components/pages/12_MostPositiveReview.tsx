@@ -55,17 +55,17 @@ const MostPositiveReview: React.FC<MostPositiveReviewProps> = ({
           animate="visible"
         >
           <motion.div 
-            className="flex items-center gap-6 p-4 max-w-[600px] w-full bg-[rgba(237,240,245,0.3)] backdrop-blur-[10px] rounded-xl border border-[rgba(0,0,0,0.1)] max-md:flex-col max-md:text-center"
+            className="flex items-center gap-6 p-4 max-w-[600px] w-full rounded-xl max-md:flex-col max-md:text-center"
             variants={fadeScaleVariants}
           >
             <motion.div 
-              className="w-[120px] h-[180px] rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.15)] border border-[rgba(0,0,0,0.1)] flex-shrink-0"
+              className="w-[120px] h-[180px] rounded-xl overflow-hidden flex-shrink-0"
               variants={fadeScaleVariants}
             >
               {mostPositiveReview.coverImage ? (
                 <img src={mostPositiveReview.coverImage} alt={mostPositiveReview.title} className="w-full h-full object-cover" />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-[3rem] bg-[rgba(237,240,245,0.5)] text-black">📖</div>
+                <div className="w-full h-full flex items-center justify-center text-[3rem] text-black">📖</div>
               )}
             </motion.div>
             <div className="text-center md:text-left">
@@ -154,7 +154,7 @@ const MostPositiveReview: React.FC<MostPositiveReviewProps> = ({
         </motion.div>
       ) : (
         <motion.div 
-          className="text-center p-12 rounded-xl border border-[rgba(0,0,0,0.1)] bg-[rgba(237,240,245,0.3)] backdrop-blur-[10px]"
+          className="text-center p-12 rounded-xl"
           variants={itemVariants}
         >
           <p className="m-0 text-[1.2rem] text-black font-[var(--font-main)]">No positive reviews found - are you a hater?</p>

@@ -13,7 +13,7 @@ interface BooksReadProps {
 const BooksRead: React.FC<BooksReadProps> = ({ yearBooks = 0, onPrevPage, onNextPage }) => {
   return (
     <motion.div 
-      className="page-container flex flex-col items-center justify-center min-h-[60vh] mt-8 relative z-20"
+      className="page-container flex flex-col items-center justify-center mt-24 relative z-20"
       variants={containerVariantsSlow}
       initial="hidden"
       animate="visible"
@@ -21,7 +21,7 @@ const BooksRead: React.FC<BooksReadProps> = ({ yearBooks = 0, onPrevPage, onNext
       {/* Intro Text */}
       <motion.div 
         variants={itemVariants} 
-        className="text-center mb-6 w-full"
+        className="text-center pt-30 mb-6 w-full"
       >
         <motion.h2 
           className="text-xl md:text-2xl font-bold tracking-wider uppercase text-[var(--color-vintage-accent)] font-[var(--font-display)] mb-2"
@@ -38,10 +38,10 @@ const BooksRead: React.FC<BooksReadProps> = ({ yearBooks = 0, onPrevPage, onNext
       </motion.div>
 
       {/* Hero Section with Large Number */}
-      <div className="relative flex items-center justify-center w-full aspect-square max-w-[300px] my-8">
+      <div className="relative flex items-center justify-center w-full">
         {/* The Big Number */}
         <motion.div 
-          className="relative z-20 font-black text-[6rem] md:text-[8rem] leading-none text-[var(--color-vintage-accent)] drop-shadow-lg font-[var(--font-display)]"
+          className="relative z-20 font-black text-[6rem] md:text-[8rem] leading-none text-[var(--color-vintage-accent)] font-[var(--font-display)]"
           variants={heroVariants}
           initial="hidden"
           animate="visible"

@@ -27,7 +27,7 @@ const BiggestHater: React.FC<BiggestHaterProps> = ({
 }) => {
   return (
     <motion.div 
-      className="page-container flex flex-col items-center justify-center min-h-[60vh] mt-8 relative z-20"
+      className="page-container flex flex-col items-center justify-center mt-8 relative z-20"
       variants={containerVariantsSlow}
       initial="hidden"
       animate="visible"
@@ -42,23 +42,23 @@ const BiggestHater: React.FC<BiggestHaterProps> = ({
       
       {biggestHaterMoment ? (
         <motion.div 
-          className="flex flex-col items-center gap-8 my-8 max-w-[600px]"
+          className="flex flex-col items-center gap-8 my-8"
           variants={containerVariantsSlow}
           initial="hidden"
           animate="visible"
         >
           <motion.div 
-            className="flex flex-col items-center gap-4 p-8 rounded-xl w-full bg-[rgba(237,240,245,0.3)] backdrop-blur-[10px] border border-[rgba(0,0,0,0.1)]"
+            className="flex flex-col items-center gap-4 p-8 rounded-xl w-full"
             variants={fadeScaleVariants}
           >
             <motion.div 
-              className="w-[120px] h-[180px] rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.15)] border border-[rgba(0,0,0,0.1)]"
+              className="w-[120px] h-[180px] rounded-xl overflow-hidden"
               variants={fadeScaleVariants}
             >
               {biggestHaterMoment.coverImage ? (
                 <img src={biggestHaterMoment.coverImage} alt={biggestHaterMoment.title} className="w-full h-full object-cover" />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-[3rem] bg-[rgba(237,240,245,0.5)] text-black">📖</div>
+                <div className="w-full h-full flex items-center justify-center text-[3rem] text-black">📖</div>
               )}
             </motion.div>
             <div className="text-center">
@@ -78,7 +78,7 @@ const BiggestHater: React.FC<BiggestHaterProps> = ({
           </motion.div>
           
           <motion.div 
-            className="flex items-center gap-8 p-8 rounded-xl w-full bg-[rgba(237,240,245,0.3)] backdrop-blur-[10px] border border-[rgba(0,0,0,0.1)] max-md:flex-col max-md:gap-4"
+            className="flex items-center gap-8 p-8 rounded-xl w-full max-md:flex-col max-md:gap-4"
             variants={itemVariants}
           >
             <div className="flex flex-col items-center gap-2 flex-1">
@@ -89,7 +89,7 @@ const BiggestHater: React.FC<BiggestHaterProps> = ({
               </div>
             </div>
             
-            <div className="text-[1.5rem] font-bold text-black bg-[rgba(255,210,245,0.4)] px-4 py-2 rounded-full min-w-[60px] text-center font-[var(--font-main)]">VS</div>
+            <div className="text-[1.5rem] font-bold text-black px-4 py-2 rounded-full text-center font-[var(--font-main)]">VS</div>
             
             <div className="flex flex-col items-center gap-2 flex-1">
               <div className="text-[0.9rem] opacity-80 text-center font-[var(--font-main)] text-black">Everyone Else</div>
@@ -101,7 +101,7 @@ const BiggestHater: React.FC<BiggestHaterProps> = ({
           </motion.div>
           
           <motion.div 
-            className="text-center bg-[rgba(255,165,236,0.2)] p-6 rounded-xl backdrop-blur-[10px] w-full border border-[rgba(0,0,0,0.1)]"
+            className="text-center p-6 rounded-xl w-full"
             variants={itemVariants}
           >
             <motion.div 
@@ -119,7 +119,7 @@ const BiggestHater: React.FC<BiggestHaterProps> = ({
           </motion.div>
           
           <motion.div 
-            className="text-center p-6 rounded-xl w-full bg-[rgba(255,210,245,0.2)] border border-[rgba(0,0,0,0.1)]"
+            className="text-center p-6 rounded-xl w-full"
             variants={itemVariants}
           >
             <p className="m-0 text-[1.1rem] text-black font-bold font-[var(--font-main)]">
@@ -129,7 +129,7 @@ const BiggestHater: React.FC<BiggestHaterProps> = ({
         </motion.div>
       ) : (
         <motion.div 
-          className="text-center p-12 rounded-xl w-full bg-[rgba(237,240,245,0.3)] backdrop-blur-[10px] border border-[rgba(0,0,0,0.1)]"
+          className="text-center p-12 rounded-xl w-full"
           variants={itemVariants}
         >
           <p className="m-0 text-[1.2rem] text-black font-[var(--font-main)]">No hater moments found - you're too agreeable! 😊</p>
