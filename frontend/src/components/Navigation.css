@@ -53,15 +53,15 @@
 }
 
 .nav-left::before {
-  background: linear-gradient(to right, rgba(255, 210, 245, 0.2), transparent);
+  background: linear-gradient(to right, var(--color-vintage-accent), transparent);
 }
 
 .nav-right::before {
-  background: linear-gradient(to left, rgba(255, 210, 245, 0.2), transparent);
+  background: linear-gradient(to left, var(--color-vintage-accent), transparent);
 }
 /* Visual feedback on hover */
 .nav-left:hover::before, .nav-right:hover::before {
-  opacity: 1;
+  opacity: 0.2;
 }
 
 .nav-left:hover, .nav-right:hover {
