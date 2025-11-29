@@ -36,19 +36,22 @@ const slideVariants: Variants = {
     opacity: 1,
     scale: 1,
     transition: {
-      x: { type: "spring", stiffness: 300, damping: 30 },
-      opacity: { duration: 0.2 },
-      scale: { duration: 0.3 },
+      // Stiffness increased from 300 -> 800 (Stronger pull)
+      // Damping increased from 30 -> 40 (Reduces bounce at high speed)
+      x: { type: "spring", stiffness: 600, damping: 40 },
+      opacity: { duration: 0.15 }, // Reduced from 0.2
+      scale: { duration: 0.2 },   // Reduced from 0.3
     }
   },
   exit: (direction: number) => ({
     zIndex: 0,
-    x: direction < 0 ? 1000 : -1000,
+    x: direction < 0 ? 600 : -600,
     opacity: 0,
     scale: 0.9,
     transition: {
-      x: { type: "spring", stiffness: 300, damping: 30 },
-      opacity: { duration: 0.2 },
+      // Matching the speed of the center transition
+      x: { type: "spring", stiffness: 800, damping: 40 },
+      opacity: { duration: 0.1 },
     }
   })
 };
