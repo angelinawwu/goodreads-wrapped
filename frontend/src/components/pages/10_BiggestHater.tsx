@@ -130,10 +130,10 @@ const BiggestHater: React.FC<BiggestHaterProps> = ({
               initial="enter"
               animate="center"
               exit="exit"
-              className="absolute w-full flex flex-col items-center text-center"
+              className="absolute w-full flex flex-col items-center text-center mb-24"
             >
               <motion.div 
-                className="mb-6 relative"
+                className="mb-12 relative"
                 variants={fadeScaleVariants}
               >
                 <motion.div 
@@ -183,7 +183,7 @@ const BiggestHater: React.FC<BiggestHaterProps> = ({
               initial="enter"
               animate="center"
               exit="exit"
-              className="absolute w-full flex flex-col items-center text-center"
+              className="absolute w-full flex flex-col items-center text-center mb-24"
             >
               <motion.div 
                 className="flex justify-center items-end gap-6 md:gap-10 w-full mb-8 max-md:flex-col max-md:items-center max-md:gap-6"
@@ -191,16 +191,16 @@ const BiggestHater: React.FC<BiggestHaterProps> = ({
               >
                 <div className="flex flex-col items-center">
                   <p className="text-[0.85rem] uppercase tracking-widest opacity-60 mb-2 font-[var(--font-main)] text-black">Your Rating</p>
-                  <div className="text-[3rem] md:text-[4rem] font-black font-[var(--font-display)] text-black">
+                  <div className="text-3xl md:text-4xl font-black font-[var(--font-display)] text-black">
                     {biggestHaterMoment.userRating} / 5
                   </div>
                 </div>
-                <div className="text-[4rem] md:text-[5rem] font-black font-[var(--font-display)] text-black/10">
+                <div className="text-3xl md:text-4xl font-black font-[var(--font-display)] text-black/10">
                   ≠
                 </div>
                 <div className="flex flex-col items-center">
                   <p className="text-[0.85rem] uppercase tracking-widest opacity-60 mb-2 font-[var(--font-main)] text-black">The World's Rating</p>
-                  <div className="text-[3rem] md:text-[4rem] font-black font-[var(--font-display)] text-black">
+                  <div className="text-3xl md:text-4xl font-black font-[var(--font-display)] text-black">
                     {biggestHaterMoment.avgRating?.toFixed(2)} / 5
                   </div>
                 </div>
@@ -218,7 +218,7 @@ const BiggestHater: React.FC<BiggestHaterProps> = ({
                 variants={itemVariants}
               >
                 <motion.div 
-                  className="text-[4rem] md:text-[6rem] leading-none font-black font-[var(--font-display)] text-[var(--color-vintage-accent)]"
+                  className="text-4xl md:text-6xl leading-none font-black font-[var(--font-display)] text-[var(--color-vintage-accent)]"
                   variants={itemVariants}
                 >
                   <AnimatedCounter value={biggestDisparity} decimals={2} />

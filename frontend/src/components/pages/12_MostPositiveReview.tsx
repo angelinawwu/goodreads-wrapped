@@ -155,7 +155,7 @@ const MostPositiveReview: React.FC<MostPositiveReviewProps> = ({
                 </motion.div>
                 {mostPositiveReview.userRating && (
                   <motion.div 
-                    className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-3 py-1 rounded-full text-lg font-bold shadow-xl rotate-[-5deg] border-2 border-white"
+                    className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 bg-[var(--color-vintage-highlight)] text-white px-3 py-1 rounded-full text-lg font-bold shadow-xl rotate-[-5deg] border-2 border-white"
                     variants={itemVariants}
                   >
                     {mostPositiveReview.userRating}/5
@@ -201,11 +201,11 @@ const MostPositiveReview: React.FC<MostPositiveReviewProps> = ({
               className="absolute w-full flex flex-col items-center text-center"
             >
               <motion.div 
-                className="mb-8 p-4 bg-gray-50/50 backdrop-blur-sm rounded-xl border border-gray-200 shadow-inner w-full max-w-xl"
+                className="mb-8 p-4 bg-[var(--color-vintage-light)] rounded-xl border border-[var(--color-vintage-accent)] w-full max-w-xl"
                 variants={itemVariants}
               >
                 <motion.p 
-                  className="text-[1.2rem] leading-snug italic text-black/90 font-[var(--font-main)] max-md:text-[1rem]"
+                  className="text-[1.2rem] leading-snug italic text-[var(--color-vintage-text)] font-[var(--font-main)] max-md:text-[1rem]"
                   variants={itemVariants}
                 >
                   "{mostPositiveReview.sentiment?.fullReview || 'No review text available'}"
@@ -223,7 +223,7 @@ const MostPositiveReview: React.FC<MostPositiveReviewProps> = ({
                   Sentiment Score
                 </motion.p>
                 <motion.div 
-                  className="text-[4rem] md:text-[5rem] leading-none font-black font-[var(--font-display)] text-green-600 drop-shadow-sm"
+                  className="text-[4rem] md:text-[5rem] leading-none font-black font-[var(--font-display)] text-[var(--color-vintage-highlight)]"
                   variants={itemVariants}
                 >
                   <AnimatedCounter value={mostPositiveReview.sentiment?.comparative || 0} decimals={3} />
