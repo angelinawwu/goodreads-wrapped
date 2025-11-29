@@ -32,10 +32,10 @@ export const decorMap: { [key: string]: DecorItem[] } = {
     { id: 8, position: 'top' }
   ],
   '/dependability': [
-    { id: 9, position: 'frame' }
+    { id: 9, position: 'frame-c', className: 'scale-150 origin-center' }
   ],
   '/biggest-hater': [
-    { id: 10, position: 'frame' }
+    { id: 10, position: 'frame-c', className: 'scale-180 origin-center' }
   ],
   '/most-scathing-review': [
     { id: 4, position: 'bottom' }
