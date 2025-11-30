@@ -181,7 +181,7 @@ button, input, .book-list, .book-item, .desktop-nav, .username-form, .input-grou
   top: 0;
   left: 0;
   right: 0;
-  z-index: 100;
+  z-index: 49;
   padding: 1rem 1.5rem;
   width: 100%;
   box-sizing: border-box;
