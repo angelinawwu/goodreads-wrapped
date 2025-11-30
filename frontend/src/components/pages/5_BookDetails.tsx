@@ -147,7 +147,7 @@ const BookDetails: React.FC<BookDetailsProps> = ({
                   className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]"
                   variants={itemVariants}
                 >
-                  The Marathon Read
+                  Your Longest Read
                 </motion.h2>
               </motion.div>
               
@@ -212,7 +212,7 @@ const BookDetails: React.FC<BookDetailsProps> = ({
                   className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]"
                   variants={itemVariants}
                 >
-                  The Sprint
+                  Your Shortest Read
                 </motion.h2>
               </motion.div>
               

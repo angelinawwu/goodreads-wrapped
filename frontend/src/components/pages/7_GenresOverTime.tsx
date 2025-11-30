@@ -2,6 +2,13 @@ import React, { useState } from 'react';
 import Navigation from '../Navigation';
 import { motion } from 'framer-motion';
 import { containerVariantsSlow, itemVariants } from '../motionVariants';
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import {
+  ChartContainer,
+  ChartLegend,
+  ChartTooltipContent,
+} from '../ui/chart';
+import type { ChartConfig } from '../ui/chart';
 
 interface GenresOverTimeProps {
   genreCounts?: { [key: string]: number };
@@ -65,26 +72,33 @@ const GenresOverTime: React.FC<GenresOverTimeProps> = ({
     genreColorMap[genre.toLowerCase()] || fallbackColors[index % fallbackColors.length]
   );
 
-  const createBoundedSmoothPath = (points: { x: number; y: number }[]) => {
-    if (points.length < 2) return '';
+  // Create chart config for shadcn chart
+  const chartConfig: ChartConfig = topGenres.reduce((acc, genre, index) => {
+    acc[genre.toLowerCase().replace(/\s+/g, '_')] = {
+      label: genre,
+      color: genreColors[index],
+    };
+    return acc;
+  }, {} as ChartConfig);
+
+  // Transform data for Recharts
+  const chartData = months.map((month, monthIndex) => {
+    const monthKey = `${2025}-${String(monthIndex + 1).padStart(2, '0')}`;
+    const totalBooks = monthlyBookTotals?.[monthKey] || 0;
     
-    let path = `M ${points[0].x} ${points[0].y}`;
+    const dataPoint: { month: string; [key: string]: number | string } = {
+      month: month,
+    };
     
-    for (let i = 0; i < points.length - 1; i++) {
-      const p1 = points[i];
-      const p2 = points[i + 1];
-      
-      // Simple control points that stay close to the actual points
-      const cp1x = p1.x + (p2.x - p1.x) * 0.5;
-      const cp1y = p1.y;
-      const cp2x = p1.x + (p2.x - p1.x) * 0.5;
-      const cp2y = p2.y;
-      
-      path += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2.x} ${p2.y}`;
-    }
+    topGenres.forEach((genre) => {
+      const genreCount = monthlyGenreData?.[monthKey]?.[genre] || 0;
+      const percentage = totalBooks > 0 ? (genreCount / totalBooks) * 100 : 0;
+      const genreKey = genre.toLowerCase().replace(/\s+/g, '_');
+      dataPoint[genreKey] = Math.round(percentage * 10) / 10; // Round to 1 decimal
+    });
     
-    return path;
-  };
+    return dataPoint;
+  });
 
   return (
     <motion.div 
@@ -97,140 +111,106 @@ const GenresOverTime: React.FC<GenresOverTimeProps> = ({
         className="mb-4 w-full text-center"
         variants={itemVariants}
       >
-        <h2 className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]">📈 Genres Over Time</h2>
+        <h2 className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]">Genres Over Time</h2>
         <p className="text-[1.1rem] opacity-80 m-0 font-[var(--font-main)] italic">How your reading tastes evolved in 2025</p>
       </motion.div>
       
       <motion.div 
-        className="w-full max-w-[900px] my-4 flex flex-col items-center"
+        className="w-full my-4 flex flex-col items-center"
         variants={containerVariantsSlow}
         initial="hidden"
         animate="visible"
       >
         {monthlyGenreData && topGenres.length > 0 ? (
-          <div className="w-full flex flex-col items-center gap-4">
-            <motion.svg 
-              viewBox="0 0 800 400" 
-              className="w-full h-auto max-w-[800px] rounded-[10px] p-4 max-md:p-2"
-              variants={itemVariants}
+          <motion.div 
+            className="w-full flex flex-col items-center gap-4"
+            variants={itemVariants}
+          >
+            <ChartContainer 
+              config={chartConfig} 
+              className="w-full h-[400px]"
             >
-              {/* Define drop shadow filter */}
-              <defs>
-                <filter id="lineShadow" x="-50%" y="-50%" width="200%" height="200%">
-                  <feDropShadow dx="0" dy="2" stdDeviation="3" floodColor="rgba(0,0,0,0.5)" floodOpacity="0.5"/>
-                </filter>
-              </defs>
-              
-              {/* Chart background */}
-              <rect width="800" height="400" fill="transparent" />
-              
-              {/* Y-axis labels */}
-              {[0, 25, 50, 75, 100].map(value => (
-                <g key={value}>
-                  <line 
-                    x1="80" 
-                    y1={350 - (value * 2.5)} 
-                    x2="750" 
-                    y2={350 - (value * 2.5)} 
-                    stroke="rgba(255,255,255,0.1)" 
-                    strokeWidth="1"
-                  />
-                  <text 
-                    x="70" 
-                    y={355 - (value * 2.5)} 
-                    fill="white" 
-                    fontSize="12" 
-                    textAnchor="end"
-                  >
-                    {value}%
-                  </text>
-                </g>
-              ))}
-              
-              {/* X-axis labels */}
-              {months.map((month, index) => (
-                <text 
-                  key={month}
-                  x={110 + (index * 55)} 
-                  y="380" 
-                  fill="white" 
-                  fontSize="12" 
-                  textAnchor="middle"
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart
+                  accessibilityLayer
+                  data={chartData}
+                  margin={{
+                    left: 6,
+                    right: 6,
+                    top: 6,
+                    bottom: 6,
+                  }}
+                  onMouseMove={(e) => {
+                    if (e && 'activePayload' in e && e.activePayload && Array.isArray(e.activePayload) && e.activePayload[0]?.dataKey) {
+                      const genreKey = e.activePayload[0].dataKey as string;
+                      const genre = topGenres.find(g => g.toLowerCase().replace(/\s+/g, '_') === genreKey);
+                      if (genre) setHoveredGenre(genre);
+                    }
+                  }}
+                  onMouseLeave={() => setHoveredGenre(null)}
                 >
-                  {month}
-                </text>
-              ))}
-              
-              {/* Genre lines */}
-              {topGenres.map((genre, genreIndex) => {
-                const points = months.map((_, monthIndex) => {
-                  const monthKey = `${2025}-${String(monthIndex + 1).padStart(2, '0')}`;
-                  const totalBooks = monthlyBookTotals?.[monthKey] || 0;
-                  const genreCount = monthlyGenreData[monthKey]?.[genre] || 0;
-                  const percentage = totalBooks > 0 ? (genreCount / totalBooks) * 100 : 0;
+                <CartesianGrid vertical={false} strokeDasharray="3 3" className="stroke-black/10" />
+                <XAxis
+                  dataKey="month"
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={8}
+                  tick={{ fill: 'rgba(0,0,0,0.7)', fontSize: 12 }}
+                />
+                <YAxis
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={8}
+                  tick={{ fill: 'rgba(0,0,0,0.7)', fontSize: 12 }}
+                  tickFormatter={(value) => `${value}%`}
+                  domain={[0, 100]}
+                />
+                <Tooltip
+                  cursor={false}
+                  content={({ active, payload, label }: any) => (
+                    <ChartTooltipContent active={active} payload={payload} label={label} indicator="line" />
+                  )}
+                />
+                {topGenres.map((genre) => {
+                  const genreKey = genre.toLowerCase().replace(/\s+/g, '_');
+                  const isHovered = hoveredGenre === null || hoveredGenre === genre;
+                  const opacity = isHovered ? 0.4 : 0.1;
                   
-                  return {
-                    x: 110 + (monthIndex * 55),
-                    y: 350 - (percentage * 2.5)
-                  };
-                });
-                
-                const pathData = createBoundedSmoothPath(points);
-                
-                const isHovered = hoveredGenre === null || hoveredGenre === genre;
-                const opacity = isHovered ? 1 : 0.2;
-                const strokeWidth = isHovered ? (hoveredGenre === genre ? 4 : 3) : 2;
-                
-                return (
-                  <g 
-                    key={genre}
-                    onMouseEnter={() => setHoveredGenre(genre)}
-                    onMouseLeave={() => setHoveredGenre(null)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <motion.path
-                      d={pathData}
-                      fill="none"
-                      stroke={genreColors[genreIndex]}
-                      strokeWidth={strokeWidth}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      filter="url(#lineShadow)"
-                      opacity={opacity}
-                      style={{ transition: 'opacity 0.2s ease, stroke-width 0.2s ease' }}
-                      initial={{ pathLength: 0, opacity: 0 }}
-                      animate={{ pathLength: 1, opacity: opacity }}
-                      transition={{ 
-                        pathLength: { duration: 1.5, delay: genreIndex * 0.2, ease: "easeOut" },
-                        opacity: { duration: 0.2 }
+                  // FIXED: Safely retrieve the color directly from your config
+                  // instead of relying on CSS variables
+                  const genreColor = chartConfig[genreKey]?.color || '#8884d8';
+
+                  return (
+                    <Area
+                      key={genreKey}
+                      dataKey={genreKey}
+                      type="natural"
+                      // Use direct color reference
+                      fill={genreColor}
+                      fillOpacity={opacity}
+                      stroke={genreColor}
+                      strokeWidth={isHovered ? (hoveredGenre === genre ? 3 : 2) : 1.5}
+                      stackId="a"
+                      style={{
+                        transition: 'opacity 0.2s ease, stroke-width 0.2s ease',
                       }}
                     />
-                    {/* Data points */}
-                    {points.map((point, index) => (
-                      <motion.circle
-                        key={index}
-                        cx={point.x}
-                        cy={point.y}
-                        r="4"
-                        fill={genreColors[genreIndex]}
-                        opacity={opacity}
-                        style={{ transition: 'opacity 0.2s ease' }}
-                        initial={{ scale: 0, opacity: 0 }}
-                        animate={{ scale: 1, opacity: opacity }}
-                        transition={{ 
-                          delay: (genreIndex * 0.2) + (index * 0.1) + 1.5,
-                          type: "spring",
-                          stiffness: 200,
-                          damping: 15
-                        }}
-                      />
-                    ))}
-                  </g>
-                );
-              })}
-            </motion.svg>
+                  );
+                })}
+                <ChartLegend 
+                  payload={topGenres.map((genre, idx) => ({
+                    value: genre,
+                    type: 'line',
+                    id: genre.toLowerCase().replace(/\s+/g, '_'),
+                    color: genreColors[idx],
+                  }))} 
+                  config={chartConfig} 
+                />
+                </AreaChart>
+              </ResponsiveContainer>
+            </ChartContainer>
             
-            {/* Legend */}
+            {/* Custom Legend with hover functionality */}
             <motion.div 
               className="flex flex-wrap justify-center gap-4 mt-4 max-md:gap-2"
               variants={containerVariantsSlow}
@@ -244,11 +224,10 @@ const GenresOverTime: React.FC<GenresOverTimeProps> = ({
                 return (
                   <motion.div 
                     key={genre} 
-                    className="flex items-center gap-2"
+                    className="flex items-center gap-2 cursor-pointer"
                     onMouseEnter={() => setHoveredGenre(genre)}
                     onMouseLeave={() => setHoveredGenre(null)}
                     style={{ 
-                      cursor: 'pointer',
                       opacity: opacity,
                       transition: 'opacity 0.2s ease'
                     }}
@@ -263,7 +242,7 @@ const GenresOverTime: React.FC<GenresOverTimeProps> = ({
                 );
               })}
             </motion.div>
-          </div>
+          </motion.div>
         ) : (
           <motion.div 
             className="text-center p-12 text-[rgba(0,0,0,0.7)] text-[1.1rem] font-[var(--font-main)]"
