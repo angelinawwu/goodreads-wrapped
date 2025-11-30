@@ -108,7 +108,7 @@ const GenresOverTime: React.FC<GenresOverTimeProps> = ({
       animate="visible"
     >
       <motion.div 
-        className="mb-4 w-full text-center"
+        className="mt-28 mb-4 w-full text-center"
         variants={itemVariants}
       >
         <h2 className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]">Genres Over Time</h2>
@@ -128,7 +128,7 @@ const GenresOverTime: React.FC<GenresOverTimeProps> = ({
           >
             <ChartContainer 
               config={chartConfig} 
-              className="w-full h-[400px]"
+              className="w-full h-60"
             >
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart
@@ -164,6 +164,7 @@ const GenresOverTime: React.FC<GenresOverTimeProps> = ({
                   tick={{ fill: 'rgba(0,0,0,0.7)', fontSize: 12 }}
                   tickFormatter={(value) => `${value}%`}
                   domain={[0, 100]}
+                  width={40}
                 />
                 <Tooltip
                   cursor={false}
