@@ -715,13 +715,16 @@ app.post('/store-data', (req, res) => {
 // // Keep your existing app.listen() code below this
 // console.log('About to start listening...');
 
-// app.listen(PORT, () => {
-//   console.log(`Server running on http://localhost:${PORT}`);
-// }).on('error', (error) => {
-//   console.error('Server error:', error);
-// });
-
-// console.log('Server setup complete');
+// Only start the server if not in a serverless environment (like Vercel)
+if (process.env.VERCEL !== '1') {
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  }).on('error', (error) => {
+    console.error('Server error:', error);
+  });
+  
+  console.log('Server setup complete');
+}
 
 // ------------------------------------------------------------------------------------------------
 

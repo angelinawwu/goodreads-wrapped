@@ -5,6 +5,7 @@ import QRCode from 'qrcode';
 import Decor from './components/Decor';
 import { decorMap } from './data/decorConfig';
 import WelcomePage from './components/pages/1_WelcomePage';
+import DesktopView from './components/pages/2_DesktopView';
 import BooksRead from './components/pages/3_BooksRead';
 import AverageRating from './components/pages/4_AverageRating';
 import BookDetails from './components/pages/5_BookDetails';
@@ -124,8 +125,10 @@ interface ScrapingResult {
   };
 }
 
-// 💡 Vite uses import.meta.env for environment variables.
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+// Use proxy in development, full URL in production
+const API_BASE_URL = import.meta.env.DEV 
+  ? '/api'  // Vite proxy will forward to localhost:3001
+  : (import.meta.env.VITE_API_URL || 'http://localhost:3001');
 
 function App() {
 
@@ -178,6 +181,14 @@ function App() {
     setLoading(true);
     try {
       const response = await fetch(`${API_BASE_URL}/scrape/${username}/books/2025`);
+      
+      // Check if response is ok before parsing JSON
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Server error:', response.status, errorText);
+        throw new Error(`Server error: ${response.status} - ${errorText || 'Unknown error'}`);
+      }
+      
       const data = await response.json();
       setResult(data);
       
@@ -187,10 +198,10 @@ function App() {
       setQrCodeUrl(qrCode);
       
       // Navigate to the first page
-      navigate('/books-read');      
+      navigate('/books-read');
     } catch (error) {
       console.error('Error:', error);
-      setResult({ error: 'Failed to fetch data' });
+      setResult({ error: error instanceof Error ? error.message : 'Failed to fetch data' });
     } finally {
       setLoading(false);
     }
@@ -209,7 +220,8 @@ function App() {
     const pageOrder = ['/', '/books-read', '/average-rating', '/book-details', '/top-genres', '/genres-over-time', '/reading-time', '/dependability', '/biggest-hater', '/most-scathing-review', '/most-positive-review', '/book-list', '/complete'];
     const currentPath = location.pathname;
     const currentIndex = pageOrder.indexOf(currentPath);
-    if (currentIndex > 0) {
+    // Don't allow going back from /books-read (it's the first page after welcome)
+    if (currentIndex > 1) {
       navigate(pageOrder[currentIndex - 1]);
     }
   };
@@ -228,6 +240,7 @@ function App() {
       yearBooks={result?.yearBooks}
       onPrevPage={prevPage}
       onNextPage={nextPage}
+      disableBack={true}
     />
   );
 
@@ -343,6 +356,13 @@ function App() {
     />
   );
 
+  const renderDesktopView = () => (
+    <DesktopView
+      qrCodeUrl={qrCodeUrl}
+      onContinue={nextPage}
+    />
+  );
+
   const currentDecor = decorMap[location.pathname] || [];
 
   return (
@@ -388,6 +408,9 @@ function App() {
               <header className="App-header">
                 <Routes>
                   <Route path="/" element={renderWelcomePage()} />
+                  <Route path="/desktop" element={
+                    result && !isMobile ? renderDesktopView() : <div>Loading...</div>
+                  } />
                   <Route path="/books-read" element={
                     result ? renderBooksReadPage() : <div>Loading...</div>
                   } />

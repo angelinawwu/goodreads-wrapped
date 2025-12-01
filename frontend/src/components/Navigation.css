@@ -52,23 +52,33 @@
   pointer-events: none;
 }
 
-.nav-left::before {
-  background: linear-gradient(to right, var(--color-vintage-accent), transparent);
-}
 
-.nav-right::before {
-  background: linear-gradient(to left, var(--color-vintage-accent), transparent);
-}
 /* Visual feedback on hover */
 .nav-left:hover::before, .nav-right:hover::before {
   opacity: 0.2;
 }
 
 .nav-left:hover, .nav-right:hover {
-  color: black;
+  color: var(--color-vintage-accent);
 }
+
 
 .nav-left:hover p, .nav-right:hover p {
   transform: scale(1.05);
+}
+
+/* Disabled state */
+.nav-disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.nav-disabled:hover::before {
+  opacity: 0 !important;
+}
+
+.nav-disabled:hover {
+  color: rgba(0, 0, 0, 0.3) !important;
 }
 

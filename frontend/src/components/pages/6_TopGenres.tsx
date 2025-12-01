@@ -60,11 +60,11 @@ const TopGenres: React.FC<TopGenresProps> = ({
             return (
               <motion.div 
                 key={genre} 
-                className="flex items-center my-2 p-3 rounded-xl bg-[rgba(237,240,245,0.3)] backdrop-blur-[10px] border border-[rgba(0,0,0,0.1)] transition-all duration-200 hover:-translate-y-0.5 hover:bg-[rgba(255,210,245,0.3)] max-md:flex-col max-md:text-center max-md:gap-4"
+                className="flex items-center my-2 p-3 transition-all duration-200 max-md:flex-col max-md:text-center max-md:gap-4"
                 variants={itemVariants}
               >
                 <div className="mr-6 min-w-[60px] max-md:mr-0">
-                  <span className="text-[1.5rem] font-bold text-black bg-[rgba(255,210,245,0.4)] px-4 py-2 rounded-full inline-block min-w-[40px] text-center font-[var(--font-main)]">#{index + 1}</span>
+                  <span className="text-[1.5rem] font-bold text-[var(--color-vintage-bg)] bg-[var(--color-vintage-accent)] px-4 py-2 rounded-full inline-block min-w-[40px] text-center font-[var(--font-main)]">#{index + 1}</span>
                 </div>
                 <div className="flex-1 text-left max-md:text-center">
                   <div className="text-[1.3rem] font-bold mb-1 font-[var(--font-main)] text-black">{genre}</div>

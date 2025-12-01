@@ -8,9 +8,10 @@ interface BooksReadProps {
   yearBooks?: number;
   onPrevPage: () => void;
   onNextPage: () => void;
+  disableBack?: boolean;
 }
 
-const BooksRead: React.FC<BooksReadProps> = ({ yearBooks = 0, onPrevPage, onNextPage }) => {
+const BooksRead: React.FC<BooksReadProps> = ({ yearBooks = 0, onPrevPage, onNextPage, disableBack = false }) => {
   return (
     <motion.div 
       className="page-container flex flex-col items-center justify-center mt-24 relative z-20"
@@ -60,7 +61,7 @@ const BooksRead: React.FC<BooksReadProps> = ({ yearBooks = 0, onPrevPage, onNext
         </span>
       </motion.div>
       
-      <Navigation onPrevPage={onPrevPage} onNextPage={onNextPage} />
+      <Navigation onPrevPage={onPrevPage} onNextPage={onNextPage} disablePrev={disableBack} />
     </motion.div>
   );
 };
