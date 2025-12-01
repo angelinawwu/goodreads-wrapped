@@ -106,7 +106,7 @@ const Dependability: React.FC<DependabilityProps> = ({
                   className="text-lg opacity-80 m-0 font-[var(--font-main)] italic"
                   variants={itemVariants}
                 >
-                  Let's see how well you followed through.
+                  But how well did you follow through?
                 </motion.p>
               </motion.div>
             </motion.div>
@@ -134,7 +134,7 @@ const Dependability: React.FC<DependabilityProps> = ({
                   Follow-Through Rate
                 </motion.p>
                 <motion.div 
-                  className="text-[4rem] md:text-[5rem] font-black text-black my-2 font-[var(--font-display)] leading-none"
+                  className="text-6xl font-black text-var(--color-vintage-accent) my-2 font-[var(--font-display)] leading-none"
                   variants={itemVariants}
                 >
                   <AnimatedCounter value={dependabilityPercent} decimals={1} />%

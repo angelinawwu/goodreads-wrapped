@@ -47,6 +47,8 @@ const GenresOverTime: React.FC<GenresOverTimeProps> = ({
         .map(([genre]) => genre)
     : [];
 
+  const uniqueGenresCount = genreCounts ? Object.keys(genreCounts).length : 0;
+
   // Map specific genres to consistent colors
   const genreColorMap: { [genre: string]: string } = {
     'fantasy': '#E0ABFF',           // Purple
@@ -116,21 +118,14 @@ const GenresOverTime: React.FC<GenresOverTimeProps> = ({
         className="mt-28 mb-2 w-full text-center"
         variants={itemVariants}
       >
-        <motion.h2
-          className="text-4xl font-medium mb-4 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
-          variants={stagedHeadline}
-          initial="hidden"
-          animate="visible"
-        >
-          Genres Over Time
-        </motion.h2>
+        
         <motion.p
           className="text-lg opacity-80 m-0 font-[var(--font-main)] italic"
           variants={stagedSubheadline}
           initial="hidden"
           animate="visible"
         >
-          How your reading tastes evolved in 2025
+          Here were your top 5.
         </motion.p>
       </motion.div>
       

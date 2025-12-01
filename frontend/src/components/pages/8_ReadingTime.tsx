@@ -100,7 +100,7 @@ const ReadingTime: React.FC<ReadingTimeProps> = ({
                   className="text-4xl font-medium mb-4 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
                   variants={itemVariants}
                 >
-                  That's a lot of variety.
+                  Wow, that's a lot of variety.
                 </motion.h2>
                 <motion.p 
                   className="text-lg opacity-80 m-0 font-[var(--font-main)] italic"

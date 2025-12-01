@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import { useMotionValue, useTransform, animate } from 'framer-motion';
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 
 interface AnimatedCounterProps {
   value: number;
   decimals?: number;
   duration?: number;
+  delay?: number;
   className?: string;
 }
 
@@ -18,6 +18,7 @@ const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   value, 
   decimals = 0,
   duration = 2.5,
+  delay = 0,
   className = ''
 }) => {
   const count = useMotionValue(0);
@@ -29,12 +30,15 @@ const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   });
 
   useEffect(() => {
-    const animation = animate(count, value, {
-      duration: duration,
-      ease: "circOut", 
+    const controls = animate(count, value, {
+      duration,
+      delay,
+      ease: "circOut",
     });
-    return animation.stop;
-  }, [value, count, duration]);
+    return () => {
+      controls.stop();
+    };
+  }, [value, duration, delay, count]);
 
   return <motion.span className={className}>{rounded}</motion.span>;
 };

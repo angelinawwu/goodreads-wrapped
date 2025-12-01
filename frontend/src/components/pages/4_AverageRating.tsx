@@ -26,7 +26,7 @@ const AverageRating: React.FC<AverageRatingProps> = ({
 }) => {
   return (
     <motion.div 
-      className="pt-64 px-8"
+      className="pt-72 px-8"
       variants={containerVariantsSlow}
       initial="hidden"
       animate="visible"
@@ -70,14 +70,6 @@ const AverageRating: React.FC<AverageRatingProps> = ({
           out of 5 stars
         </motion.div>
       </div>
-      <motion.div 
-        className="mt-4 opacity-80 text-lg font-[var(--font-main)] text-black text-center"
-        variants={itemVariants}
-      >
-        <p className="m-0 font-[var(--font-main)]">
-          Based on <AnimatedCounter value={booksWithRatings} /> books you rated
-        </p>
-      </motion.div>
       
       <Navigation onPrevPage={onPrevPage} onNextPage={onNextPage} />
     </motion.div>

@@ -71,7 +71,7 @@ const BookDetails: React.FC<BookDetailsProps> = ({
     if (step < totalSteps - 1) {
       const timer = setTimeout(() => {
         setStep(step + 1);
-      }, 5000);
+      }, 4000);
       return () => clearTimeout(timer);
     }
     // Note: Do NOT auto-advance to next page - let user control page navigation
@@ -85,7 +85,7 @@ const BookDetails: React.FC<BookDetailsProps> = ({
       animate="visible"
     >
       {/* Main Content Area with Slides */}
-      <div className="flex-1 flex items-center justify-center w-full max-w-[600px] relative min-h-[400px]">
+      <div className="flex-1 flex items-center justify-center w-full relative">
         <AnimatePresence initial={false} mode="wait">
           
           {/* STEP 0: INTRO */}
@@ -108,11 +108,11 @@ const BookDetails: React.FC<BookDetailsProps> = ({
                   initial="hidden"
                   animate="visible"
                 >
-                  You covered some<br/>serious ground.
+                  This year, you covered some serious ground.
                 </motion.h2>
                 <motion.p 
                   className="text-lg opacity-80 m-0 font-[var(--font-main)] italic"
-                  variants={stagedSubheadline}
+                  variants={stagedLabel}
                   initial="hidden"
                   animate="visible"
                 >
@@ -138,7 +138,9 @@ const BookDetails: React.FC<BookDetailsProps> = ({
               >
                 <motion.h2 
                   className="text-4xl font-medium mb-4 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
-                  variants={itemVariants}
+                  variants={stagedHeadline}
+                  initial="hidden"
+                  animate="visible"
                 >
                   Your Longest Read
                 </motion.h2>
@@ -202,7 +204,9 @@ const BookDetails: React.FC<BookDetailsProps> = ({
               >
                 <motion.h2 
                   className="text-4xl font-medium mb-4 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
-                  variants={itemVariants}
+                  variants={stagedHeadline}
+                  initial="hidden"
+                  animate="visible"
                 >
                   Your Shortest Read
                 </motion.h2>
@@ -266,7 +270,9 @@ const BookDetails: React.FC<BookDetailsProps> = ({
               >
                 <motion.h2 
                   className="text-4xl font-medium mb-4 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
-                  variants={itemVariants}
+                  variants={stagedHeadline}
+                  initial="hidden"
+                  animate="visible"
                 >
                   On average, your books were
                 </motion.h2>

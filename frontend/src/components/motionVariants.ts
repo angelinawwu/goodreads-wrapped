@@ -139,9 +139,9 @@ export const fadeScaleVariants: Variants = {
 
 export const STAGED_TEXT_DELAYS = {
   HEADLINE: 0.0,
-  SUBHEADLINE: 1.0,
-  METRIC: 2.0,
-  LABEL: 3.0,
+  SUBHEADLINE: 0.5,
+  METRIC: 1.0,
+  LABEL: 1.5,
 } as const;
 
 export const createStagedTextVariant = (delaySeconds: number): Variants => ({

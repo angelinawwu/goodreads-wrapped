@@ -57,7 +57,7 @@ const BooksRead: React.FC<BooksReadProps> = ({ yearBooks = 0, onPrevPage, onNext
           initial="hidden"
           animate="visible"
         >
-          <AnimatedCounter value={yearBooks} />
+          <AnimatedCounter value={yearBooks} delay={1} />
         </motion.div>
       </div>
 
