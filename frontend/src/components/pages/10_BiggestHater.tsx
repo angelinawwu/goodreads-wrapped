@@ -46,7 +46,6 @@ const zoomVariants: Variants = {
 const BiggestHater: React.FC<BiggestHaterProps> = ({
   biggestHaterMoment,
   biggestDisparity = 0,
-  booksWithBothRatings = 0,
   onPrevPage,
   onNextPage,
 }) => {
@@ -247,19 +246,6 @@ const BiggestHater: React.FC<BiggestHaterProps> = ({
                 >
                   Maybe the world just isn't ready for the truth?
                 </motion.p>
-
-                {booksWithBothRatings > 0 && (
-                  <motion.p
-                    className="text-[0.85rem] opacity-70 font-[var(--font-main)] mt-4 text-black"
-                    variants={itemVariants}
-                  >
-                    Stat calculated from{' '}
-                    <span className="font-semibold">
-                      <AnimatedCounter value={booksWithBothRatings} />
-                    </span>{' '}
-                    mutual ratings.
-                  </motion.p>
-                )}
 
               </motion.div>
             </motion.div>
