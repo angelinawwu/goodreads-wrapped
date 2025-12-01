@@ -125,6 +125,8 @@ interface ScrapingResult {
   };
 }
 
+// 💡 Vite uses import.meta.env for environment variables.
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 function App() {
 
@@ -176,7 +178,7 @@ function App() {
   
     setLoading(true);
     try {
-      const response = await fetch(`http://localhost:3001/scrape/${username}/books/2025`);
+      const response = await fetch(`${API_BASE_URL}/scrape/${username}/books/2025`);
       const data = await response.json();
       setResult(data);
       

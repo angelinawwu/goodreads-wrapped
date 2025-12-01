@@ -693,19 +693,45 @@ app.post('/store-data', (req, res) => {
   res.json({ success: true });
 });
 
+// ------------------------------------------------------------------------------------------------
+
+// COMMENTED OUT FOR DEPLOYMENT
+
 // Backend: Retrieve user data
-app.get('/get-data/:userId', (req, res) => {
-  const data = userDataStore[req.params.userId];
-  res.json(data || { error: 'Data not found' });
-});
+// app.get('/get-data/:userId', (req, res) => {
+//   const data = userDataStore[req.params.userId];
+//   res.json(data || { error: 'Data not found' });
+// });
 
-// Keep your existing app.listen() code below this
-console.log('About to start listening...');
+// // Keep your existing app.listen() code below this
+// console.log('About to start listening...');
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-}).on('error', (error) => {
-  console.error('Server error:', error);
-});
+// app.listen(PORT, () => {
+//   console.log(`Server running on http://localhost:${PORT}`);
+// }).on('error', (error) => {
+//   console.error('Server error:', error);
+// });
 
-console.log('Server setup complete');
+// console.log('Server setup complete');
+
+// ------------------------------------------------------------------------------------------------
+
+// New Code at the end of server.ts
+
+// ⚠️ IMPORTANT: DO NOT REMOVE the line below: 
+// `const app = express();` is near the top of your file and must remain there.
+
+// This conditional block ensures the server only starts listening 
+// when running locally (i.e., not in the Vercel serverless environment).
+if (process.env.NODE_ENV !== 'production' || process.env.IS_VERCEL === undefined) {
+  // Use a different port or check if Vercel is running
+  const LOCAL_PORT = process.env.PORT || 3001;
+  app.listen(LOCAL_PORT, () => {
+    console.log(`\n✅ Local Server running on http://localhost:${LOCAL_PORT}\n`);
+  }).on('error', (error) => {
+    console.error('Server error:', error);
+  });
+} 
+
+// The necessary export for Vercel Serverless Functions
+export default app;
