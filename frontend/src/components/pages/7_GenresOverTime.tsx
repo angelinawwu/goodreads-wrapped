@@ -5,7 +5,6 @@ import {
   containerVariantsSlow,
   itemVariants,
   stagedHeadline,
-  stagedSubheadline,
 } from '../motionVariants';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import {
@@ -49,35 +48,8 @@ const GenresOverTime: React.FC<GenresOverTimeProps> = ({
 
   const uniqueGenresCount = genreCounts ? Object.keys(genreCounts).length : 0;
 
-  // Map specific genres to consistent colors
-  const genreColorMap: { [genre: string]: string } = {
-    'fantasy': '#E0ABFF',           // Purple
-    'romance': '#FFA5C3',           // Pink
-    'mystery': '#C297CF',           // Dark blue
-    'science fiction': '#8EF9C2',   // Blue
-    'thriller': '#FFB48F',          // Red
-    'historical fiction': '#CDF862', // Orange
-    'contemporary': '#8DD6F8',      // Green
-    'young adult': '#F5CB86',       // Yellow
-    'horror': '#E58C8C',            // Dark purple
-    'biography': '#CEB4A4',         // Gray
-    'non-fiction': '#B7B7B7',       // Teal
-    'memoir': '#f1c40f',            // Gold
-    'literary fiction': '#95a5a6',  // Light gray
-    'crime': '#C47F77',             // Dark red
-    'adventure': '#EDB380'          // Orange-red
-  };
-  
-  // Fallback colors for unmapped genres
-  const fallbackColors = [
-    '#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57',
-    '#fd79a8', '#fdcb6e', '#6c5ce7', '#a29bfe', '#74b9ff'
-  ];
-  
-  // Get colors for top genres
-  const genreColors = topGenres.map((genre, index) => 
-    genreColorMap[genre.toLowerCase()] || fallbackColors[index % fallbackColors.length]
-  );
+  const palette = ['#737437', '#3A1010', '#757160', '#B76039', '#0B2426'];
+  const genreColors = topGenres.map((_, index) => palette[index % palette.length]);
 
   // Create chart config for shadcn chart
   const chartConfig: ChartConfig = topGenres.reduce((acc, genre, index) => {
@@ -118,14 +90,19 @@ const GenresOverTime: React.FC<GenresOverTimeProps> = ({
         className="mt-28 mb-2 w-full text-center"
         variants={itemVariants}
       >
-        
-        <motion.p
-          className="text-lg opacity-80 m-0 font-[var(--font-main)] italic"
-          variants={stagedSubheadline}
+        <motion.h2
+          className="text-4xl font-medium mb-2 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
+          variants={stagedHeadline}
           initial="hidden"
           animate="visible"
         >
-          Here were your top 5.
+          Genres Over Time
+        </motion.h2>
+        <motion.p
+          className="text-[1.1rem] opacity-80 m-0 font-[var(--font-main)] italic"
+          variants={itemVariants}
+        >
+          You read across {uniqueGenresCount} different genres in 2025.
         </motion.p>
       </motion.div>
       
