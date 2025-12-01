@@ -726,4 +726,4 @@ app.post('/store-data', (req, res) => {
 // ------------------------------------------------------------------------------------------------
 
 // The necessary export for Vercel Serverless Functions
-export default app;
+module.exports = app;
