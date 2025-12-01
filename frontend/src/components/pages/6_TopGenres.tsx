@@ -1,7 +1,12 @@
 import React from 'react';
 import Navigation from '../Navigation';
 import { motion } from 'framer-motion';
-import { containerVariantsSlow, itemVariants } from '../motionVariants';
+import {
+  containerVariantsSlow,
+  itemVariants,
+  stagedHeadline,
+  stagedSubheadline,
+} from '../motionVariants';
 import AnimatedCounter from '../AnimatedCounter';
 
 interface TopGenresProps {
@@ -36,13 +41,17 @@ const TopGenres: React.FC<TopGenresProps> = ({
       >
         <motion.h2 
           className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]"
-          variants={itemVariants}
+          variants={stagedHeadline}
+          initial="hidden"
+          animate="visible"
         >
           Top Genres
         </motion.h2>
         <motion.p 
           className="text-[1.1rem] opacity-80 m-0 font-[var(--font-main)] italic"
-          variants={itemVariants}
+          variants={stagedSubheadline}
+          initial="hidden"
+          animate="visible"
         >
           Your favorite genres in 2025
         </motion.p>

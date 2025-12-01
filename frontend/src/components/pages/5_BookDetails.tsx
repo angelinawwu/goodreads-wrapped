@@ -1,8 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navigation from '../Navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Variants } from 'framer-motion';
-import { containerVariantsSlow, itemVariants, fadeScaleVariants } from '../motionVariants';
+import {
+  containerVariantsSlow,
+  itemVariants,
+  fadeScaleVariants,
+  stagedHeadline,
+  stagedSubheadline,
+  stagedMetric,
+  stagedLabel,
+} from '../motionVariants';
 import AnimatedCounter from '../AnimatedCounter';
 
 interface BookDetailsProps {
@@ -23,37 +31,28 @@ interface BookDetailsProps {
   onNextPage: () => void;
 }
 
-// Slide transition variants for horizontal movement
-const slideVariants: Variants = {
-  enter: (direction: number) => ({
-    x: direction > 0 ? 1000 : -1000,
+// Zoom transition variants
+const zoomVariants: Variants = {
+  enter: {
+    scale: 0.8,
     opacity: 0,
-    scale: 0.9,
-  }),
+  },
   center: {
-    zIndex: 1,
-    x: 0,
-    opacity: 1,
     scale: 1,
+    opacity: 1,
     transition: {
-      // Stiffness increased from 300 -> 800 (Stronger pull)
-      // Damping increased from 30 -> 40 (Reduces bounce at high speed)
-      x: { type: "spring", stiffness: 600, damping: 40 },
-      opacity: { duration: 0.15 }, // Reduced from 0.2
-      scale: { duration: 0.2 },   // Reduced from 0.3
+      scale: { type: "spring", stiffness: 200, damping: 20 },
+      opacity: { duration: 0.3 },
     }
   },
-  exit: (direction: number) => ({
-    zIndex: 0,
-    x: direction < 0 ? 600 : -600,
+  exit: {
+    scale: 1.2,
     opacity: 0,
-    scale: 0.9,
     transition: {
-      // Matching the speed of the center transition
-      x: { type: "spring", stiffness: 800, damping: 40 },
-      opacity: { duration: 0.1 },
+      scale: { type: "spring", stiffness: 200, damping: 20 },
+      opacity: { duration: 0.2 },
     }
-  })
+  }
 };
 
 const BookDetails: React.FC<BookDetailsProps> = ({ 
@@ -64,27 +63,19 @@ const BookDetails: React.FC<BookDetailsProps> = ({
   onNextPage 
 }) => {
   const [step, setStep] = useState(0);
-  const [direction, setDirection] = useState(0);
 
   const totalSteps = 4; // Intro, Longest, Shortest, Average
 
-  const handleNext = () => {
+  // Auto-advance slides every 5 seconds
+  useEffect(() => {
     if (step < totalSteps - 1) {
-      setDirection(1);
-      setStep(step + 1);
-    } else {
-      onNextPage();
+      const timer = setTimeout(() => {
+        setStep(step + 1);
+      }, 5000);
+      return () => clearTimeout(timer);
     }
-  };
-
-  const handlePrev = () => {
-    if (step > 0) {
-      setDirection(-1);
-      setStep(step - 1);
-    } else {
-      onPrevPage();
-    }
-  };
+    // Note: Do NOT auto-advance to next page - let user control page navigation
+  }, [step, totalSteps]);
 
   return (
     <motion.div 
@@ -95,14 +86,13 @@ const BookDetails: React.FC<BookDetailsProps> = ({
     >
       {/* Main Content Area with Slides */}
       <div className="flex-1 flex items-center justify-center w-full max-w-[600px] relative min-h-[400px]">
-        <AnimatePresence initial={false} custom={direction} mode="wait">
+        <AnimatePresence initial={false} mode="wait">
           
           {/* STEP 0: INTRO */}
           {step === 0 && (
             <motion.div
               key="intro"
-              custom={direction}
-              variants={slideVariants}
+              variants={zoomVariants}
               initial="enter"
               animate="center"
               exit="exit"
@@ -114,13 +104,17 @@ const BookDetails: React.FC<BookDetailsProps> = ({
               >
                 <motion.h2 
                   className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]"
-                  variants={itemVariants}
+                  variants={stagedHeadline}
+                  initial="hidden"
+                  animate="visible"
                 >
                   You covered some<br/>serious ground.
                 </motion.h2>
                 <motion.p 
                   className="text-[1.1rem] opacity-80 m-0 font-[var(--font-main)] italic"
-                  variants={itemVariants}
+                  variants={stagedSubheadline}
+                  initial="hidden"
+                  animate="visible"
                 >
                   From short stories to epic sagas...
                 </motion.p>
@@ -132,8 +126,7 @@ const BookDetails: React.FC<BookDetailsProps> = ({
           {step === 1 && longestBook && (
             <motion.div
               key="longest"
-              custom={direction}
-              variants={slideVariants}
+              variants={zoomVariants}
               initial="enter"
               animate="center"
               exit="exit"
@@ -197,8 +190,7 @@ const BookDetails: React.FC<BookDetailsProps> = ({
           {step === 2 && shortestBook && (
             <motion.div
               key="shortest"
-              custom={direction}
-              variants={slideVariants}
+              variants={zoomVariants}
               initial="enter"
               animate="center"
               exit="exit"
@@ -262,8 +254,7 @@ const BookDetails: React.FC<BookDetailsProps> = ({
           {step === 3 && (
             <motion.div
               key="average"
-              custom={direction}
-              variants={slideVariants}
+              variants={zoomVariants}
               initial="enter"
               animate="center"
               exit="exit"
@@ -287,13 +278,17 @@ const BookDetails: React.FC<BookDetailsProps> = ({
               >
                 <motion.div 
                   className="text-[4rem] md:text-[5rem] font-bold text-black my-4 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
-                  variants={itemVariants}
+                  variants={stagedMetric}
+                  initial="hidden"
+                  animate="visible"
                 >
                   <AnimatedCounter value={averagePages} />
                 </motion.div>
                 <motion.div 
                   className="text-[1.1rem] opacity-80 font-[var(--font-main)] text-black"
-                  variants={itemVariants}
+                  variants={stagedLabel}
+                  initial="hidden"
+                  animate="visible"
                 >
                   pages per book
                 </motion.div>
@@ -304,7 +299,7 @@ const BookDetails: React.FC<BookDetailsProps> = ({
         </AnimatePresence>
       </div>
       
-      <Navigation onPrevPage={handlePrev} onNextPage={handleNext} />
+      <Navigation onPrevPage={onPrevPage} onNextPage={onNextPage} />
     </motion.div>
   );
 };

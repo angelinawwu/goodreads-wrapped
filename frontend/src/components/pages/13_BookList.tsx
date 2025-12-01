@@ -31,6 +31,17 @@ const BookList: React.FC<BookListProps> = ({ books, onPrevPage, onNextPage }) =>
   const bookCount = books?.length || 0;
   const gridStyle = bookCount <= 12 ? { gridTemplateColumns: getGridCols(bookCount) } : {};
 
+  const getBookSizeClasses = (count: number) => {
+    if (count <= 12) {
+      return 'max-w-[80px] max-h-[120px] min-w-[40px] min-h-[60px] max-md:max-w-[60px] max-md:max-h-[90px] max-md:min-w-[35px] max-md:min-h-[52px]';
+    }
+    if (count <= 24) {
+      return 'max-w-[64px] max-h-[96px] min-w-[36px] min-h-[54px] max-md:max-w-[52px] max-md:max-h-[78px] max-md:min-w-[32px] max-md:min-h-[48px]';
+    }
+    // Lots of books: make icons smaller so they all fit more comfortably
+    return 'max-w-[52px] max-h-[78px] min-w-[32px] min-h-[48px] max-md:max-w-[44px] max-md:max-h-[66px] max-md:min-w-[28px] max-md:min-h-[42px]';
+  };
+
   return (
     <motion.div 
       className="page-container flex flex-col items-center justify-center mt-8 relative z-20"
@@ -42,10 +53,10 @@ const BookList: React.FC<BookListProps> = ({ books, onPrevPage, onNextPage }) =>
         className="mb-4 w-full text-center"
         variants={itemVariants}
       >
-        <h2 className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]">📚 Your 2025 Books</h2>
+        <h2 className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]">Your 2025 Books</h2>
         <p className="text-[1.1rem] opacity-80 m-0 font-[var(--font-main)] italic">Here's what you read this year</p>
       </motion.div>
-      <div className="w-full my-4 h-[60vh] overflow-visible flex items-center justify-center max-md:h-[50vh] max-md:pt-8">
+      <div className="w-full my-4 flex items-center justify-center max-md:pt-8">
         {books && books.length > 0 ? (
           <motion.div 
             className="grid gap-1 p-2 w-full h-full content-center justify-center z-[150] md:grid-cols-[repeat(auto-fit,minmax(60px,1fr))] max-md:grid-cols-[repeat(auto-fit,minmax(45px,1fr))]"
@@ -57,7 +68,7 @@ const BookList: React.FC<BookListProps> = ({ books, onPrevPage, onNextPage }) =>
             {books.map((book: any, index: number) => (
               <motion.div 
                 key={index} 
-                className="flex justify-center transition-transform duration-200 hover:scale-105"
+                className="relative z-[100] flex justify-center transition-transform duration-200 hover:scale-105 hover:z-[99999]"
                 variants={fadeScaleVariants}
                 custom={index}
                 transition={{
@@ -67,15 +78,14 @@ const BookList: React.FC<BookListProps> = ({ books, onPrevPage, onNextPage }) =>
                   damping: 15
                 }}
               >
-                <div className="w-full aspect-[2/3] max-w-[80px] max-h-[120px] min-w-[40px] min-h-[60px] rounded-lg overflow-visible relative group max-md:max-w-[60px] max-md:max-h-[90px] max-md:min-w-[35px] max-md:min-h-[52px] z-[100]">
+                <div className={`w-full aspect-[2/3] rounded-lg overflow-visible relative group ${getBookSizeClasses(bookCount)}`}>
                   {book.coverImage ? (
                     <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover rounded-lg" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-[2rem] text-black">
-                      <span>📖</span>
                     </div>
                   )}
-                  <div className="absolute bottom-[105px] left-1/2 -translate-x-1/2 bg-[var(--color-vintage-accent)] text-[var(--color-vintage-bg)] py-2 px-3 rounded-lg text-[0.8rem] font-medium font-[var(--font-main)] whitespace-nowrap max-w-[200px] overflow-hidden text-ellipsis opacity-0 invisible transition-all duration-300 z-[99999] pointer-events-none group-hover:opacity-100 group-hover:visible max-md:text-[0.7rem] max-md:py-1.5 max-md:px-2.5 max-md:max-w-[150px] max-md:bottom-[80px]">
+                  <div className="absolute bottom-[105px] -mb-6 left-1/2 -translate-x-1/2 bg-[var(--color-vintage-accent)] text-[var(--color-vintage-bg)] py-2 px-3 rounded-lg text-[0.8rem] font-medium font-[var(--font-main)] whitespace-nowrap max-w-[120px] overflow-hidden text-ellipsis opacity-0 invisible transition-all duration-300 z-[99999] pointer-events-none group-hover:opacity-100 group-hover:visible max-md:text-[0.7rem] max-md:py-1.5 max-md:px-2.5 max-md:max-w-[100px] max-md:bottom-[80px]">
                     {book.title}
                     <div className="absolute top-full left-1/2 -translate-x-1/2 border-[6px] border-transparent border-t-[var(--color-vintage-text)]"></div>
                   </div>

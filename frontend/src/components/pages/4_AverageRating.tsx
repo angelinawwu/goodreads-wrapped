@@ -1,7 +1,14 @@
 import React from 'react';
 import Navigation from '../Navigation';
 import { motion } from 'framer-motion';
-import { containerVariantsSlow, itemVariants, heroVariants } from '../motionVariants';
+import {
+  containerVariantsSlow,
+  itemVariants,
+  stagedHeadline,
+  stagedSubheadline,
+  stagedMetric,
+  stagedLabel,
+} from '../motionVariants';
 import AnimatedCounter from '../AnimatedCounter';
 
 interface AverageRatingProps {
@@ -30,13 +37,17 @@ const AverageRating: React.FC<AverageRatingProps> = ({
       >
         <motion.h2 
           className="text-2xl font-medium mb-2 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
-          variants={itemVariants}
+          variants={stagedHeadline}
+          initial="hidden"
+          animate="visible"
         >
           Average Rating
         </motion.h2>
         <motion.p 
           className="text-lg opacity-80 m-0 font-[var(--font-main)]"
-          variants={itemVariants}
+          variants={stagedSubheadline}
+          initial="hidden"
+          animate="visible"
         >
           Your average rating for 2025 books
         </motion.p>
@@ -44,7 +55,7 @@ const AverageRating: React.FC<AverageRatingProps> = ({
       <div className="my-8 text-center">
         <motion.div 
           className="text-6xl font-medium m-0 text-[var(--color-vintage-accent)] font-[var(--font-display)] shadow-none"
-          variants={heroVariants}
+          variants={stagedMetric}
           initial="hidden"
           animate="visible"
         >
@@ -52,7 +63,9 @@ const AverageRating: React.FC<AverageRatingProps> = ({
         </motion.div>
         <motion.div 
           className="text-lg mt-2 opacity-90 font-[var(--font-main)] text-black"
-          variants={itemVariants}
+          variants={stagedLabel}
+          initial="hidden"
+          animate="visible"
         >
           out of 5 stars
         </motion.div>

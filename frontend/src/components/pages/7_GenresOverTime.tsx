@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import Navigation from '../Navigation';
 import { motion } from 'framer-motion';
-import { containerVariantsSlow, itemVariants } from '../motionVariants';
+import {
+  containerVariantsSlow,
+  itemVariants,
+  stagedHeadline,
+  stagedSubheadline,
+} from '../motionVariants';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import {
   ChartContainer,
@@ -111,15 +116,27 @@ const GenresOverTime: React.FC<GenresOverTimeProps> = ({
         className="mt-28 mb-4 w-full text-center"
         variants={itemVariants}
       >
-        <h2 className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]">Genres Over Time</h2>
-        <p className="text-[1.1rem] opacity-80 m-0 font-[var(--font-main)] italic">How your reading tastes evolved in 2025</p>
+        <motion.h2
+          className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]"
+          variants={stagedHeadline}
+          initial="hidden"
+          animate="visible"
+        >
+          Genres Over Time
+        </motion.h2>
+        <motion.p
+          className="text-[1.1rem] opacity-80 m-0 font-[var(--font-main)] italic"
+          variants={stagedSubheadline}
+          initial="hidden"
+          animate="visible"
+        >
+          How your reading tastes evolved in 2025
+        </motion.p>
       </motion.div>
       
-      <motion.div 
+      {/* Chart container kept static so Recharts can correctly measure height */}
+      <div 
         className="w-full my-4 flex flex-col items-center"
-        variants={containerVariantsSlow}
-        initial="hidden"
-        animate="visible"
       >
         {monthlyGenreData && topGenres.length > 0 ? (
           <motion.div 
@@ -130,7 +147,8 @@ const GenresOverTime: React.FC<GenresOverTimeProps> = ({
               config={chartConfig} 
               className="w-full h-60"
             >
-              <ResponsiveContainer width="100%" height="100%">
+              {/* Use fixed pixel height so Recharts doesn't depend on animated container measurements */}
+              <ResponsiveContainer width="100%" height={240}>
                 <AreaChart
                   accessibilityLayer
                   data={chartData}
@@ -252,7 +270,7 @@ const GenresOverTime: React.FC<GenresOverTimeProps> = ({
             <p>Not enough data to generate chart</p>
           </motion.div>
         )}
-      </motion.div>
+      </div>
       
       <Navigation onPrevPage={onPrevPage} onNextPage={onNextPage} />
     </motion.div>

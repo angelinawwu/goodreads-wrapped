@@ -128,3 +128,43 @@ export const fadeScaleVariants: Variants = {
   },
 };
 
+/**
+ * Staged text entrance helpers
+ *
+ * Each element:
+ * - briefly appears centered
+ * - then settles slightly higher as later elements arrive
+ * - uses ease-out-quad for a smooth, low-bounce feel
+ */
+
+export const STAGED_TEXT_DELAYS = {
+  HEADLINE: 0.0,
+  SUBHEADLINE: 1.0,
+  METRIC: 2.0,
+  LABEL: 3.0,
+} as const;
+
+export const createStagedTextVariant = (delaySeconds: number): Variants => ({
+  hidden: {
+    opacity: 0,
+    y: 0,
+    scale: 0.97,
+  },
+  visible: {
+    opacity: 1,
+    y: -12,
+    scale: 1,
+    transition: {
+      duration: 1.0,
+      delay: delaySeconds,
+      // ease-out-quad: cubic-bezier(.25, .46, .45, .94)
+      ease: [0.25, 0.46, 0.45, 0.94],
+    },
+  },
+});
+
+export const stagedHeadline = createStagedTextVariant(STAGED_TEXT_DELAYS.HEADLINE);
+export const stagedSubheadline = createStagedTextVariant(STAGED_TEXT_DELAYS.SUBHEADLINE);
+export const stagedMetric = createStagedTextVariant(STAGED_TEXT_DELAYS.METRIC);
+export const stagedLabel = createStagedTextVariant(STAGED_TEXT_DELAYS.LABEL);
+

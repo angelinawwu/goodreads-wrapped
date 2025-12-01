@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navigation from '../Navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Variants } from 'framer-motion';
@@ -24,34 +24,28 @@ interface ReadingTimeProps {
   onNextPage: () => void;
 }
 
-// Slide transition variants for horizontal movement
-const slideVariants: Variants = {
-  enter: (direction: number) => ({
-    x: direction > 0 ? 1000 : -1000,
+// Zoom transition variants
+const zoomVariants: Variants = {
+  enter: {
+    scale: 0.8,
     opacity: 0,
-    scale: 0.9,
-  }),
+  },
   center: {
-    zIndex: 1,
-    x: 0,
-    opacity: 1,
     scale: 1,
+    opacity: 1,
     transition: {
-      x: { type: "spring", stiffness: 600, damping: 40 },
-      opacity: { duration: 0.15 },
-      scale: { duration: 0.2 },
+      scale: { type: "spring", stiffness: 200, damping: 20 },
+      opacity: { duration: 0.3 },
     }
   },
-  exit: (direction: number) => ({
-    zIndex: 0,
-    x: direction < 0 ? 600 : -600,
+  exit: {
+    scale: 1.2,
     opacity: 0,
-    scale: 0.9,
     transition: {
-      x: { type: "spring", stiffness: 800, damping: 40 },
-      opacity: { duration: 0.1 },
+      scale: { type: "spring", stiffness: 200, damping: 20 },
+      opacity: { duration: 0.2 },
     }
-  })
+  }
 };
 
 const ReadingTime: React.FC<ReadingTimeProps> = ({ 
@@ -63,27 +57,19 @@ const ReadingTime: React.FC<ReadingTimeProps> = ({
   onNextPage 
 }) => {
   const [step, setStep] = useState(0);
-  const [direction, setDirection] = useState(0);
 
   const totalSteps = 4; // Intro, Fastest, Slowest, Average
 
-  const handleNext = () => {
+  // Auto-advance slides every 5 seconds
+  useEffect(() => {
     if (step < totalSteps - 1) {
-      setDirection(1);
-      setStep(step + 1);
-    } else {
-      onNextPage();
+      const timer = setTimeout(() => {
+        setStep(step + 1);
+      }, 5000);
+      return () => clearTimeout(timer);
     }
-  };
-
-  const handlePrev = () => {
-    if (step > 0) {
-      setDirection(-1);
-      setStep(step - 1);
-    } else {
-      onPrevPage();
-    }
-  };
+    // Note: Do NOT auto-advance to next page - let user control page navigation
+  }, [step, totalSteps]);
 
   return (
     <motion.div 
@@ -94,14 +80,13 @@ const ReadingTime: React.FC<ReadingTimeProps> = ({
     >
       {/* Main Content Area with Slides */}
       <div className="flex-1 flex items-center justify-center w-full max-w-[600px] relative min-h-[400px]">
-        <AnimatePresence initial={false} custom={direction} mode="wait">
+        <AnimatePresence initial={false} mode="wait">
           
           {/* STEP 0: INTRO */}
           {step === 0 && (
             <motion.div
               key="intro"
-              custom={direction}
-              variants={slideVariants}
+              variants={zoomVariants}
               initial="enter"
               animate="center"
               exit="exit"
@@ -131,8 +116,7 @@ const ReadingTime: React.FC<ReadingTimeProps> = ({
           {step === 1 && fastestRead && (
             <motion.div
               key="fastest"
-              custom={direction}
-              variants={slideVariants}
+              variants={zoomVariants}
               initial="enter"
               animate="center"
               exit="exit"
@@ -146,7 +130,7 @@ const ReadingTime: React.FC<ReadingTimeProps> = ({
                   className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]"
                   variants={itemVariants}
                 >
-                  The Speed Reader
+                  Your Quickest Read
                 </motion.h2>
               </motion.div>
               
@@ -196,8 +180,7 @@ const ReadingTime: React.FC<ReadingTimeProps> = ({
           {step === 2 && slowestRead && (
             <motion.div
               key="slowest"
-              custom={direction}
-              variants={slideVariants}
+              variants={zoomVariants}
               initial="enter"
               animate="center"
               exit="exit"
@@ -211,7 +194,7 @@ const ReadingTime: React.FC<ReadingTimeProps> = ({
                   className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]"
                   variants={itemVariants}
                 >
-                  The Marathon
+                  Your Longest Read
                 </motion.h2>
               </motion.div>
               
@@ -261,8 +244,7 @@ const ReadingTime: React.FC<ReadingTimeProps> = ({
           {step === 3 && (
             <motion.div
               key="average"
-              custom={direction}
-              variants={slideVariants}
+              variants={zoomVariants}
               initial="enter"
               animate="center"
               exit="exit"
@@ -313,7 +295,7 @@ const ReadingTime: React.FC<ReadingTimeProps> = ({
         </AnimatePresence>
       </div>
       
-      <Navigation onPrevPage={handlePrev} onNextPage={handleNext} />
+      <Navigation onPrevPage={onPrevPage} onNextPage={onNextPage} />
     </motion.div>
   );
 };

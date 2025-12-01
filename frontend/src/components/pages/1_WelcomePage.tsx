@@ -1,6 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { containerVariants, itemVariantsSubtle } from '../motionVariants';
+import {
+  containerVariants,
+  itemVariantsSubtle,
+  stagedHeadline,
+  stagedSubheadline,
+} from '../motionVariants';
 
 interface WelcomePageProps {
   username: string;
@@ -24,13 +29,17 @@ const WelcomePage: React.FC<WelcomePageProps> = ({
     >
       <motion.h1 
         className="text-4xl font-medium mb-2 font-[var(--font-main)] shadow-none"
-        variants={itemVariantsSubtle}
+        variants={stagedHeadline}
+        initial="hidden"
+        animate="visible"
       >
         Goodreads Wrapped 2025
       </motion.h1>
       <motion.p 
         className="text-md opacity-80 m-0 font-[var(--font-main)]"
-        variants={itemVariantsSubtle}
+        variants={stagedSubheadline}
+        initial="hidden"
+        animate="visible"
       >
         Discover your reading year in review!
       </motion.p>

@@ -13,8 +13,8 @@
   --color-vintage-accent-light: #933c3c;
   --color-vintage-highlight: #556b2f;
   
-  --font-main: 'EB Garamond', serif;
-  --font-display: 'EB Garamond', serif;
+  --font-main: 'Roboto Condensed', serif;
+  --font-display: 'Roboto Condensed', serif;
 
   /* Shadcn theme variables */
   --background: oklch(1 0 0);
