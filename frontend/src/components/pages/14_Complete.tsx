@@ -30,7 +30,6 @@ interface CompleteProps {
   topGenres?: TopGenre[];
   topRatedBooks?: TopRatedBook[];
   uniqueGenres?: number;
-  onRestart: () => void;
   onPrevPage: () => void;
   onNextPage: () => void;
 }
@@ -40,7 +39,6 @@ const Complete: React.FC<CompleteProps> = ({
   topGenres = [],
   topRatedBooks = [],
   uniqueGenres,
-  onRestart,
   onPrevPage,
   onNextPage,
 }) => {
@@ -54,8 +52,51 @@ const Complete: React.FC<CompleteProps> = ({
       initial="hidden"
       animate="visible"
     >
+      {/* Top rated books - at the top, no background */}
+      <motion.div
+        className="w-full flex items-center justify-center mb-6"
+        variants={containerVariantsSlow}
+        initial="hidden"
+        animate="visible"
+      >
+        {safeTopRatedBooks.length > 0 ? (
+          <div className="relative w-[180px] h-[140px] flex items-center justify-center">
+            {safeTopRatedBooks.map((book, index) => {
+              const offsets = [
+                '-translate-x-8 rotate-[-5deg]',
+                'translate-y-1',
+                'translate-x-8 rotate-[5deg]',
+              ];
+              const classOffset = offsets[index] || '';
+              return (
+                <motion.div
+                  key={book.title}
+                  className={`absolute w-[80px] h-[120px] rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.18)] border border-[rgba(0,0,0,0.12)] bg-white ${classOffset}`}
+                  variants={fadeScaleVariants}
+                >
+                  {book.coverImage ? (
+                    <img
+                      src={book.coverImage}
+                      alt={book.title}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-xs text-black bg-gray-200">
+                      No cover
+                    </div>
+                  )}
+                </motion.div>
+              );
+            })}
+          </div>
+        ) : (
+          <p className="text-sm opacity-70 font-[var(--font-main)] text-black text-center">
+            Not enough ratings to surface favorite books.
+          </p>
+        )}
+      </motion.div>
       {/* Hero intro */}
-      <div className="w-full text-center mb-2 pt-12">
+      <div className="w-full text-center mb-2">
         <motion.h2
           className="text-3xl md:text-4xl font-medium font-[var(--font-display)] text-[var(--color-vintage-accent)]"
           variants={stagedHeadline}
@@ -64,12 +105,13 @@ const Complete: React.FC<CompleteProps> = ({
         >
           That&apos;s a wrap on your reading year!
         </motion.h2>
-
       </div>
+
+      
 
       {/* Stats strip */}
       <motion.div
-        className="flex justify-center gap-8 my-4 max-md:flex-col max-md:gap-4"
+        className="flex justify-center gap-8 my-2 max-md:flex-col max-md:gap-4"
         variants={containerVariantsSlow}
         initial="hidden"
         animate="visible"
@@ -115,20 +157,19 @@ const Complete: React.FC<CompleteProps> = ({
         )}
       </motion.div>
 
-      {/* Top genres + top books */}
+      {/* Top genres - full width */}
       <motion.div
-        className="flex flex-col md:flex-row gap-6 w-full mt-4"
+        className="w-full mt-4"
         variants={containerVariantsSlow}
         initial="hidden"
         animate="visible"
       >
-        {/* Top genres */}
         <motion.div
-          className="flex-1 bg-[var(--color-vintage-light)]/80 border border-[rgba(0,0,0,0.08)] rounded-2xl p-4"
+          className="w-full bg-[var(--color-vintage-light)] border border-[rgba(0,0,0,0.08)] rounded-2xl p-4 pt-6"
           variants={itemVariants}
         >
           <motion.h3
-            className="text-lg font-semibold mb-3 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
+            className="text-lg font-semibold font-[var(--font-display)] text-[var(--color-vintage-accent)]"
             variants={stagedHeadline}
             initial="hidden"
             animate="visible"
@@ -160,52 +201,10 @@ const Complete: React.FC<CompleteProps> = ({
             </p>
           )}
         </motion.div>
-
-        {/* Top rated books - simplified overlapping covers */}
-        <motion.div
-          className="flex-1 bg-[var(--color-vintage-light)]/80 border border-[rgba(0,0,0,0.08)] rounded-2xl p-4 flex items-center justify-center"
-          variants={itemVariants}
-        >
-          {safeTopRatedBooks.length > 0 ? (
-            <div className="relative w-[180px] h-[140px] flex items-center justify-center">
-              {safeTopRatedBooks.map((book, index) => {
-                const offsets = [
-                  '-translate-x-8 rotate-[-5deg]',
-                  'translate-y-1',
-                  'translate-x-8 rotate-[5deg]',
-                ];
-                const classOffset = offsets[index] || '';
-                return (
-                  <motion.div
-                    key={book.title}
-                    className={`absolute w-[80px] h-[120px] rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.18)] border border-[rgba(0,0,0,0.12)] bg-white ${classOffset}`}
-                    variants={fadeScaleVariants}
-                  >
-                    {book.coverImage ? (
-                      <img
-                        src={book.coverImage}
-                        alt={book.title}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-xs text-black bg-gray-200">
-                        No cover
-                      </div>
-                    )}
-                  </motion.div>
-                );
-              })}
-            </div>
-          ) : (
-            <p className="text-sm opacity-70 font-[var(--font-main)] text-black text-center">
-              Not enough ratings to surface favorite books.
-            </p>
-          )}
-        </motion.div>
       </motion.div>
 
       {/* Share / restart section */}
-      <motion.div
+      {/* <motion.div
         className="flex flex-col items-center gap-4 mt-6"
         variants={containerVariantsSlow}
         initial="hidden"
@@ -222,7 +221,7 @@ const Complete: React.FC<CompleteProps> = ({
         >
           Start Over
         </motion.button>
-      </motion.div>
+      </motion.div> */}
 
       <Navigation onPrevPage={onPrevPage} onNextPage={onNextPage} />
     </motion.div>

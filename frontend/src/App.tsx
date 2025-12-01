@@ -279,11 +279,6 @@ function App() {
       topGenres={result?.topGenres}
       topRatedBooks={result?.topRatedBooks}
       uniqueGenres={result?.uniqueGenres}
-      onRestart={() => {
-        navigate('/');
-        setResult(null);
-        setUsername('');
-      }}
       onPrevPage={prevPage}
       onNextPage={nextPage}
     />
