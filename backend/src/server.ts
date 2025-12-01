@@ -503,7 +503,22 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
       // Get unique genres count
       const uniqueGenres = Object.keys(genreCounts).length;
 
-      console.log(`Genre stats: ${uniqueGenres} unique genres, most popular: ${mostPopularGenre}`);
+      // Compute top 3 genres with percentages of books read this year
+      const totalYearBooks = yearBooks.length || 1;
+      const topGenres = Object.entries(genreCounts)
+        .sort(([, a], [, b]) => (b as number) - (a as number))
+        .slice(0, 3)
+        .map(([name, count]) => ({
+          name,
+          count,
+          percentage: Math.round(((count as number) / totalYearBooks) * 1000) / 10, // 1 decimal place
+        }));
+
+      console.log(
+        `Genre stats: ${uniqueGenres} unique genres, most popular: ${mostPopularGenre}, top genres: ${topGenres
+          .map(g => `${g.name} (${g.percentage}%)`)
+          .join(', ')}`
+      );
 
       // Calculate monthly genre data for chart
       console.log(`Calculating monthly genre distribution...`);
@@ -618,6 +633,23 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
         : null;
 
       console.log(`Page stats: Average ${averagePages.toFixed(0)} pages, Longest: ${longestBook?.title} (${longestBook?.numPages} pages), Shortest: ${shortestBook?.title} (${shortestBook?.numPages} pages)`);
+
+      // Top 3 highest-rated books (by user rating, then avg rating, then rating count)
+      const sortedByRating = [...booksWithRatings].sort((a, b) => {
+        const userDiff = (b.userRating || 0) - (a.userRating || 0);
+        if (userDiff !== 0) return userDiff;
+        const avgDiff = (b.avgRating || 0) - (a.avgRating || 0);
+        if (avgDiff !== 0) return avgDiff;
+        return (b.numRatings || 0) - (a.numRatings || 0);
+      });
+
+      const topRatedBooks = sortedByRating.slice(0, 3).map(book => ({
+        title: book.title,
+        author: book.author,
+        userRating: book.userRating,
+        avgRating: book.avgRating,
+        coverImage: book.coverImage,
+      }));
       
       // Analyze sentiment for existing reviews
       console.log(`Analyzing sentiment for ${yearBooks.length} books...`);
@@ -662,6 +694,7 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
         mostPopularGenre: mostPopularGenre,
         uniqueGenres: uniqueGenres,
         genreCounts: genreCounts,
+        topGenres: topGenres,
         // NEW: Reading time statistics
         averageReadingTime: Math.round(averageReadingTime * 100) / 100,
         fastestRead: fastestRead,
@@ -683,6 +716,8 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
         // NEW: Monthly genre data
         monthlyGenreData: monthlyGenreData,
         monthlyBookTotals: monthlyBookTotals,
+        // NEW: Top rated books
+        topRatedBooks: topRatedBooks,
       });
       
     } catch (error) {

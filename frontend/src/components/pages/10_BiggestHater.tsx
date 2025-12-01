@@ -43,12 +43,12 @@ const zoomVariants: Variants = {
   }
 };
 
-const BiggestHater: React.FC<BiggestHaterProps> = ({ 
-  biggestHaterMoment, 
-  biggestDisparity = 0, 
+const BiggestHater: React.FC<BiggestHaterProps> = ({
+  biggestHaterMoment,
+  biggestDisparity = 0,
   booksWithBothRatings = 0,
-  onPrevPage, 
-  onNextPage 
+  onPrevPage,
+  onNextPage,
 }) => {
   const [step, setStep] = useState(0);
 
@@ -241,13 +241,26 @@ const BiggestHater: React.FC<BiggestHaterProps> = ({
                   {' '}more critical than the average reader.
                 </motion.p>
                 
-                <motion.p 
+                <motion.p
                   className="text-[1rem] italic opacity-80 font-[var(--font-main)] mt-6 text-black"
                   variants={itemVariants}
                 >
                   Maybe the world just isn't ready for the truth?
                 </motion.p>
-                
+
+                {booksWithBothRatings > 0 && (
+                  <motion.p
+                    className="text-[0.85rem] opacity-70 font-[var(--font-main)] mt-4 text-black"
+                    variants={itemVariants}
+                  >
+                    Stat calculated from{' '}
+                    <span className="font-semibold">
+                      <AnimatedCounter value={booksWithBothRatings} />
+                    </span>{' '}
+                    mutual ratings.
+                  </motion.p>
+                )}
+
               </motion.div>
             </motion.div>
           )}

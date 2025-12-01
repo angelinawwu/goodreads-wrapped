@@ -7,7 +7,6 @@ import {
   itemVariants,
   fadeScaleVariants,
   stagedHeadline,
-  stagedSubheadline,
   stagedMetric,
   stagedLabel,
 } from '../motionVariants';

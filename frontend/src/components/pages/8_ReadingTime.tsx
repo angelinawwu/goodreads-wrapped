@@ -2,7 +2,15 @@ import React, { useState, useEffect } from 'react';
 import Navigation from '../Navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Variants } from 'framer-motion';
-import { containerVariantsSlow, itemVariants, fadeScaleVariants } from '../motionVariants';
+import {
+  containerVariantsSlow,
+  itemVariants,
+  fadeScaleVariants,
+  stagedHeadline,
+  stagedSubheadline,
+  stagedMetric,
+  stagedLabel,
+} from '../motionVariants';
 import AnimatedCounter from '../AnimatedCounter';
 
 interface ReadingTimeProps {
@@ -20,6 +28,7 @@ interface ReadingTimeProps {
     coverImage?: string;
   };
   booksWithReadingTime?: number;
+  slideDurations?: number[];
   onPrevPage: () => void;
   onNextPage: () => void;
 }
@@ -53,6 +62,7 @@ const ReadingTime: React.FC<ReadingTimeProps> = ({
   fastestRead, 
   slowestRead, 
   booksWithReadingTime = 0,
+  slideDurations = [2000, 5000, 5000, 1000],
   onPrevPage, 
   onNextPage 
 }) => {
@@ -60,16 +70,19 @@ const ReadingTime: React.FC<ReadingTimeProps> = ({
 
   const totalSteps = 4; // Intro, Fastest, Slowest, Average
 
-  // Auto-advance slides every 5 seconds
+  const defaultDurations = [5000, 5000, 5000, 5000];
+
+  // Auto-advance slides with per-slide durations
   useEffect(() => {
     if (step < totalSteps - 1) {
+      const durationForStep = slideDurations[step] ?? defaultDurations[step] ?? 5000;
       const timer = setTimeout(() => {
         setStep(step + 1);
-      }, 5000);
+      }, durationForStep);
       return () => clearTimeout(timer);
     }
     // Note: Do NOT auto-advance to next page - let user control page navigation
-  }, [step, totalSteps]);
+  }, [step, totalSteps, slideDurations]);
 
   return (
     <motion.div 
@@ -92,23 +105,24 @@ const ReadingTime: React.FC<ReadingTimeProps> = ({
               exit="exit"
               className="absolute w-full flex flex-col items-center text-center"
             >
-              <motion.div 
-                className="mb-4 w-full"
-                variants={itemVariants}
-              >
-                <motion.h2 
+              <div className="mb-4 w-full text-center">
+                <motion.h2
                   className="text-4xl font-medium mb-4 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
-                  variants={itemVariants}
+                  variants={stagedHeadline}
+                  initial="hidden"
+                  animate="visible"
                 >
                   Wow, that's a lot of variety.
                 </motion.h2>
-                <motion.p 
+                <motion.p
                   className="text-lg opacity-80 m-0 font-[var(--font-main)] italic"
-                  variants={itemVariants}
+                  variants={stagedSubheadline}
+                  initial="hidden"
+                  animate="visible"
                 >
                   How quickly did those books fly by?
                 </motion.p>
-              </motion.div>
+              </div>
             </motion.div>
           )}
 
@@ -122,24 +136,23 @@ const ReadingTime: React.FC<ReadingTimeProps> = ({
               exit="exit"
               className="absolute w-full flex flex-col items-center text-center"
             >
-              <motion.div 
-                className="mb-4 w-full"
-                variants={itemVariants}
-              >
+              <div className="mb-4 w-full text-center">
                 <motion.h2 
-                  className="text-4xl font-medium mb-4 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
-                  variants={itemVariants}
+                  className="text-4xl font-medium font-[var(--font-display)] text-[var(--color-vintage-accent)]"
+                  variants={stagedHeadline}
+                  initial="hidden"
+                  animate="visible"
                 >
                   Your Quickest Read
                 </motion.h2>
-              </motion.div>
+              </div>
               
               <motion.div 
-                className="mb-6 relative"
+                className="relative"
                 variants={fadeScaleVariants}
               >
                 <motion.div 
-                  className="w-[120px] h-[180px] rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.15)] border border-[rgba(0,0,0,0.1)] mx-auto"
+                  className="w-[120px] h-[180px] mb-4 rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.15)] border border-[rgba(0,0,0,0.1)] mx-auto"
                   variants={fadeScaleVariants}
                 >
                   {fastestRead.coverImage ? (
@@ -150,35 +163,40 @@ const ReadingTime: React.FC<ReadingTimeProps> = ({
                 </motion.div>
               </motion.div>
               
-              <motion.div 
-                className="text-center mb-4"
-                variants={itemVariants}
-              >
+              <div className="text-center">
                 <motion.div 
-                  className="text-[1.1rem] font-bold mb-2 font-[var(--font-main)] text-black"
-                  variants={itemVariants}
+                  className="text-xl font-bold mb-2 font-[var(--font-main)] text-black"
+                  variants={stagedSubheadline}
+                  initial="hidden"
+                  animate="visible"
                 >
                   {fastestRead.title}
                 </motion.div>
                 <motion.div 
-                  className="text-[0.9rem] opacity-80 mb-4 font-[var(--font-main)] text-black"
-                  variants={itemVariants}
+                  className="text-lg opacity-80 mb-8 font-[var(--font-main)] text-black"
+                  variants={stagedLabel}
+                  initial="hidden"
+                  animate="visible"
                 >
                   by {fastestRead.author}
                 </motion.div>
                 <motion.div 
-                  className="text-[2rem] font-bold text-black my-2 font-[var(--font-main)]"
-                  variants={itemVariants}
+                  className="text-4xl font-bold text-black my-2 font-[var(--font-main)]"
+                  variants={stagedMetric}
+                  initial="hidden"
+                  animate="visible"
                 >
                   <AnimatedCounter value={fastestRead.readingDays || 0} /> days
                 </motion.div>
                 <motion.p 
                   className="text-lg opacity-80 m-0 font-[var(--font-main)] italic"
-                  variants={itemVariants}
+                  variants={stagedLabel}
+                  initial="hidden"
+                  animate="visible"
                 >
                   You're basically the next Usain Bolt.
                 </motion.p>
-              </motion.div>
+              </div>
             </motion.div>
           )}
 
@@ -192,20 +210,19 @@ const ReadingTime: React.FC<ReadingTimeProps> = ({
               exit="exit"
               className="absolute w-full flex flex-col items-center text-center"
             >
-              <motion.div 
-                className="mb-4 w-full"
-                variants={itemVariants}
-              >
+              <div className="mb-4 w-full text-center">
                 <motion.h2 
-                  className="text-4xl font-medium mb-4 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
-                  variants={itemVariants}
+                  className="text-4xl font-medium font-[var(--font-display)] text-[var(--color-vintage-accent)]"
+                  variants={stagedHeadline}
+                  initial="hidden"
+                  animate="visible"
                 >
                   Your Longest Read
                 </motion.h2>
-              </motion.div>
+              </div>
               
               <motion.div 
-                className="mb-6 relative"
+                className="relative"
                 variants={fadeScaleVariants}
               >
                 <motion.div 
@@ -220,35 +237,40 @@ const ReadingTime: React.FC<ReadingTimeProps> = ({
                 </motion.div>
               </motion.div>
               
-              <motion.div 
-                className="text-center mb-4"
-                variants={itemVariants}
-              >
+              <div className="text-center">
                 <motion.div 
-                  className="text-[1.1rem] font-bold mb-2 font-[var(--font-main)] text-black"
-                  variants={itemVariants}
+                  className="text-xl font-bold mb-2 font-[var(--font-main)] text-black"
+                  variants={stagedSubheadline}
+                  initial="hidden"
+                  animate="visible"
                 >
                   {slowestRead.title}
                 </motion.div>
                 <motion.div 
-                  className="text-[0.9rem] opacity-80 mb-4 font-[var(--font-main)] text-black"
-                  variants={itemVariants}
+                  className="text-lg opacity-80 mb-8 font-[var(--font-main)] text-black"
+                  variants={stagedLabel}
+                  initial="hidden"
+                  animate="visible"
                 >
                   by {slowestRead.author}
                 </motion.div>
                 <motion.div 
-                  className="text-[2rem] font-bold text-black my-2 font-[var(--font-main)]"
-                  variants={itemVariants}
+                  className="text-4xl font-bold text-black my-2 font-[var(--font-main)]"
+                  variants={stagedMetric}
+                  initial="hidden"
+                  animate="visible"
                 >
                   <AnimatedCounter value={slowestRead.readingDays || 0} /> days
                 </motion.div>
                 <motion.p 
                   className="text-lg opacity-80 m-0 font-[var(--font-main)] italic"
-                  variants={itemVariants}
+                  variants={stagedLabel}
+                  initial="hidden"
+                  animate="visible"
                 >
                   Geez. Taking your time with that one?
                 </motion.p>
-              </motion.div>
+              </div>
             </motion.div>
           )}
 
@@ -262,35 +284,45 @@ const ReadingTime: React.FC<ReadingTimeProps> = ({
               exit="exit"
               className="absolute w-full flex flex-col items-center text-center"
             >
-              <motion.div 
-                className="mb-4 w-full"
-                variants={itemVariants}
-              >
+              <div className="mb-4 w-full text-center">
                 <motion.h2 
                   className="text-4xl font-medium mb-4 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
-                  variants={itemVariants}
+                  variants={stagedHeadline}
+                  initial="hidden"
+                  animate="visible"
                 >
                   On average, you spent
                 </motion.h2>
-              </motion.div>
+              </div>
               
-              <motion.div 
+              <div 
                 className="text-center"
-                variants={itemVariants}
               >
                 <motion.div 
                   className="text-[4rem] md:text-[5rem] font-bold text-black my-4 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
-                  variants={itemVariants}
+                  variants={stagedMetric}
+                  initial="hidden"
+                  animate="visible"
                 >
                   <AnimatedCounter value={averageReadingTime} decimals={2} />
                 </motion.div>
                 <motion.div 
                   className="text-[1.1rem] opacity-80 font-[var(--font-main)] text-black"
-                  variants={itemVariants}
+                  variants={stagedLabel}
+                  initial="hidden"
+                  animate="visible"
                 >
                   days per book
                 </motion.div>
-              </motion.div>
+                {booksWithReadingTime > 0 && (
+                  <motion.p
+                    className="text-sm opacity-70 font-[var(--font-main)] text-black mt-4"
+                    variants={itemVariants}
+                  >
+                    Based on <AnimatedCounter value={booksWithReadingTime} /> books with tracked dates.
+                  </motion.p>
+                )}
+              </div>
             </motion.div>
           )}
 

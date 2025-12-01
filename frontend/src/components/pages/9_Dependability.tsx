@@ -56,7 +56,7 @@ const Dependability: React.FC<DependabilityProps> = ({
     if (step < totalSteps - 1) {
       const timer = setTimeout(() => {
         setStep(step + 1);
-      }, 5000);
+      }, 4000);
       return () => clearTimeout(timer);
     }
     // Note: Do NOT auto-advance to next page - let user control page navigation
@@ -131,7 +131,7 @@ const Dependability: React.FC<DependabilityProps> = ({
                   className="text-[1.2rem] font-bold uppercase tracking-widest opacity-60 mb-2 font-[var(--font-main)] text-black"
                   variants={itemVariants}
                 >
-                  Follow-Through Rate
+                  You read
                 </motion.p>
                 <motion.div 
                   className="text-6xl font-black text-var(--color-vintage-accent) my-2 font-[var(--font-display)] leading-none"
@@ -139,6 +139,12 @@ const Dependability: React.FC<DependabilityProps> = ({
                 >
                   <AnimatedCounter value={dependabilityPercent} decimals={1} />%
                 </motion.div>
+                <motion.p 
+                  className="text-[1.2rem] font-bold uppercase tracking-widest opacity-60 mb-2 font-[var(--font-main)] text-black"
+                  variants={itemVariants}
+                >
+                  of the new books you added to your TBR.
+                </motion.p>
               </motion.div>
 
               {/* Breakdown numbers */}

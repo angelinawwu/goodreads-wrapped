@@ -13,16 +13,14 @@ import AnimatedCounter from '../AnimatedCounter';
 
 interface AverageRatingProps {
   averageRating?: number;
-  booksWithRatings?: number;
   onPrevPage: () => void;
   onNextPage: () => void;
 }
 
-const AverageRating: React.FC<AverageRatingProps> = ({ 
-  averageRating = 0, 
-  booksWithRatings = 0, 
-  onPrevPage, 
-  onNextPage 
+const AverageRating: React.FC<AverageRatingProps> = ({
+  averageRating = 0,
+  onPrevPage,
+  onNextPage,
 }) => {
   return (
     <motion.div 

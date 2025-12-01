@@ -54,6 +54,11 @@ interface ScrapingResult {
   mostPopularGenre?: string;
   uniqueGenres?: number;
   genreCounts?: { [key: string]: number };
+  topGenres?: {
+    name: string;
+    count: number;
+    percentage: number;
+  }[];
   // NEW: Reading time statistics
   averageReadingTime?: number;
   fastestRead?: {
@@ -123,6 +128,14 @@ interface ScrapingResult {
   monthlyBookTotals?: {
     [month: string]: number;
   };
+  // NEW: Top rated books (for Complete page)
+  topRatedBooks?: {
+    title: string;
+    author: string;
+    userRating?: number;
+    avgRating?: number;
+    coverImage?: string;
+  }[];
 }
 
 // Use proxy in development, full URL in production
@@ -247,7 +260,6 @@ function App() {
   const renderAverageRatingPage = () => (
     <AverageRating
       averageRating={result?.averageRating}
-      booksWithRatings={result?.booksWithRatings}
       onPrevPage={prevPage}
       onNextPage={nextPage}
     />
@@ -264,9 +276,9 @@ function App() {
   const renderCompletePage = () => (
     <Complete
       yearBooks={result?.yearBooks}
-      pagesScraped={result?.pagesScraped}
-      qrCodeUrl={qrCodeUrl}
-      isMobile={isMobile}
+      topGenres={result?.topGenres}
+      topRatedBooks={result?.topRatedBooks}
+      uniqueGenres={result?.uniqueGenres}
       onRestart={() => {
         navigate('/');
         setResult(null);

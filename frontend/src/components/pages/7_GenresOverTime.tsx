@@ -46,8 +46,6 @@ const GenresOverTime: React.FC<GenresOverTimeProps> = ({
         .map(([genre]) => genre)
     : [];
 
-  const uniqueGenresCount = genreCounts ? Object.keys(genreCounts).length : 0;
-
   const palette = ['#737437', '#3A1010', '#757160', '#B76039', '#0B2426'];
   const genreColors = topGenres.map((_, index) => palette[index % palette.length]);
 
@@ -102,7 +100,7 @@ const GenresOverTime: React.FC<GenresOverTimeProps> = ({
           className="text-[1.1rem] opacity-80 m-0 font-[var(--font-main)] italic"
           variants={itemVariants}
         >
-          You read across {uniqueGenresCount} different genres in 2025.
+          Here's how your reading tastes evolved across the year.
         </motion.p>
       </motion.div>
       
