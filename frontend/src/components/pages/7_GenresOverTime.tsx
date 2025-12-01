@@ -113,11 +113,11 @@ const GenresOverTime: React.FC<GenresOverTimeProps> = ({
       animate="visible"
     >
       <motion.div 
-        className="mt-28 mb-4 w-full text-center"
+        className="mt-28 mb-2 w-full text-center"
         variants={itemVariants}
       >
         <motion.h2
-          className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]"
+          className="text-4xl font-medium mb-4 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
           variants={stagedHeadline}
           initial="hidden"
           animate="visible"
@@ -125,7 +125,7 @@ const GenresOverTime: React.FC<GenresOverTimeProps> = ({
           Genres Over Time
         </motion.h2>
         <motion.p
-          className="text-[1.1rem] opacity-80 m-0 font-[var(--font-main)] italic"
+          className="text-lg opacity-80 m-0 font-[var(--font-main)] italic"
           variants={stagedSubheadline}
           initial="hidden"
           animate="visible"
@@ -145,10 +145,10 @@ const GenresOverTime: React.FC<GenresOverTimeProps> = ({
           >
             <ChartContainer 
               config={chartConfig} 
-              className="w-full h-60"
+              className="w-full h-48"
             >
               {/* Use fixed pixel height so Recharts doesn't depend on animated container measurements */}
-              <ResponsiveContainer width="100%" height={240}>
+              <ResponsiveContainer width="100%" height={200}>
                 <AreaChart
                   accessibilityLayer
                   data={chartData}

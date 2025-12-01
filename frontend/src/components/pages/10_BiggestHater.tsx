@@ -91,16 +91,16 @@ const BiggestHater: React.FC<BiggestHaterProps> = ({
                 variants={itemVariants}
               >
                 <motion.h2 
-                  className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]"
-                  variants={itemVariants}
-                >
-                  The Public Disagreement
-                </motion.h2>
-                <motion.p 
-                  className="text-[1.1rem] opacity-80 m-0 font-[var(--font-main)] italic"
+                  className="text-4xl font-medium mb-4 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
                   variants={itemVariants}
                 >
                   You weren't afraid to stand alone this year.
+                </motion.h2>
+                <motion.p 
+                  className="text-lg opacity-80 m-0 font-[var(--font-main)] italic"
+                  variants={itemVariants}
+                >
+                  Let's see your most controversial opinion.
                 </motion.p>
               </motion.div>
             </motion.div>
@@ -140,7 +140,7 @@ const BiggestHater: React.FC<BiggestHaterProps> = ({
                   className="text-[1.1rem] text-black/60 mb-2 font-[var(--font-main)]"
                   variants={itemVariants}
                 >
-                  The book that got your lowest score:
+                  This was your biggest hater moment:
                 </motion.p>
                 <motion.div 
                   className="text-[1.3rem] font-bold mb-1 font-[var(--font-display)] text-black"
@@ -245,17 +245,9 @@ const BiggestHater: React.FC<BiggestHaterProps> = ({
                   className="text-[1rem] italic opacity-80 font-[var(--font-main)] mt-6 text-black"
                   variants={itemVariants}
                 >
-                  (Maybe the world just wasn't ready for that truth.)
+                  Maybe the world just isn't ready for the truth?
                 </motion.p>
                 
-                {booksWithBothRatings > 0 && (
-                  <motion.p 
-                    className="m-0 text-[0.9rem] opacity-60 font-[var(--font-main)] text-black mt-4"
-                    variants={itemVariants}
-                  >
-                    Stat calculated from <AnimatedCounter value={booksWithBothRatings} /> mutual ratings.
-                  </motion.p>
-                )}
               </motion.div>
             </motion.div>
           )}

@@ -100,13 +100,13 @@ const MostPositiveReview: React.FC<MostPositiveReviewProps> = ({
                   className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]"
                   variants={itemVariants}
                 >
-                  The Year's Most Positive Review
+                  Don't worry, they weren't all bad.
                 </motion.h2>
                 <motion.p 
                   className="text-[1.1rem] opacity-80 m-0 font-[var(--font-main)] italic"
                   variants={itemVariants}
                 >
-                  When you couldn't hold back your enthusiasm.
+                  Here's your most positive review of the year.
                 </motion.p>
               </motion.div>
             </motion.div>
@@ -166,7 +166,7 @@ const MostPositiveReview: React.FC<MostPositiveReviewProps> = ({
                   className="text-[1rem] italic opacity-70 font-[var(--font-main)]"
                   variants={itemVariants}
                 >
-                  This book received your most positive review of the year.
+                  We're glad you had such a good time.
                 </motion.p>
               </motion.div>
             </motion.div>

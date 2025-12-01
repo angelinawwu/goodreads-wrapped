@@ -103,7 +103,7 @@ const BookDetails: React.FC<BookDetailsProps> = ({
                 variants={itemVariants}
               >
                 <motion.h2 
-                  className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]"
+                  className="text-4xl font-medium mb-4 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
                   variants={stagedHeadline}
                   initial="hidden"
                   animate="visible"
@@ -111,7 +111,7 @@ const BookDetails: React.FC<BookDetailsProps> = ({
                   You covered some<br/>serious ground.
                 </motion.h2>
                 <motion.p 
-                  className="text-[1.1rem] opacity-80 m-0 font-[var(--font-main)] italic"
+                  className="text-lg opacity-80 m-0 font-[var(--font-main)] italic"
                   variants={stagedSubheadline}
                   initial="hidden"
                   animate="visible"
@@ -137,7 +137,7 @@ const BookDetails: React.FC<BookDetailsProps> = ({
                 variants={itemVariants}
               >
                 <motion.h2 
-                  className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]"
+                  className="text-4xl font-medium mb-4 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
                   variants={itemVariants}
                 >
                   Your Longest Read
@@ -201,7 +201,7 @@ const BookDetails: React.FC<BookDetailsProps> = ({
                 variants={itemVariants}
               >
                 <motion.h2 
-                  className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]"
+                  className="text-4xl font-medium mb-4 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
                   variants={itemVariants}
                 >
                   Your Shortest Read
@@ -265,10 +265,10 @@ const BookDetails: React.FC<BookDetailsProps> = ({
                 variants={itemVariants}
               >
                 <motion.h2 
-                  className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]"
+                  className="text-4xl font-medium mb-4 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
                   variants={itemVariants}
                 >
-                  Your Average
+                  On average, your books were
                 </motion.h2>
               </motion.div>
               
@@ -277,7 +277,7 @@ const BookDetails: React.FC<BookDetailsProps> = ({
                 variants={itemVariants}
               >
                 <motion.div 
-                  className="text-[4rem] md:text-[5rem] font-bold text-black my-4 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
+                  className="text-6xl font-bold text-black my-4 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
                   variants={stagedMetric}
                   initial="hidden"
                   animate="visible"
@@ -285,12 +285,12 @@ const BookDetails: React.FC<BookDetailsProps> = ({
                   <AnimatedCounter value={averagePages} />
                 </motion.div>
                 <motion.div 
-                  className="text-[1.1rem] opacity-80 font-[var(--font-main)] text-black"
+                  className="text-lg opacity-80 font-[var(--font-main)] text-black"
                   variants={stagedLabel}
                   initial="hidden"
                   animate="visible"
                 >
-                  pages per book
+                  pages long
                 </motion.div>
               </motion.div>
             </motion.div>

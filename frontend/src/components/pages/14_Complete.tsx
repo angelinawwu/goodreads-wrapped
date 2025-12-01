@@ -25,32 +25,32 @@ const Complete: React.FC<CompleteProps> = ({
 }) => {
   return (
     <motion.div 
-      className="page-container flex flex-col items-center justify-center min-h-[60vh] mt-8 relative z-20"
+      className="page-container flex flex-col items-center justify-center mt-12 relative z-20"
       variants={containerVariantsSlow}
       initial="hidden"
       animate="visible"
     >
       <motion.div 
-        className="mb-4 w-full text-center"
+        className="mb w-full text-center pt-12"
         variants={itemVariants}
       >
         <motion.h2 
-          className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]"
+          className="text-4xl font-medium mb-4 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
           variants={heroVariants}
           initial="hidden"
           animate="visible"
         >
-          🎉 That's a Wrap!
+          That's a Wrap!
         </motion.h2>
         <motion.p 
-          className="text-[1.1rem] opacity-80 m-0 font-[var(--font-main)] italic"
+          className="text-lg opacity-80 m-0 font-[var(--font-main)] italic"
           variants={itemVariants}
         >
           Thanks for exploring your reading year
         </motion.p>
       </motion.div>
       <motion.div 
-        className="flex justify-center gap-12 my-12 max-md:flex-col max-md:gap-8"
+        className="flex justify-center gap-12 my-4 max-md:flex-col max-md:gap-8"
         variants={containerVariantsSlow}
         initial="hidden"
         animate="visible"
@@ -101,7 +101,7 @@ const Complete: React.FC<CompleteProps> = ({
         animate="visible"
       >
         <motion.button 
-          className="bg-[#FFD2F5] text-black border border-black py-4 px-8 rounded-xl text-[1.1rem] font-[var(--font-main)] cursor-pointer transition-all duration-300 mt-8 min-w-[150px] hover:bg-[#FFA5EC] hover:-translate-y-0.5 hover:shadow-[0_5px_15px_rgba(255,165,236,0.4)]" 
+          className="bg-[var(--color-vintage-accent)] text-white p-2 px-4 rounded-xl text-lg font-[var(--font-main)] cursor-pointer transition-all duration-300 mt-4 hover:bg-[var(--color-vintage-accent-light)] hover:-translate-y-0.5" 
           onClick={onRestart}
           variants={itemVariants}
           whileHover={{ scale: 1.05 }}
@@ -109,15 +109,6 @@ const Complete: React.FC<CompleteProps> = ({
         >
           Start Over
         </motion.button>
-        {!isMobile && qrCodeUrl && (
-          <motion.div 
-            className="text-center my-8"
-            variants={fadeScaleVariants}
-          >
-            <p className="mb-2 font-[var(--font-main)] text-black">Share on mobile:</p>
-            <img src={qrCodeUrl} alt="QR Code" className="max-w-[150px] rounded-xl border border-[rgba(0,0,0,0.1)]" />
-          </motion.div>
-        )}
       </motion.div>
       <Navigation onPrevPage={onPrevPage} onNextPage={onNextPage} />
     </motion.div>

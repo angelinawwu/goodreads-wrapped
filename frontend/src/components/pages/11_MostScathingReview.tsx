@@ -97,16 +97,16 @@ const MostScathingReview: React.FC<MostScathingReviewProps> = ({
                 variants={itemVariants}
               >
                 <motion.h2 
-                  className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]"
+                  className="text-4xl font-medium mb-4 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
                   variants={itemVariants}
                 >
-                  The Year's Most Scathing Critique
+                  You're a reader with strong opinions.
                 </motion.h2>
                 <motion.p 
-                  className="text-[1.1rem] opacity-80 m-0 font-[var(--font-main)] italic"
+                  className="text-lg opacity-80 m-0 font-[var(--font-main)] italic"
                   variants={itemVariants}
                 >
-                  When you held absolutely nothing back.
+                  What was your most negative, vitriolic review of the year?
                 </motion.p>
               </motion.div>
             </motion.div>
@@ -166,7 +166,7 @@ const MostScathingReview: React.FC<MostScathingReviewProps> = ({
                   className="text-[1rem] italic opacity-70 font-[var(--font-main)]"
                   variants={itemVariants}
                 >
-                  This book received your most negative review of the year.
+                  Being brutally honest is a good thing, right?
                 </motion.p>
               </motion.div>
             </motion.div>

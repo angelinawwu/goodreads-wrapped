@@ -97,16 +97,16 @@ const ReadingTime: React.FC<ReadingTimeProps> = ({
                 variants={itemVariants}
               >
                 <motion.h2 
-                  className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]"
+                  className="text-4xl font-medium mb-4 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
                   variants={itemVariants}
                 >
-                  Speed matters.
+                  That's a lot of variety.
                 </motion.h2>
                 <motion.p 
-                  className="text-[1.1rem] opacity-80 m-0 font-[var(--font-main)] italic"
+                  className="text-lg opacity-80 m-0 font-[var(--font-main)] italic"
                   variants={itemVariants}
                 >
-                  From quick reads to marathons...
+                  How quickly did those books fly by?
                 </motion.p>
               </motion.div>
             </motion.div>
@@ -127,7 +127,7 @@ const ReadingTime: React.FC<ReadingTimeProps> = ({
                 variants={itemVariants}
               >
                 <motion.h2 
-                  className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]"
+                  className="text-4xl font-medium mb-4 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
                   variants={itemVariants}
                 >
                   Your Quickest Read
@@ -172,6 +172,12 @@ const ReadingTime: React.FC<ReadingTimeProps> = ({
                 >
                   <AnimatedCounter value={fastestRead.readingDays || 0} /> days
                 </motion.div>
+                <motion.p 
+                  className="text-lg opacity-80 m-0 font-[var(--font-main)] italic"
+                  variants={itemVariants}
+                >
+                  You're basically the next Usain Bolt.
+                </motion.p>
               </motion.div>
             </motion.div>
           )}
@@ -191,7 +197,7 @@ const ReadingTime: React.FC<ReadingTimeProps> = ({
                 variants={itemVariants}
               >
                 <motion.h2 
-                  className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]"
+                  className="text-4xl font-medium mb-4 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
                   variants={itemVariants}
                 >
                   Your Longest Read
@@ -236,6 +242,12 @@ const ReadingTime: React.FC<ReadingTimeProps> = ({
                 >
                   <AnimatedCounter value={slowestRead.readingDays || 0} /> days
                 </motion.div>
+                <motion.p 
+                  className="text-lg opacity-80 m-0 font-[var(--font-main)] italic"
+                  variants={itemVariants}
+                >
+                  Geez. Taking your time with that one?
+                </motion.p>
               </motion.div>
             </motion.div>
           )}
@@ -255,10 +267,10 @@ const ReadingTime: React.FC<ReadingTimeProps> = ({
                 variants={itemVariants}
               >
                 <motion.h2 
-                  className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]"
+                  className="text-4xl font-medium mb-4 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
                   variants={itemVariants}
                 >
-                  Your Average
+                  On average, you spent
                 </motion.h2>
               </motion.div>
               
@@ -278,16 +290,6 @@ const ReadingTime: React.FC<ReadingTimeProps> = ({
                 >
                   days per book
                 </motion.div>
-                {booksWithReadingTime > 0 && (
-                  <motion.div 
-                    className="text-center mt-4 opacity-80"
-                    variants={itemVariants}
-                  >
-                    <p className="m-0 text-[0.9rem] font-[var(--font-main)] text-black">
-                      Based on <AnimatedCounter value={booksWithReadingTime} /> books with reading dates
-                    </p>
-                  </motion.div>
-                )}
               </motion.div>
             </motion.div>
           )}

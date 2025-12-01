@@ -48,7 +48,8 @@ const Dependability: React.FC<DependabilityProps> = ({
 }) => {
   const [step, setStep] = useState(0);
 
-  const totalSteps = 4; // Intro, Score Reveal, Breakdown, Reflection
+  // Intro, Combined Score + Breakdown, Reflection
+  const totalSteps = 3;
 
   // Auto-advance slides every 5 seconds
   useEffect(() => {
@@ -65,10 +66,10 @@ const Dependability: React.FC<DependabilityProps> = ({
   const totalBooks = toReadAddedCount + toReadReadCount;
 
   const summaryText = dependability >= 0.8 
-    ? "You're incredibly reliable with your reading goals!"
+    ? "You're actually doing pretty well. Keep checking those off the list."
     : dependability >= 0.5
-    ? "You're doing well at following through on your reading plans!"
-    : "There's always room to improve your reading follow-through!";
+    ? "You know, it could be worse."
+    : "Yikes. Dream big I guess?";
 
   return (
     <motion.div 
@@ -96,33 +97,34 @@ const Dependability: React.FC<DependabilityProps> = ({
                 variants={itemVariants}
               >
                 <motion.h2 
-                  className="text-[2rem] mb-[0.3rem] font-[var(--font-display)] text-[var(--color-vintage-accent)]"
+                  className="text-4xl font-medium mb-4 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
                   variants={itemVariants}
                 >
-                  Your Reading Dependability
+                  You added a lot of books to your TBR this year.
                 </motion.h2>
                 <motion.p 
-                  className="text-[1.1rem] opacity-80 m-0 font-[var(--font-main)] italic"
+                  className="text-lg opacity-80 m-0 font-[var(--font-main)] italic"
                   variants={itemVariants}
                 >
-                  How well you follow through on your reading goals this year.
+                  Let's see how well you followed through.
                 </motion.p>
               </motion.div>
             </motion.div>
           )}
 
-          {/* STEP 1: SCORE REVEAL - The Big Metric */}
+          {/* STEP 1: SCORE + BREAKDOWN */}
           {step === 1 && (
             <motion.div
-              key="score"
+              key="score-breakdown"
               variants={zoomVariants}
               initial="enter"
               animate="center"
               exit="exit"
               className="absolute w-full flex flex-col items-center text-center"
             >
+              {/* Score reveal */}
               <motion.div 
-                className="text-center"
+                className="text-center mb-6"
                 variants={itemVariants}
               >
                 <motion.p 
@@ -138,19 +140,8 @@ const Dependability: React.FC<DependabilityProps> = ({
                   <AnimatedCounter value={dependabilityPercent} decimals={1} />%
                 </motion.div>
               </motion.div>
-            </motion.div>
-          )}
 
-          {/* STEP 2: BREAKDOWN - The Numbers */}
-          {step === 2 && (
-            <motion.div
-              key="breakdown"
-              variants={zoomVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              className="absolute w-full flex flex-col items-center text-center"
-            >
+              {/* Breakdown numbers */}
               <motion.div 
                 className="flex flex-col items-center gap-4 my-4 max-w-[600px] w-full"
                 variants={itemVariants}
@@ -189,18 +180,12 @@ const Dependability: React.FC<DependabilityProps> = ({
                     </motion.div>
                   </div>
                 </motion.div>
-                <motion.p 
-                  className="text-[0.9rem] opacity-80 font-[var(--font-main)] text-black mt-4"
-                  variants={itemVariants}
-                >
-                  This measures how many books you read in {year || '2025'} that were also added to your shelves in {year || '2025'}.
-                </motion.p>
               </motion.div>
             </motion.div>
           )}
 
-          {/* STEP 3: REFLECTION - Interpretation */}
-          {step === 3 && (
+          {/* STEP 2: REFLECTION - Interpretation */}
+          {step === 2 && (
             <motion.div
               key="reflection"
               variants={zoomVariants}

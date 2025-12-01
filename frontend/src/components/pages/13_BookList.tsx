@@ -19,17 +19,7 @@ interface BookListProps {
 }
 
 const BookList: React.FC<BookListProps> = ({ books, onPrevPage, onNextPage }) => {
-  const getGridCols = (count: number) => {
-    if (count === 1) return 'repeat(1, 1fr)';
-    if (count === 2 || count === 4) return 'repeat(2, 1fr)';
-    if (count === 3 || count === 5 || count === 6 || count === 9) return 'repeat(3, 1fr)';
-    if (count === 7 || count === 8 || count === 11 || count === 12) return 'repeat(4, 1fr)';
-    if (count === 10) return 'repeat(5, 1fr)';
-    return 'repeat(auto-fit, minmax(50px, 1fr))';
-  };
-
   const bookCount = books?.length || 0;
-  const gridStyle = bookCount <= 12 ? { gridTemplateColumns: getGridCols(bookCount) } : {};
 
   const getBookSizeClasses = (count: number) => {
     if (count <= 12) {
@@ -59,8 +49,7 @@ const BookList: React.FC<BookListProps> = ({ books, onPrevPage, onNextPage }) =>
       <div className="w-full my-4 flex items-center justify-center max-md:pt-8">
         {books && books.length > 0 ? (
           <motion.div 
-            className="grid gap-1 p-2 w-full h-full content-center justify-center z-[150] md:grid-cols-[repeat(auto-fit,minmax(60px,1fr))] max-md:grid-cols-[repeat(auto-fit,minmax(45px,1fr))]"
-            style={bookCount <= 12 ? gridStyle : undefined}
+            className="grid gap-[4px] p-2 w-full content-start justify-center z-[150] md:grid-cols-4 lg:grid-cols-5 max-md:grid-cols-[repeat(auto-fit,minmax(45px,1fr))]"
             variants={containerVariantsSlow}
             initial="hidden"
             animate="visible"
@@ -68,13 +57,13 @@ const BookList: React.FC<BookListProps> = ({ books, onPrevPage, onNextPage }) =>
             {books.map((book: any, index: number) => (
               <motion.div 
                 key={index} 
-                className="relative z-[100] flex justify-center transition-transform duration-200 hover:scale-105 hover:z-[99999]"
+                className="relative z-[100] flex justify-center transition-transform duration-10 hover:scale-105 hover:z-[99999]"
                 variants={fadeScaleVariants}
                 custom={index}
                 transition={{
-                  delay: index * 0.05,
+                  delay: index * 0.01,
                   type: "spring",
-                  stiffness: 100,
+                  stiffness: 60,
                   damping: 15
                 }}
               >
