@@ -5,7 +5,6 @@ import QRCode from 'qrcode';
 import Decor from './components/Decor';
 import { decorMap } from './data/decorConfig';
 import WelcomePage from './components/pages/1_WelcomePage';
-import DesktopView from './components/pages/2_DesktopView';
 import BooksRead from './components/pages/3_BooksRead';
 import AverageRating from './components/pages/4_AverageRating';
 import BookDetails from './components/pages/5_BookDetails';
@@ -187,12 +186,8 @@ function App() {
       const qrCode = await QRCode.toDataURL(mobileUrl);
       setQrCodeUrl(qrCode);
       
-      // Navigate to the first page instead of setting state
-      if (isMobile) {
-        navigate('/books-read');
-      } else {
-        navigate('/desktop');
-      }      
+      // Navigate to the first page
+      navigate('/books-read');      
     } catch (error) {
       console.error('Error:', error);
       setResult({ error: 'Failed to fetch data' });
@@ -202,7 +197,7 @@ function App() {
   };
 
   const nextPage = () => {
-    const pageOrder = ['/','/desktop', '/books-read', '/average-rating', '/book-details', '/top-genres', '/genres-over-time', '/reading-time', '/dependability', '/biggest-hater', '/most-scathing-review', '/most-positive-review', '/book-list', '/complete'];
+    const pageOrder = ['/', '/books-read', '/average-rating', '/book-details', '/top-genres', '/genres-over-time', '/reading-time', '/dependability', '/biggest-hater', '/most-scathing-review', '/most-positive-review', '/book-list', '/complete'];
     const currentPath = location.pathname;
     const currentIndex = pageOrder.indexOf(currentPath);
     if (currentIndex < pageOrder.length - 1) {
@@ -211,7 +206,7 @@ function App() {
   };
 
   const prevPage = () => {
-    const pageOrder = ['/','/desktop', '/books-read', '/average-rating', '/book-details', '/top-genres', '/genres-over-time', '/reading-time', '/dependability', '/biggest-hater', '/most-scathing-review', '/most-positive-review', '/book-list', '/complete'];
+    const pageOrder = ['/', '/books-read', '/average-rating', '/book-details', '/top-genres', '/genres-over-time', '/reading-time', '/dependability', '/biggest-hater', '/most-scathing-review', '/most-positive-review', '/book-list', '/complete'];
     const currentPath = location.pathname;
     const currentIndex = pageOrder.indexOf(currentPath);
     if (currentIndex > 0) {
@@ -348,13 +343,6 @@ function App() {
     />
   );
 
-  const renderDesktopView = () => (
-    <DesktopView
-      qrCodeUrl={qrCodeUrl}
-      onContinue={nextPage}
-    />
-  );
-
   const currentDecor = decorMap[location.pathname] || [];
 
   return (
@@ -400,9 +388,6 @@ function App() {
               <header className="App-header">
                 <Routes>
                   <Route path="/" element={renderWelcomePage()} />
-                  <Route path="/desktop" element={
-                    result && !isMobile ? renderDesktopView() : <div>Loading...</div>
-                  } />
                   <Route path="/books-read" element={
                     result ? renderBooksReadPage() : <div>Loading...</div>
                   } />
