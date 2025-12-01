@@ -137,16 +137,13 @@ const Complete: React.FC<CompleteProps> = ({
           </motion.h3>
           {safeTopGenres.length > 0 ? (
             <div className="space-y-2">
-              {safeTopGenres.map((genre, index) => (
+              {safeTopGenres.map((genre) => (
                 <motion.div
                   key={genre.name}
                   className="flex items-center justify-between text-sm md:text-base"
                   variants={itemVariants}
                 >
                   <div className="flex items-center gap-2">
-                    <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[var(--color-vintage-accent)] text-[var(--color-vintage-bg)] text-xs font-bold">
-                      #{index + 1}
-                    </span>
                     <span className="font-[var(--font-main)] text-black font-semibold">
                       {genre.name}
                     </span>
@@ -164,28 +161,26 @@ const Complete: React.FC<CompleteProps> = ({
           )}
         </motion.div>
 
-        {/* Top rated books */}
+        {/* Top rated books - simplified overlapping covers */}
         <motion.div
-          className="flex-1 bg-[var(--color-vintage-light)]/80 border border-[rgba(0,0,0,0.08)] rounded-2xl p-4"
+          className="flex-1 bg-[var(--color-vintage-light)]/80 border border-[rgba(0,0,0,0.08)] rounded-2xl p-4 flex items-center justify-center"
           variants={itemVariants}
         >
-          <motion.h3
-            className="text-lg font-semibold mb-3 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
-            variants={stagedHeadline}
-            initial="hidden"
-            animate="visible"
-          >
-            Your highest-rated reads
-          </motion.h3>
           {safeTopRatedBooks.length > 0 ? (
-            <div className="flex gap-3 md:gap-4 justify-center md:justify-start">
-              {safeTopRatedBooks.map((book) => (
-                <motion.div
-                  key={book.title}
-                  className="flex flex-col items-center w-[80px] md:w-[90px]"
-                  variants={fadeScaleVariants}
-                >
-                  <div className="w-full aspect-[2/3] rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.18)] border border-[rgba(0,0,0,0.12)] bg-white">
+            <div className="relative w-[180px] h-[140px] flex items-center justify-center">
+              {safeTopRatedBooks.map((book, index) => {
+                const offsets = [
+                  '-translate-x-8 rotate-[-5deg]',
+                  'translate-y-1',
+                  'translate-x-8 rotate-[5deg]',
+                ];
+                const classOffset = offsets[index] || '';
+                return (
+                  <motion.div
+                    key={book.title}
+                    className={`absolute w-[80px] h-[120px] rounded-xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.18)] border border-[rgba(0,0,0,0.12)] bg-white ${classOffset}`}
+                    variants={fadeScaleVariants}
+                  >
                     {book.coverImage ? (
                       <img
                         src={book.coverImage}
@@ -193,29 +188,16 @@ const Complete: React.FC<CompleteProps> = ({
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-sm text-black bg-gray-200">
+                      <div className="w-full h-full flex items-center justify-center text-xs text-black bg-gray-200">
                         No cover
                       </div>
                     )}
-                  </div>
-                  <div className="mt-2 text-center">
-                    <p className="text-xs font-semibold font-[var(--font-main)] text-black line-clamp-2">
-                      {book.title}
-                    </p>
-                    <p className="text-[0.65rem] opacity-70 font-[var(--font-main)] text-black line-clamp-1">
-                      {book.author}
-                    </p>
-                    {book.userRating !== undefined && (
-                      <p className="text-xs font-[var(--font-main)] text-[var(--color-vintage-accent)] mt-1">
-                        <AnimatedCounter value={book.userRating} decimals={1} /> / 5
-                      </p>
-                    )}
-                  </div>
-                </motion.div>
-              ))}
+                  </motion.div>
+                );
+              })}
             </div>
           ) : (
-            <p className="text-sm opacity-70 font-[var(--font-main)] text-black">
+            <p className="text-sm opacity-70 font-[var(--font-main)] text-black text-center">
               Not enough ratings to surface favorite books.
             </p>
           )}

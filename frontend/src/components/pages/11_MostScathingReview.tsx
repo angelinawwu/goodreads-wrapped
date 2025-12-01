@@ -100,7 +100,7 @@ const MostScathingReview: React.FC<MostScathingReviewProps> = ({
                   className="text-4xl font-medium mb-4 font-[var(--font-display)] text-[var(--color-vintage-accent)]"
                   variants={itemVariants}
                 >
-                  You're a reader with strong opinions.
+                  Wow, you're a reader with strong opinions.
                 </motion.h2>
                 <motion.p 
                   className="text-lg opacity-80 m-0 font-[var(--font-main)] italic"
@@ -162,12 +162,7 @@ const MostScathingReview: React.FC<MostScathingReviewProps> = ({
                 >
                   by {mostScathingReview.author}
                 </motion.div>
-                <motion.p 
-                  className="text-[1rem] italic opacity-70 font-[var(--font-main)]"
-                  variants={itemVariants}
-                >
-                  Being brutally honest is a good thing, right?
-                </motion.p>
+                
               </motion.div>
             </motion.div>
           )}
@@ -215,6 +210,12 @@ const MostScathingReview: React.FC<MostScathingReviewProps> = ({
                   variants={itemVariants}
                 >
                   ({(mostScathingReview.sentiment?.negative?.length || 0)} negative terms detected)
+                </motion.p>
+                <motion.p 
+                  className="text-[1rem] mt-8 italic opacity-70 font-[var(--font-main)]"
+                  variants={itemVariants}
+                >
+                  Being brutally honest is a good thing, right?
                 </motion.p>
               </motion.div>
             </motion.div>

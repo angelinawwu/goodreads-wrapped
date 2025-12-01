@@ -1,4 +1,36 @@
-/* Navigation Areas */
+/* Mobile tap zones - invisible full screen halves */
+.nav-mobile-left, .nav-mobile-right {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .nav-mobile-left, .nav-mobile-right {
+    position: fixed;
+    top: 0;
+    width: 50%;
+    height: 100vh;
+    z-index: 25;
+    cursor: pointer;
+    pointer-events: auto;
+    background: transparent;
+    display: block;
+  }
+
+  .nav-mobile-left {
+    left: 0;
+  }
+
+  .nav-mobile-right {
+    right: 0;
+  }
+
+  .nav-mobile-left.nav-disabled,
+  .nav-mobile-right.nav-disabled {
+    pointer-events: none;
+  }
+}
+
+/* Desktop Navigation Areas */
 .nav-left, .nav-right {
   position: fixed;
   top: 0;
@@ -26,6 +58,13 @@
   right: 0;
   justify-content: flex-end;
   padding-right: 6rem;
+}
+
+/* Hide desktop navigation buttons on mobile */
+@media (max-width: 768px) {
+  .nav-left, .nav-right {
+    display: none;
+  }
 }
 
 .nav-left p, .nav-right p {

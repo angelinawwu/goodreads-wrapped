@@ -56,17 +56,24 @@ const BookList: React.FC<BookListProps> = ({ books, onPrevPage, onNextPage }) =>
           >
             {books.map((book: any, index: number) => (
               <motion.div 
-                key={index} 
-                className="relative z-[100] flex justify-center transition-transform duration-10 hover:scale-105 hover:z-[99999]"
-                variants={fadeScaleVariants}
-                custom={index}
-                transition={{
-                  delay: index * 0.01,
-                  type: "spring",
-                  stiffness: 60,
-                  damping: 15
-                }}
-              >
+              key={book.id} // CRITICAL: Use book ID
+              className="relative z-[100] flex justify-center" // Remove CSS transitions here
+              variants={fadeScaleVariants}
+              custom={index}
+              transition={{
+                delay: 0,
+                duration: 0.01,
+                ease: "easeOut"
+              }}
+              // Use whileHover for the fast interaction
+              whileHover={{
+                scale: 1.05,
+                zIndex: 99999, // Handle z-index with motion
+                transition: {
+                  duration: 0.1, // Quick hover transition
+                }
+              }}
+            >
                 <div className={`w-full aspect-[2/3] rounded-lg overflow-visible relative group ${getBookSizeClasses(bookCount)}`}>
                   {book.coverImage ? (
                     <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover rounded-lg" />
@@ -74,7 +81,7 @@ const BookList: React.FC<BookListProps> = ({ books, onPrevPage, onNextPage }) =>
                     <div className="w-full h-full flex items-center justify-center text-[2rem] text-black">
                     </div>
                   )}
-                  <div className="absolute bottom-[105px] -mb-6 left-1/2 -translate-x-1/2 bg-[var(--color-vintage-accent)] text-[var(--color-vintage-bg)] py-2 px-3 rounded-lg text-[0.8rem] font-medium font-[var(--font-main)] whitespace-nowrap max-w-[120px] overflow-hidden text-ellipsis opacity-0 invisible transition-all duration-300 z-[99999] pointer-events-none group-hover:opacity-100 group-hover:visible max-md:text-[0.7rem] max-md:py-1.5 max-md:px-2.5 max-md:max-w-[100px] max-md:bottom-[80px]">
+                  <div className="absolute bottom-[105px] -mb-8 left-1/2 -translate-x-1/2 bg-[var(--color-vintage-accent)] text-[var(--color-vintage-bg)] py-2 px-3 rounded-lg text-[0.8rem] font-medium font-[var(--font-main)] whitespace-nowrap max-w-[120px] overflow-hidden text-ellipsis opacity-0 invisible transition-all duration-300 z-[99999] pointer-events-none group-hover:opacity-100 group-hover:visible max-md:text-[0.7rem] max-md:py-1.5 max-md:px-2.5 max-md:max-w-[100px] max-md:bottom-[80px]">
                     {book.title}
                     <div className="absolute top-full left-1/2 -translate-x-1/2 border-[6px] border-transparent border-t-[var(--color-vintage-text)]"></div>
                   </div>

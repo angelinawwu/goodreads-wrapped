@@ -21,6 +21,21 @@ const Navigation: React.FC<NavigationProps> = ({
 }) => {
   return (
     <>
+      {/* Mobile tap zones - full screen halves */}
+      {showPrev && (
+        <div 
+          className={`nav-mobile-left ${disablePrev ? 'nav-disabled' : ''}`} 
+          onClick={disablePrev ? undefined : onPrevPage}
+        />
+      )}
+      {showNext && (
+        <div 
+          className={`nav-mobile-right ${disableNext ? 'nav-disabled' : ''}`} 
+          onClick={disableNext ? undefined : onNextPage}
+        />
+      )}
+
+      {/* Desktop navigation buttons */}
       {showPrev && (
         <div 
           className={`nav-left ${disablePrev ? 'nav-disabled' : ''}`} 

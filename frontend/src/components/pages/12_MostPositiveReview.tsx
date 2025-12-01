@@ -65,7 +65,7 @@ const MostPositiveReview: React.FC<MostPositiveReviewProps> = ({
     if (step < totalSteps - 1) {
       const timer = setTimeout(() => {
         setStep(step + 1);
-      }, 5000);
+      }, 4000);
       return () => clearTimeout(timer);
     }
     // Note: Do NOT auto-advance to next page - let user control page navigation
@@ -162,12 +162,7 @@ const MostPositiveReview: React.FC<MostPositiveReviewProps> = ({
                 >
                   by {mostPositiveReview.author}
                 </motion.div>
-                <motion.p 
-                  className="text-[1rem] italic opacity-70 font-[var(--font-main)]"
-                  variants={itemVariants}
-                >
-                  We're glad you had such a good time.
-                </motion.p>
+                
               </motion.div>
             </motion.div>
           )}
@@ -215,6 +210,12 @@ const MostPositiveReview: React.FC<MostPositiveReviewProps> = ({
                   variants={itemVariants}
                 >
                   ({(mostPositiveReview.sentiment?.positive?.length || 0)} positive terms detected)
+                </motion.p>
+                <motion.p 
+                  className="text-[1rem] mt-8 italic opacity-70 font-[var(--font-main)]"
+                  variants={itemVariants}
+                >
+                  We're glad you had such a good time.
                 </motion.p>
               </motion.div>
             </motion.div>
