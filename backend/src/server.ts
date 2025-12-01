@@ -220,7 +220,16 @@ console.log('Starting server...');
 
 const app = express();
 const PORT = 3001;
-app.use(cors());
+// app.use(cors());
+
+// 💡 This allows all origins explicitly, which is the easiest fix 
+// for Vercel Serverless Function APIs.
+app.use(cors({
+  origin: '*',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  allowedHeaders: 'Content-Type,Authorization'
+}));
 
 console.log('Express app created');
 
