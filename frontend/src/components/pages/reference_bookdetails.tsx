@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { motion, useSpring, useTransform, animate, useMotionValue, AnimatePresence } from 'framer-motion';
+import { motion, useTransform, animate, useMotionValue, AnimatePresence } from 'framer-motion';
 import type { Variants } from 'framer-motion';
 
 // --- Types ---

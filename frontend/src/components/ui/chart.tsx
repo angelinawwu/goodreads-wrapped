@@ -1,7 +1,6 @@
 "use client"
 
 import * as React from "react"
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis, type CartesianGridProps } from "recharts"
 
 import { cn } from "../../lib/utils"
 

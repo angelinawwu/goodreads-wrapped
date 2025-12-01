@@ -59,7 +59,6 @@ const slideVariants: Variants = {
 
 const MostScathingReview: React.FC<MostScathingReviewProps> = ({ 
   mostScathingReview, 
-  booksWithReviews = 0,
   onPrevPage, 
   onNextPage 
 }) => {

@@ -59,7 +59,6 @@ const slideVariants: Variants = {
 
 const MostPositiveReview: React.FC<MostPositiveReviewProps> = ({ 
   mostPositiveReview, 
-  booksWithReviews = 0,
   onPrevPage, 
   onNextPage 
 }) => {
