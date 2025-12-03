@@ -27,7 +27,7 @@ export default function Home() {
         animate="visible"
       >
 
-        <motion.h2 variants={itemVariants} className="text-headline mb-8">
+        <motion.h2 variants={itemVariants} className="text-headline mb-4">
           Goodreads Wrapped 2025
         </motion.h2>
 
@@ -59,7 +59,7 @@ export default function Home() {
           </button>
         </motion.form>
 
-        <motion.p variants={itemVariants} className="text-sm opacity-60 mt-8">
+        <motion.p variants={itemVariants} className="text-sm opacity-60 mt-4">
           This may take a few minutes to generate
         </motion.p>
       </motion.div>
