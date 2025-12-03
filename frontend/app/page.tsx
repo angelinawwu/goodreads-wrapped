@@ -40,7 +40,7 @@ export default function Home() {
           You can find your ID in your Goodreads profile URL.
         </motion.p>
 
-        <motion.form variants={itemVariants} onSubmit={handleSubmit} className="space-y-6">
+        <motion.form variants={itemVariants} onSubmit={handleSubmit} className="space-y-2">
           <input
             type="text"
             value={username}

@@ -62,7 +62,25 @@ export function getDependabilityMessage(score: number): string {
   if (score <= 0.75) {
     return "More than half! Not bad.";
   }
-  return "That's pretty good. I'd trust you to follow through on your promises.";
+  return "Okay, that's pretty good. I'd trust you to follow through on your promises.";
+}
+
+/**
+ * Format author name from "lastname, firstname" to "firstname lastname"
+ * If no comma is present, returns the name as-is
+ */
+export function formatAuthorName(authorName: string): string {
+  if (!authorName) return authorName;
+  
+  const commaIndex = authorName.indexOf(',');
+  if (commaIndex === -1) {
+    return authorName; // No comma, return as-is
+  }
+  
+  const lastName = authorName.substring(0, commaIndex).trim();
+  const firstName = authorName.substring(commaIndex + 1).trim();
+  
+  return `${firstName} ${lastName}`;
 }
 
 /**

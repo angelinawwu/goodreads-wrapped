@@ -1,6 +1,7 @@
 export interface Book {
   title: string;
   author: string;
+  authorImage?: string;
   rating?: string;
   dateRead?: string;
   dateAdded?: string;

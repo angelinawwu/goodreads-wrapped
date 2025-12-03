@@ -8,7 +8,7 @@ import {
   itemVariants,
   calculateAnimationDuration,
 } from '@/lib/motionVariants';
-import { getTopAuthor } from '@/lib/utils';
+import { getTopAuthor, formatAuthorName } from '@/lib/utils';
 import type { SlideProps } from '@/lib/types';
 
 export default function Slide06_TopAuthor({ stats, onAnimationComplete }: SlideProps) {
@@ -30,6 +30,10 @@ export default function Slide06_TopAuthor({ stats, onAnimationComplete }: SlideP
     return null;
   }
 
+  // Find the top author's book to get the author image
+  const topAuthorBook = stats.books.find(book => book.author === topAuthor.name);
+  const authorImage = topAuthorBook?.authorImage;
+
   return (
     <motion.div
       className="min-h-screen flex flex-col items-center justify-center p-8 relative z-[var(--z-content)]"
@@ -37,16 +41,24 @@ export default function Slide06_TopAuthor({ stats, onAnimationComplete }: SlideP
       initial="hidden"
       animate="visible"
     >
-      {/* Square author placeholder (could be actual image if available) */}
+      {/* Author image or placeholder */}
       <motion.div
         variants={heroVariants}
-        className="w-48 h-48 rounded-lg bg-[var(--bg-5)] flex items-center justify-center text-6xl mb-8 shadow-xl"
+        className="w-48 h-48 rounded-lg bg-[var(--bg-5)] flex items-center justify-center mb-8 shadow-xl overflow-hidden"
       >
-        ✍️
+        {authorImage ? (
+          <img
+            src={authorImage}
+            alt={topAuthor.name}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <span className="text-6xl">✍️</span>
+        )}
       </motion.div>
 
       <motion.h2 variants={itemVariants} className="text-headline text-center mb-4 font-bold">
-        {topAuthor.name}
+        {formatAuthorName(topAuthor.name)}
       </motion.h2>
 
       <motion.p variants={itemVariants} className="text-body-lg text-center opacity-80">

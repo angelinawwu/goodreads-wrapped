@@ -8,6 +8,7 @@ import Sentiment from 'sentiment';
 interface Book {
     title: string;
     author: string;
+    authorImage?: string;       // NEW: Author profile image URL
     rating: string;
     dateRead: string;
     dateAdded?: string;         // NEW: Date when book was added to shelves
@@ -28,6 +29,63 @@ interface Book {
       fullReview: string;
     };
   }
+
+const scrapeAuthorImage = async (authorUrl: string): Promise<string | undefined> => {
+  try {
+    const fullAuthorUrl = authorUrl.startsWith('http') 
+      ? authorUrl 
+      : `https://www.goodreads.com${authorUrl}`;
+    
+    console.log(`Scraping author image from: ${fullAuthorUrl}`);
+    
+    const response = await axios.get(fullAuthorUrl, {
+      timeout: 10000,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+      }
+    });
+    
+    const $ = cheerio.load(response.data);
+    
+    // Find the image in the leftContainer authorLeftContainer div
+    // Try multiple selector combinations
+    let authorImage = $('.leftContainer.authorLeftContainer img').attr('src') || 
+                      $('.leftContainer.authorLeftContainer img').attr('data-src');
+    
+    if (!authorImage) {
+      // Try with space-separated classes
+      authorImage = $('.leftContainer .authorLeftContainer img').attr('src') || 
+                    $('.leftContainer .authorLeftContainer img').attr('data-src');
+    }
+    
+    if (!authorImage) {
+      // Try just authorLeftContainer
+      authorImage = $('.authorLeftContainer img').first().attr('src') || 
+                    $('.authorLeftContainer img').first().attr('data-src');
+    }
+    
+    if (authorImage) {
+      console.log(`Found author image: ${authorImage}`);
+      return authorImage;
+    }
+    
+    // Fallback: try to find any image in the author container
+    const fallbackImage = $('.authorPhoto img, [class*="author"] img').first().attr('src') || 
+                         $('.authorPhoto img, [class*="author"] img').first().attr('data-src');
+    
+    if (fallbackImage) {
+      console.log(`Found author image (fallback): ${fallbackImage}`);
+      return fallbackImage;
+    }
+    
+    console.log(`No author image found for ${fullAuthorUrl}`);
+    return undefined;
+    
+  } catch (error) {
+    console.error(`Error scraping author image from ${authorUrl}:`, error);
+    return undefined;
+  }
+};
 
 const scrapeBookGenres = async (bookUrl: string): Promise<string[]> => {
   try {
@@ -328,8 +386,9 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
           if (title) {
             booksOnThisPage++;
             
-            const authorElement = $book.find('a[href*="/author/show/"]');
+            const authorElement = $book.find('td.field.author a[href*="/author/show/"], a[href*="/author/show/"]');
             const author = authorElement.text().trim();
+            const authorUrl = authorElement.attr('href');
             
             
             const ratingText = $book.find('.rating, .stars, [class*="rating"]').text().trim();
@@ -422,6 +481,7 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
             };
 
             (book as any).bookUrl = bookUrl;
+            (book as any).authorUrl = authorUrl; // Store author URL for later scraping
 
             // Extract book ID for dependability calculation
             if (bookUrl) {
@@ -459,6 +519,25 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
       }
       
       console.log(`Scraping complete! Total books found: ${allBooks.length}, Books in ${year}: ${yearBooks.length}`);
+
+      // Scrape author images for books in the target year
+      console.log(`Scraping author images for ${yearBooks.length} books from ${year}...`);
+      const authorImagePromises = yearBooks.map(async (book, index) => {
+        const authorUrl = (book as any).authorUrl;
+        if (authorUrl) {
+          const authorImage = await scrapeAuthorImage(authorUrl);
+          if (authorImage) {
+            book.authorImage = authorImage;
+          }
+          // Add delay to avoid rate limiting
+          if (index < yearBooks.length - 1) {
+            await new Promise(resolve => setTimeout(resolve, 500));
+          }
+        }
+        return book;
+      });
+      await Promise.all(authorImagePromises);
+      console.log(`Finished scraping author images`);
 
       // ADD THIS CODE RIGHT HERE:
       console.log(`Scraping genres for ${yearBooks.length} books from ${year}...`);

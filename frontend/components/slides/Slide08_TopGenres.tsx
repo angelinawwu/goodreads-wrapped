@@ -34,19 +34,19 @@ export default function Slide08_TopGenres({ stats, onAnimationComplete }: SlideP
       initial="hidden"
       animate="visible"
     >
-      <motion.h2 variants={stagedHeadline} className="text-headline text-center mb-12">
+      <motion.h2 variants={stagedHeadline} className="text-headline text-center">
         Your top genres
       </motion.h2>
 
-      <div className="w-full max-w-md space-y-6">
+      <div className="w-full max-w-md space-y-4">
         {topFive.map((genre, i) => (
           <motion.div
             key={i}
             variants={itemVariants}
-            className="flex items-center justify-between p-4 bg-white/10 rounded-lg"
+            className="flex items-center justify-between p-3 px-6 bg-white/10 rounded-lg"
           >
-            <div className="flex items-center gap-4">
-              <span className="text-display text-4xl">{i + 1}</span>
+            <div className="flex items-center gap-3 md:gap-2">
+              <span className="font-[var(--font-display)] font-bold sm:text-display w-20 md:text-8xl">{i + 1}</span>
               <div>
                 <div className="text-body-lg font-semibold">{genre.name}</div>
                 <div className="text-sm opacity-70">{genre.count} books</div>

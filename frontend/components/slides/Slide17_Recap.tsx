@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { Download } from 'lucide-react';
 import { containerVariants, itemVariants, calculateAnimationDuration } from '@/lib/motionVariants';
 import { useImageExport } from '@/hooks/useImageExport';
-import { getTopAuthor } from '@/lib/utils';
+import { getTopAuthor, formatAuthorName } from '@/lib/utils';
 import type { SlideProps } from '@/lib/types';
 
 export default function Slide17_Recap({ stats, onAnimationComplete }: SlideProps) {
@@ -120,7 +120,7 @@ export default function Slide17_Recap({ stats, onAnimationComplete }: SlideProps
             <div className="text-sm font-bold uppercase tracking-wide mb-3">Top Author</div>
             {topAuthor && (
               <div>
-                <div className="font-semibold">{topAuthor.name}</div>
+                <div className="font-semibold">{formatAuthorName(topAuthor.name)}</div>
                 <div className="text-sm opacity-70">{topAuthor.count} books</div>
               </div>
             )}
