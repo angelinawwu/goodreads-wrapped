@@ -44,7 +44,7 @@ export function getTextColor(bgIndex: number): string {
  * Calculate percentage more than average (assuming average is 12 books/year)
  */
 export function calculatePercentageMore(booksRead: number): number {
-  const AVERAGE_BOOKS = 12;
+  const AVERAGE_BOOKS = 4;
   const percentMore = ((booksRead - AVERAGE_BOOKS) / AVERAGE_BOOKS) * 100;
   return Math.round(percentMore);
 }

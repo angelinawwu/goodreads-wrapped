@@ -9,12 +9,16 @@ import {
   itemVariants,
   calculateAnimationDuration,
 } from '@/lib/motionVariants';
+import { getTextColor } from '@/lib/utils';
 import type { SlideProps } from '@/lib/types';
 
 // Chart colors from the palette
 const CHART_COLORS = ['#737437', '#3A1010', '#757160', '#B76039', '#0B2426'];
 
 export default function Slide09_GenresChart({ stats, onAnimationComplete }: SlideProps) {
+  // Slide 9 is at index 8
+  const textColor = getTextColor(8);
+
   useEffect(() => {
     const duration = calculateAnimationDuration({
       hasStaged: true,
@@ -62,14 +66,16 @@ export default function Slide09_GenresChart({ stats, onAnimationComplete }: Slid
               dataKey="month"
               tickLine={false}
               axisLine={false}
-              style={{ fontSize: '12px' }}
+              style={{ fontSize: '12px', fill: textColor }}
+              tick={{ fill: textColor }}
             />
             <YAxis
               tickFormatter={(value) => `${value}%`}
               domain={[0, 100]}
               tickLine={false}
               axisLine={false}
-              style={{ fontSize: '12px' }}
+              style={{ fontSize: '12px', fill: textColor }}
+              tick={{ fill: textColor }}
             />
             <Tooltip
               contentStyle={{
@@ -77,7 +83,10 @@ export default function Slide09_GenresChart({ stats, onAnimationComplete }: Slid
                 border: 'none',
                 borderRadius: '8px',
                 padding: '8px',
+                color: textColor,
               }}
+              labelStyle={{ color: textColor }}
+              itemStyle={{ color: textColor }}
             />
             {stats.topGenres.slice(0, 5).map((genre, i) => (
               <Area
@@ -91,7 +100,7 @@ export default function Slide09_GenresChart({ stats, onAnimationComplete }: Slid
               />
             ))}
             <Legend
-              wrapperStyle={{ paddingTop: '20px' }}
+              wrapperStyle={{ paddingTop: '20px', color: textColor }}
               iconType="circle"
             />
           </AreaChart>

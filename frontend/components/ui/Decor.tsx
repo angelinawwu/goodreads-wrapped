@@ -32,7 +32,7 @@ const getPositionClasses = (position: DecorPosition): string => {
     bottom: 'bottom-0 left-1/2 -translate-x-1/2 w-full max-h-[150px] overflow-hidden',
     center: 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[80%] z-0 opacity-[0.15]',
     frame: 'top-0 left-0 w-full h-auto z-10',
-    'frame-c': 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full z-0',
+    'frame-c': 'top-1/2 left-0 right-0 -translate-y-1/2 z-0 origin-center',
     'corner-tl': 'top-0 left-0 w-[150px]',
     'corner-tr': 'top-0 right-0 w-[150px] scale-x-[-1]',
     'corner-bl': 'bottom-0 left-0 w-[150px] scale-y-[-1]',
@@ -50,6 +50,9 @@ const getImageClasses = (position: DecorPosition): string => {
   }
   if (position === 'frame') {
     return 'block w-full h-full object-fill';
+  }
+  if (position === 'frame-c') {
+    return 'block w-full h-auto mx-auto';
   }
   return 'block max-w-full h-auto';
 };
