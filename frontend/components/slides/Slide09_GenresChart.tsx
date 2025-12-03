@@ -13,7 +13,7 @@ import { getTextColor } from '@/lib/utils';
 import type { SlideProps } from '@/lib/types';
 
 // Chart colors from the palette
-const CHART_COLORS = ['#737437', '#3A1010', '#757160', '#B76039', '#0B2426'];
+const CHART_COLORS = ['#437427', '#3A1010', '#357160', '#190606', '#6B4426'];
 
 export default function Slide09_GenresChart({ stats, onAnimationComplete }: SlideProps) {
   // Slide 9 is at index 8
@@ -32,19 +32,48 @@ export default function Slide09_GenresChart({ stats, onAnimationComplete }: Slid
   }, [onAnimationComplete]);
 
   // Transform monthly genre data for chart
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  
+  // Group data by month number (ignoring year) to avoid duplicates
   const chartData = stats.monthlyGenreData
-    ? Object.entries(stats.monthlyGenreData).map(([month, genres]) => {
-        const total = stats.monthlyBookTotals?.[month] || 1;
-        const dataPoint: any = { month: month.split('-')[1] }; // Just MM
-
-        // Calculate percentages for top 5 genres
-        stats.topGenres.slice(0, 5).forEach((genre) => {
-          const count = (genres as any)[genre.name] || 0;
-          dataPoint[genre.name] = ((count / total) * 100).toFixed(1);
+    ? (() => {
+        const monthGroups: { [monthNum: number]: { genres: { [genre: string]: number }; total: number } } = {};
+        
+        Object.entries(stats.monthlyGenreData).forEach(([monthKey, genres]) => {
+          const monthNum = parseInt(monthKey.split('-')[1], 10); // Get month number (1-12)
+          const total = stats.monthlyBookTotals?.[monthKey] || 1;
+          
+          if (!monthGroups[monthNum]) {
+            monthGroups[monthNum] = { genres: {}, total: 0 };
+          }
+          
+          // Aggregate genre counts
+          Object.entries(genres as any).forEach(([genre, count]) => {
+            monthGroups[monthNum].genres[genre] = (monthGroups[monthNum].genres[genre] || 0) + (count as number);
+          });
+          
+          // Aggregate totals
+          monthGroups[monthNum].total += total;
         });
-
-        return dataPoint;
-      })
+        
+        // Convert to chart data format
+        return Object.entries(monthGroups)
+          .map(([monthNumStr, data]) => {
+            const monthNum = parseInt(monthNumStr, 10);
+            const monthName = monthNames[monthNum - 1]; // Convert to 0-based index
+            const dataPoint: any = { month: monthName };
+            
+            // Calculate percentages for top 5 genres
+            stats.topGenres.slice(0, 5).forEach((genre) => {
+              const count = data.genres[genre.name] || 0;
+              dataPoint[genre.name] = ((count / data.total) * 100).toFixed(1);
+            });
+            
+            return { ...dataPoint, monthNum }; // Include monthNum for sorting
+          })
+          .sort((a, b) => a.monthNum - b.monthNum)
+          .map(({ monthNum, ...rest }) => rest); // Remove monthNum from final data
+      })()
     : [];
 
   return (

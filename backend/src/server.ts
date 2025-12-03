@@ -87,7 +87,7 @@ const scrapeAuthorImage = async (authorUrl: string): Promise<string | undefined>
   }
 };
 
-const scrapeBookGenres = async (bookUrl: string): Promise<string[]> => {
+const scrapeBookGenres = async (bookUrl: string): Promise<{ genres: string[]; coverImage?: string }> => {
   try {
     const fullBookUrl = bookUrl.startsWith('http') 
       ? bookUrl 
@@ -102,25 +102,30 @@ const scrapeBookGenres = async (bookUrl: string): Promise<string[]> => {
     
     const $ = cheerio.load(response.data);
     
+    // Extract book cover image from BookCover__image div
+    const coverImage = $('.BookCover__image img').attr('src') || 
+                      $('.BookCover__image img').attr('data-src') ||
+                      $('.BookCover__image').attr('style')?.match(/url\(['"]?([^'"]+)['"]?\)/)?.[1];
+    
     // Extract the Next.js data
     const nextDataScript = $('#__NEXT_DATA__').html();
     if (!nextDataScript) {
       console.log('No __NEXT_DATA__ found');
-      return [];
+      return { genres: [], coverImage };
     }
     
     const nextData = JSON.parse(nextDataScript);
     
     // Navigate to the book data
     const apolloState = nextData.props?.pageProps?.apolloState;
-    if (!apolloState) return [];
+    if (!apolloState) return { genres: [], coverImage };
     
     // Find the book object (it has bookGenres)
     const bookKey = Object.keys(apolloState).find(key => 
       key.startsWith('Book:') && apolloState[key].bookGenres
     );
     
-    if (!bookKey) return [];
+    if (!bookKey) return { genres: [], coverImage };
 
     const nonGenres = [
       'fiction', 'non-fiction', 'nonfiction', 'adult', 'young-adult', 'ya', 'children', 'kids',
@@ -142,11 +147,14 @@ const scrapeBookGenres = async (bookUrl: string): Promise<string[]> => {
       .filter((name: string) => !nonGenres.includes(name));
     
     console.log(`Found genres: ${genres.join(', ')}`);
-    return genres;
+    if (coverImage) {
+      console.log(`Found cover image: ${coverImage}`);
+    }
+    return { genres, coverImage };
     
   } catch (error) {
     console.error(`Error:`, error);
-    return [];
+    return { genres: [], coverImage: undefined };
   }
 };
 
@@ -542,15 +550,19 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
       // ADD THIS CODE RIGHT HERE:
       console.log(`Scraping genres for ${yearBooks.length} books from ${year}...`);
 
-      // Scrape genres for each book read in the target year (parallel processing)
+      // Scrape genres and cover images for each book read in the target year (parallel processing)
       const genrePromises = yearBooks.map(async (book, index) => {
         const bookUrl = (book as any).bookUrl;
         
         if (bookUrl) {
           // Add staggered delay to avoid overwhelming the server
           await new Promise(resolve => setTimeout(resolve, index * 100));
-          const genres = await scrapeBookGenres(bookUrl);
+          const { genres, coverImage } = await scrapeBookGenres(bookUrl);
           book.genres = genres;
+          // Update cover image if found (book page image is usually higher quality)
+          if (coverImage) {
+            book.coverImage = coverImage;
+          }
           console.log(`Progress: ${index + 1}/${yearBooks.length} books processed`);
         }
         
