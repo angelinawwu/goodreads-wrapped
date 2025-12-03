@@ -507,7 +507,7 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
       const totalYearBooks = yearBooks.length || 1;
       const topGenres = Object.entries(genreCounts)
         .sort(([, a], [, b]) => (b as number) - (a as number))
-        .slice(0, 3)
+        .slice(0, 5)
         .map(([name, count]) => ({
           name,
           count,
@@ -613,6 +613,20 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
 
       console.log(`Biggest hater moment: ${biggestHaterMoment ? biggestHaterMoment.title : 'None'} (User: ${biggestHaterMoment ? biggestHaterMoment.userRating : 0}/5, Average: ${biggestHaterMoment ? biggestHaterMoment.avgRating : 0}/5, Disparity: ${biggestDisparity.toFixed(2)})`);
 
+      // Calculate biggest fan moment (biggest positive disparity between user rating and average rating)
+      let biggestFanMoment = null as Book | null;
+      let biggestFanDisparity = 0;
+      
+      booksWithBothRatings.forEach(book => {
+        const disparity = (book.userRating || 0) - (book.avgRating || 0);
+        if (disparity > biggestFanDisparity) {
+          biggestFanDisparity = disparity;
+          biggestFanMoment = book;
+        }
+      });
+
+      console.log(`Biggest fan moment: ${biggestFanMoment ? biggestFanMoment.title : 'None'} (User: ${biggestFanMoment ? biggestFanMoment.userRating : 0}/5, Average: ${biggestFanMoment ? biggestFanMoment.avgRating : 0}/5, Disparity: ${biggestFanDisparity.toFixed(2)})`);
+
       const booksWithRatings = yearBooks.filter(book => book.userRating !== undefined);
       const averageRating = booksWithRatings.length > 0 
         ? booksWithRatings.reduce((sum, book) => sum + (book.userRating || 0), 0) / booksWithRatings.length
@@ -643,7 +657,7 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
         return (b.numRatings || 0) - (a.numRatings || 0);
       });
 
-      const topRatedBooks = sortedByRating.slice(0, 3).map(book => ({
+      const topRatedBooks = sortedByRating.slice(0, 5).map(book => ({
         title: book.title,
         author: book.author,
         userRating: book.userRating,
@@ -703,6 +717,9 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
         // NEW: Biggest hater moment
         biggestHaterMoment: biggestHaterMoment,
         biggestDisparity: Math.round(biggestDisparity * 100) / 100,
+        // NEW: Biggest fan moment
+        biggestFanMoment: biggestFanMoment,
+        biggestFanDisparity: Math.round(biggestFanDisparity * 100) / 100,
         booksWithBothRatings: booksWithBothRatings.length,
         url: `https://www.goodreads.com/review/list/${username}?shelf=read&sort=date_read`,
         // NEW: Dependability statistics

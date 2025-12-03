@@ -41,7 +41,7 @@ const WelcomePage: React.FC<WelcomePageProps> = ({
         initial="hidden"
         animate="visible"
       >
-        Discover your reading year in review!
+        Your reading year, wrapped.
       </motion.p>
         
       <motion.form 

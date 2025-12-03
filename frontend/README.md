@@ -1,54 +1,105 @@
-# React + TypeScript + Vite
+# Goodreads Wrapped - Next.js Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A story-inspired interface for visualizing your Goodreads reading year, built with Next.js 16.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🎬 14 auto-advancing story slides with smooth animations
+- 📱 Mobile-first responsive design (works on desktop too)
+- 🎨 Earth-tone color palette with Unbounded display font
+- ⌨️ Navigation: Arrow keys, Space bar, or screen taps
+- 📊 Interactive charts and personalized reading insights
+- 💾 Exportable recap image for social sharing
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Prerequisites
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+**The backend server must be running first!**
+
+```bash
+# In a separate terminal, start the backend
+cd ../backend
+npm install
+npm start
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Backend should be running on `http://localhost:3001`
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Running the Frontend
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
 ```
+
+Open [http://localhost:3000](http://localhost:3000)
+
+## Environment Variables
+
+The `.env.local` file should contain:
+
+```env
+# Development
+NEXT_PUBLIC_API_URL=http://localhost:3001
+
+# Production (configure in Vercel dashboard)
+NEXT_PUBLIC_API_URL=https://your-backend.vercel.app
+```
+
+## Usage
+
+1. **Enter username**: Type your Goodreads username on the landing page
+2. **Wait for data**: Loading takes a few minutes as the backend scrapes Goodreads
+3. **Navigate slides**:
+   - **Mobile**: Tap left/right sides of screen
+   - **Desktop**: Click arrow buttons or use ← → keys
+   - **Both**: Press Space bar to advance
+4. **Auto-advance**: Slides automatically advance 3 seconds after animations complete
+5. **Export**: Download your recap image from the final slide
+
+## Project Structure
+
+```
+frontend/
+├── app/
+│   ├── page.tsx                    # Landing page
+│   ├── layout.tsx                  # Root layout with fonts
+│   ├── globals.css                 # Design system & colors
+│   └── wrapped/[username]/
+│       ├── page.tsx                # Story viewer route
+│       ├── loading.tsx             # Loading state
+│       └── error.tsx               # Error boundary
+├── components/
+│   ├── StoryViewer.tsx             # Main orchestrator
+│   ├── ui/                         # Reusable components
+│   │   ├── AnimatedCounter.tsx
+│   │   ├── Decor.tsx
+│   │   ├── Navigation.tsx
+│   │   └── ProgressBar.tsx
+│   └── slides/                     # 14 story slides
+├── hooks/                          # Custom React hooks
+├── lib/                            # Utils, types, config, API
+└── public/decor/                   # 10 decorative images
+```
+
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS v4
+- **Animations**: Framer Motion
+- **Charts**: Recharts
+- **Fonts**: Unbounded (Google Fonts)
+- **Export**: html-to-image
+
+## Key Design Decisions
+
+- **Mobile-first**: Touch zones (50% screen width) for navigation
+- **Auto-advance**: Pauses for 10s after manual interaction
+- **Staged animations**: Text elements reveal sequentially with drift-up effect
+- **Color rotation**: Background colors change per slide for visual variety
+- **Decor system**: Position-based decorative overlays (top/bottom/corners/center)
