@@ -24,7 +24,7 @@ export default function Slide16_Thanks({ stats, onAnimationComplete }: SlideProp
 
   return (
     <motion.div
-      className="min-h-screen flex flex-col items-center justify-center p-8 relative z-[var(--z-content)]"
+      className="min-h-screen flex flex-col mx-auto max-w-5xl items-center justify-center p-8 relative z-[var(--z-content)]"
       variants={containerVariantsSlow}
       initial="hidden"
       animate="visible"
@@ -34,7 +34,7 @@ export default function Slide16_Thanks({ stats, onAnimationComplete }: SlideProp
       </motion.h1>
 
       <motion.p variants={stagedHeadline} className="text-headline text-center mt-8 opacity-80">
-        I'll see you in 2026.
+        See you in 2026?
       </motion.p>
     </motion.div>
   );

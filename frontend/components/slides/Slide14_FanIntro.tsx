@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import {
   containerVariants,
   stagedHeadline,
+  itemVariants,
   calculateAnimationDuration,
 } from '@/lib/motionVariants';
 import type { SlideProps } from '@/lib/types';
@@ -24,7 +25,7 @@ export default function Slide14_FanIntro({ stats, onAnimationComplete }: SlidePr
 
   return (
     <motion.div
-      className="min-h-screen flex flex-col items-center justify-center p-8 relative z-[var(--z-content)]"
+      className="min-h-screen flex flex-col mx-auto max-w-4xl items-center justify-center p-8 relative z-[var(--z-content)]"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -32,6 +33,10 @@ export default function Slide14_FanIntro({ stats, onAnimationComplete }: SlidePr
       <motion.h2 variants={stagedHeadline} className="text-headline text-center mb-8">
         Don't worry, it wasn't all bad.
       </motion.h2>
+
+      <motion.p variants={itemVariants} className="text-body-lg text-center mb-8 opacity-80">
+        Here was your biggest fan moment.
+      </motion.p>
     </motion.div>
   );
 }

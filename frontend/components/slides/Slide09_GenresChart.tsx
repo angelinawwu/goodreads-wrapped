@@ -49,7 +49,7 @@ export default function Slide09_GenresChart({ stats, onAnimationComplete }: Slid
 
   return (
     <motion.div
-      className="min-h-screen flex flex-col items-center justify-center p-8 relative z-[var(--z-content)]"
+      className="min-h-screen flex flex-col mx-auto max-w-5xl items-center justify-center p-8 relative z-[var(--z-content)]"
       variants={containerVariants}
       initial="hidden"
       animate="visible"

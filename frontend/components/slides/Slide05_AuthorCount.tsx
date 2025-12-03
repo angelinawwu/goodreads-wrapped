@@ -33,7 +33,7 @@ export default function Slide05_AuthorCount({ stats, onAnimationComplete }: Slid
 
   return (
     <motion.div
-      className="min-h-screen flex flex-col items-center justify-center p-8 relative z-[var(--z-content)]"
+      className="min-h-screen flex flex-col mx-auto max-w-4xl items-center justify-center p-8 relative z-[var(--z-content)]"
       variants={containerVariantsSlow}
       initial="hidden"
       animate="visible"

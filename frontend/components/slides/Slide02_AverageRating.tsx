@@ -29,7 +29,7 @@ export default function Slide02_AverageRating({ stats, onAnimationComplete }: Sl
 
   return (
     <motion.div
-      className="min-h-screen flex flex-col items-center justify-center p-8 relative z-[var(--z-content)]"
+      className="min-h-screen mx-auto max-w-4xl flex flex-col items-center justify-center p-8 relative z-[var(--z-content)]"
       variants={containerVariantsSlow}
       initial="hidden"
       animate="visible"

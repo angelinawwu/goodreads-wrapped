@@ -28,7 +28,7 @@ export default function Slide07_GenreCount({ stats, onAnimationComplete }: Slide
 
   return (
     <motion.div
-      className="min-h-screen flex flex-col items-center justify-center p-8 relative z-[var(--z-content)]"
+      className="min-h-screen mx-auto w-10/12 flex flex-col items-center justify-center p-8 relative z-[var(--z-content)]"
       variants={containerVariantsSlow}
       initial="hidden"
       animate="visible"

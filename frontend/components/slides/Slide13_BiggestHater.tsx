@@ -33,13 +33,13 @@ export default function Slide13_BiggestHater({ stats, onAnimationComplete }: Sli
 
   return (
     <motion.div
-      className="min-h-screen flex flex-col items-center justify-center p-8 relative z-[var(--z-content)]"
+      className="min-h-screen flex flex-col mx-auto max-w-5xl items-center justify-center p-8 relative z-[var(--z-content)]"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
     >
       <motion.div variants={itemVariants} className="text-center max-w-xl">
-        <h2 className="text-headline mb-2">
+        <h2 className="text-headline mb-2 w-full">
           You gave <span className="font-bold">{book.title}</span> a rating of <span className="font-bold">{book.userRating}/5 stars.</span>{' '}
         </h2>
       </motion.div>
