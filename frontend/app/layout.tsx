@@ -1,10 +1,16 @@
 import type { Metadata } from "next";
-import { Unbounded } from "next/font/google";
+import { Unbounded, Work_Sans } from "next/font/google";
 import "./globals.css";
 
 const unbounded = Unbounded({
   subsets: ["latin"],
   variable: "--font-display",
+  display: "swap",
+});
+
+const work_sans = Work_Sans({
+  subsets: ["latin"],
+  variable: "--font-body",  
   display: "swap",
 });
 
@@ -20,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${unbounded.variable} antialiased`}>
+      <body className={`${unbounded.variable} ${work_sans.variable} antialiased`}>
         {children}
       </body>
     </html>

@@ -35,12 +35,17 @@ export default function Home() {
           Your reading year, wrapped.
         </motion.p>
 
+        <motion.p variants={itemVariants} className="text-body mb-4 text-left opacity-80">
+          Enter your Goodreads <span className="font-bold">9-digit ID</span> to begin. 
+          You can find your ID in your Goodreads profile URL.
+        </motion.p>
+
         <motion.form variants={itemVariants} onSubmit={handleSubmit} className="space-y-6">
           <input
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="Enter your Goodreads username"
+            placeholder="ex: 165807089"
             className="w-full p-4 px-6 border-2 border-[var(--text-1)] rounded-full bg-transparent text-[var(--text-1)] placeholder:text-[var(--text-1)]/50 focus:outline-none focus:border-[var(--bg-4)] transition-colors"
             disabled={isLoading}
           />

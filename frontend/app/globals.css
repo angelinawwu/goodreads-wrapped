@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&family=Work+Sans:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -21,8 +20,8 @@
   --text-7: #A2BBB8; /* Light Blue */
 
   /* Typography */
-  --font-display: 'Unbounded', sans-serif;
-  --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  /* Font variables are set by Next.js font loader in layout.tsx */
+  /* --font-display and --font-body are CSS variables from Next.js fonts */
 
   /* Z-index layers */
   --z-decor: 1;
