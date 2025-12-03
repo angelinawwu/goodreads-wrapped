@@ -13,11 +13,14 @@ import { getTextColor } from '@/lib/utils';
 import type { SlideProps } from '@/lib/types';
 
 // Chart colors from the palette
-const CHART_COLORS = ['#437427', '#3A1010', '#357160', '#190606', '#6B4426'];
+const CHART_COLORS = ['#436407', '#3A1010', '#357160', '#190606', '#6B4426']
 
 export default function Slide09_GenresChart({ stats, onAnimationComplete }: SlideProps) {
   // Slide 9 is at index 8
   const textColor = getTextColor(8);
+  
+  // Get top 5 genres in consistent order
+  const topFiveGenres = stats.topGenres.slice(0, 5);
 
   useEffect(() => {
     const duration = calculateAnimationDuration({
@@ -64,7 +67,7 @@ export default function Slide09_GenresChart({ stats, onAnimationComplete }: Slid
             const dataPoint: any = { month: monthName };
             
             // Calculate percentages for top 5 genres
-            stats.topGenres.slice(0, 5).forEach((genre) => {
+            topFiveGenres.forEach((genre) => {
               const count = data.genres[genre.name] || 0;
               dataPoint[genre.name] = ((count / data.total) * 100).toFixed(1);
             });
@@ -117,7 +120,7 @@ export default function Slide09_GenresChart({ stats, onAnimationComplete }: Slid
               labelStyle={{ color: textColor }}
               itemStyle={{ color: textColor }}
             />
-            {stats.topGenres.slice(0, 5).map((genre, i) => (
+            {topFiveGenres.map((genre, i) => (
               <Area
                 key={genre.name}
                 type="monotone"
