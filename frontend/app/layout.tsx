@@ -18,6 +18,25 @@ const work_sans = Work_Sans({
 export const metadata: Metadata = {
   title: "Goodreads Wrapped 2025",
   description: "Your reading year, wrapped.",
+  openGraph: {
+    title: "Goodreads Wrapped 2025",
+    description: "Your reading year, wrapped.",
+    images: [
+      {
+        url: "/Goodreads-Image.png",
+        width: 1200,
+        height: 630,
+        alt: "Goodreads Wrapped 2025",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Goodreads Wrapped 2025",
+    description: "Your reading year, wrapped.",
+    images: ["/Goodreads-Image.png"],
+  },
 };
 
 export default function RootLayout({
