@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Unbounded, Work_Sans } from "next/font/google";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next"
 
 const unbounded = Unbounded({
   subsets: ["latin"],
@@ -28,6 +29,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${unbounded.variable} ${work_sans.variable} antialiased`}>
         {children}
+        <Analytics />
       </body>
     </html>
   );
