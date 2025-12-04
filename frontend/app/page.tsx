@@ -60,7 +60,7 @@ export default function Home() {
         </motion.form>
 
         <motion.p variants={itemVariants} className="text-sm opacity-60 mt-4">
-          This may take a few minutes to generate
+          Make sure your Goodreads account is public
         </motion.p>
       </motion.div>
     </div>
