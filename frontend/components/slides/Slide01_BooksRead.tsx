@@ -41,11 +41,11 @@ export default function Slide01_BooksRead({ stats, onAnimationComplete }: SlideP
         You read a lot this year.
       </motion.h2>
 
-      <motion.div variants={stagedMetric} className="text-display text-center my-8">
+      <motion.div variants={stagedMetric} className="text-display text-center mt-8 mb-4">
         <AnimatedCounter value={stats.yearBooks} />
       </motion.div>
 
-      <motion.p variants={stagedSubheadline} className="text-headline text-center mb-2">
+      <motion.p variants={stagedSubheadline} className="text-headline text-center mb-4">
         books
       </motion.p>
 

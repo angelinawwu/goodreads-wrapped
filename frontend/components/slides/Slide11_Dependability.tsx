@@ -42,7 +42,7 @@ export default function Slide11_Dependability({ stats, onAnimationComplete }: Sl
         You read
       </motion.p>
 
-      <motion.div variants={stagedMetric} className="text-display text-center my-8">
+      <motion.div variants={stagedMetric} className="text-display text-center mt-8 mb-4">
         <AnimatedCounter value={percentage} />
         <span>%</span>
       </motion.div>

@@ -42,7 +42,7 @@ export default function Slide04_ReadingSpeed({ stats, onAnimationComplete }: Sli
         You spent an average of
       </motion.p>
 
-      <motion.div variants={stagedMetric} className="text-display text-center my-8">
+      <motion.div variants={stagedMetric} className="text-display text-center mt-8 mb-4">
         <AnimatedCounter value={stats.averageReadingTime || 0} />
       </motion.div>
 

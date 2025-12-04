@@ -38,11 +38,11 @@ export default function Slide02_AverageRating({ stats, onAnimationComplete }: Sl
         On average, you rated these books
       </motion.h2>
 
-      <motion.div variants={stagedMetric} className="text-display text-center my-8">
+      <motion.div variants={stagedMetric} className="text-display text-center mt-8 mb-4">
         <AnimatedCounter value={stats.averageRating} decimals={1} />
       </motion.div>
 
-      <motion.p variants={stagedSubheadline} className="text-headline text-center mb-2">
+      <motion.p variants={stagedSubheadline} className="text-headline text-center mb-4">
         stars.
       </motion.p>
 

@@ -46,7 +46,7 @@ export default function Slide08_TopGenres({ stats, onAnimationComplete }: SlideP
             className="flex items-center justify-between p-3 px-6 bg-white/10 rounded-lg"
           >
             <div className="flex items-center gap-3 md:gap-2">
-              <span className="font-[var(--font-display)] font-bold sm:text-display w-20 md:text-8xl">{i + 1}</span>
+              <span className="font-[var(--font-display)] text-6xl font-bold w-20 md:text-8xl">{i + 1}</span>
               <div>
                 <div className="text-body-lg font-semibold">{genre.name}</div>
                 <div className="text-sm opacity-70">{genre.count} books</div>

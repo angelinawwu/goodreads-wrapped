@@ -37,11 +37,11 @@ export default function Slide07_GenreCount({ stats, onAnimationComplete }: Slide
         From myths to manuscripts...
       </motion.h2>
 
-      <motion.p variants={stagedSubheadline} className="text-body-lg text-center mb-2">
+      <motion.p variants={stagedSubheadline} className="text-body-lg text-center mt-8">
         You read
       </motion.p>
 
-      <motion.div variants={stagedMetric} className="text-display text-center my-8">
+      <motion.div variants={stagedMetric} className="text-display text-center mt-8 mb-4">
         <AnimatedCounter value={stats.uniqueGenres} />
       </motion.div>
 

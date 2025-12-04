@@ -42,11 +42,11 @@ export default function Slide05_AuthorCount({ stats, onAnimationComplete }: Slid
         This year, you read the works of
       </motion.h2>
 
-      <motion.div variants={stagedMetric} className="text-display text-center my-8">
+      <motion.div variants={stagedMetric} className="text-display text-center mt-8 mb-4">
         <AnimatedCounter value={uniqueAuthors} />
       </motion.div>
 
-      <motion.p variants={stagedSubheadline} className="text-headline text-center mb-2">
+      <motion.p variants={stagedSubheadline} className="text-headline text-center mb-4">
         authors.
       </motion.p>
 
