@@ -16,6 +16,7 @@ const work_sans = Work_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   title: "Goodreads Wrapped 2025",
   description: "Your reading year, wrapped.",
   openGraph: {
