@@ -1,3 +1,3 @@
-# goodreads-wrapped
+# try it out now
 
 www.goodreadswrapped.com
