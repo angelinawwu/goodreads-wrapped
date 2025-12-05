@@ -36,7 +36,7 @@ export default function Home() {
         </motion.p>
 
         <motion.p variants={itemVariants} className="text-body mb-4 text-left opacity-80">
-          Enter your Goodreads <span className="font-bold">9-digit ID</span> to begin. 
+          Enter your <span className="font-bold">8- or 9-digit Goodreads ID</span> to begin. 
           You can find your ID in your Goodreads profile URL.
         </motion.p>
 
