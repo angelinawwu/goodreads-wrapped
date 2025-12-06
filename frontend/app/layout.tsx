@@ -21,6 +21,16 @@ export const metadata: Metadata = {
     default: "Goodreads Wrapped 2025 | Your reading year, wrapped.",
     template: "%s | Goodreads Wrapped 2025"
   },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
   description: "Create your personalized Goodreads Wrapped 2025! Discover your reading stats, top books, favorite genres, and more. Share your results with friends.",
   keywords: ["goodreads", "reading stats", "year in review", "book tracker", "reading challenge", "books", "reading wrapped", "goodreads wrapped 2025"],
   authors: [{ name: "Goodreads Wrapped" }],
@@ -38,7 +48,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "Goodreads Wrapped 2025 - Your Reading Year in Review",
+    title: "Goodreads Wrapped 2025 | Your reading year, wrapped.",
     description: "Create your personalized Goodreads Wrapped 2025! Discover your reading stats, top books, favorite genres, and more.",
     url: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
     siteName: "Goodreads Wrapped 2025",
@@ -49,13 +59,13 @@ export const metadata: Metadata = {
         url: "/Goodreads-Image.png",
         width: 1200,
         height: 630,
-        alt: "Goodreads Wrapped 2025 - Your Reading Year in Review",
+        alt: "Goodreads Wrapped 2025 | Your reading year, wrapped.",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Goodreads Wrapped 2025 - Your Reading Year in Review",
+    title: "Goodreads Wrapped 2025 | Your reading year, wrapped.",
     description: "Create your personalized Goodreads Wrapped 2025! Discover your reading stats, top books, and favorite genres.",
     images: ["/Goodreads-Image.png"],
     creator: "@goodreadswrapped", // Add if you have a Twitter handle
