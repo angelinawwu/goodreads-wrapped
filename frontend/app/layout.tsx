@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     ],
   },
   description: "Create your personalized Goodreads Wrapped 2025! Discover your reading stats, top books, favorite genres, and more. Share your results with friends.",
-  keywords: ["goodreads", "reading stats", "year in review", "book tracker", "reading challenge", "books", "reading wrapped", "goodreads wrapped 2025"],
+  keywords: ["goodreads", "spotify wrapped", "reading stats", "year in review", "book tracker", "reading challenge", "books", "reading wrapped", "goodreads wrapped 2025"],
   authors: [{ name: "Goodreads Wrapped" }],
   creator: "Goodreads Wrapped",
   publisher: "Goodreads Wrapped",
