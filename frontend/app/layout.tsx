@@ -17,26 +17,51 @@ const work_sans = Work_Sans({
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
-  title: "Goodreads Wrapped 2025",
-  description: "Your reading year, wrapped.",
+  title: {
+    default: "Goodreads Wrapped 2025 | Your reading year, wrapped.",
+    template: "%s | Goodreads Wrapped 2025"
+  },
+  description: "Create your personalized Goodreads Wrapped 2025! Discover your reading stats, top books, favorite genres, and more. Share your results with friends.",
+  keywords: ["goodreads", "reading stats", "year in review", "book tracker", "reading challenge", "books", "reading wrapped", "goodreads wrapped 2025"],
+  authors: [{ name: "Goodreads Wrapped" }],
+  creator: "Goodreads Wrapped",
+  publisher: "Goodreads Wrapped",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   openGraph: {
-    title: "Goodreads Wrapped 2025",
-    description: "Your reading year, wrapped.",
+    title: "Goodreads Wrapped 2025 - Your Reading Year in Review",
+    description: "Create your personalized Goodreads Wrapped 2025! Discover your reading stats, top books, favorite genres, and more.",
+    url: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+    siteName: "Goodreads Wrapped 2025",
+    locale: "en_US",
+    type: "website",
     images: [
       {
         url: "/Goodreads-Image.png",
         width: 1200,
         height: 630,
-        alt: "Goodreads Wrapped 2025",
+        alt: "Goodreads Wrapped 2025 - Your Reading Year in Review",
       },
     ],
-    type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Goodreads Wrapped 2025",
-    description: "Your reading year, wrapped.",
+    title: "Goodreads Wrapped 2025 - Your Reading Year in Review",
+    description: "Create your personalized Goodreads Wrapped 2025! Discover your reading stats, top books, and favorite genres.",
     images: ["/Goodreads-Image.png"],
+    creator: "@goodreadswrapped", // Add if you have a Twitter handle
+  },
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
   },
 };
 
