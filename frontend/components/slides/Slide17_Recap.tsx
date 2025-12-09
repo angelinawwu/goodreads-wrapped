@@ -2,7 +2,9 @@
 
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Download } from 'lucide-react';
+import { ArrowClockwise } from 'phosphor-react';
 import { containerVariants, itemVariants, calculateAnimationDuration } from '@/lib/motionVariants';
 import { useImageExport } from '@/hooks/useImageExport';
 import { getTopAuthor, formatAuthorName } from '@/lib/utils';
@@ -11,6 +13,7 @@ import type { SlideProps } from '@/lib/types';
 export default function Slide17_Recap({ stats, onAnimationComplete }: SlideProps) {
   const [isExporting, setIsExporting] = useState(false);
   const { exportToImage } = useImageExport();
+  const router = useRouter();
   const topAuthor = getTopAuthor(stats.books);
 
   useEffect(() => {
@@ -38,6 +41,10 @@ export default function Slide17_Recap({ stats, onAnimationComplete }: SlideProps
     }
   };
 
+  const handleStartAgain = () => {
+    router.push('/');
+  };
+
   return (
     <motion.div
       className="min-h-screen flex flex-col items-center justify-center p-8 relative z-[var(--z-content)]"
@@ -45,6 +52,16 @@ export default function Slide17_Recap({ stats, onAnimationComplete }: SlideProps
       initial="hidden"
       animate="visible"
     >
+      {/* Start Again button - upper right corner */}
+      <motion.button
+        variants={itemVariants}
+        onClick={handleStartAgain}
+        className="absolute top-8 right-8 flex items-center gap-2 text-[var(--text-1)] hover:scale-105 transition-transform z-10"
+        aria-label="Start again"
+      >
+        <ArrowClockwise size={20} weight="regular" />
+        <span className="text-sm font-medium">Start again</span>
+      </motion.button>
       {/* Exportable content */}
       <div
         id="recap-content"
