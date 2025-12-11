@@ -9,6 +9,9 @@ import { containerVariants, itemVariants, calculateAnimationDuration } from '@/l
 import { useImageExport } from '@/hooks/useImageExport';
 import { getTopAuthor, formatAuthorName } from '@/lib/utils';
 import type { SlideProps } from '@/lib/types';
+import { track } from '@vercel/analytics';
+
+track('Download Recap');
 
 export default function Slide17_Recap({ stats, onAnimationComplete }: SlideProps) {
   const [isExporting, setIsExporting] = useState(false);
@@ -55,7 +58,10 @@ export default function Slide17_Recap({ stats, onAnimationComplete }: SlideProps
       {/* Start Again button - upper right corner */}
       <motion.button
         variants={itemVariants}
-        onClick={handleStartAgain}
+        onClick={() => {
+          track('Start again');
+          handleStartAgain();
+        }}
         className="absolute top-8 right-8 flex items-center gap-2 text-[var(--text-1)] hover:scale-105 transition-transform z-10"
         aria-label="Start again"
       >
