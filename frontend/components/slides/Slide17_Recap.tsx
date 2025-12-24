@@ -11,7 +11,7 @@ import { getTopAuthor, formatAuthorName } from '@/lib/utils';
 import type { SlideProps } from '@/lib/types';
 import { track } from '@vercel/analytics';
 
-track('Download Recap');
+track('Finished Wrapped')
 
 export default function Slide17_Recap({ stats, onAnimationComplete }: SlideProps) {
   const [isExporting, setIsExporting] = useState(false);
@@ -35,6 +35,7 @@ export default function Slide17_Recap({ stats, onAnimationComplete }: SlideProps
 
   const handleExport = async () => {
     setIsExporting(true);
+    track('Download Recap');
     try {
       await exportToImage('recap-content');
     } catch (error) {

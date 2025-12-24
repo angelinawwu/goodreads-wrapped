@@ -13,6 +13,9 @@ import {
 } from '@/lib/motionVariants';
 import { calculatePercentageMore } from '@/lib/utils';
 import type { SlideProps } from '@/lib/types';
+import { track } from '@vercel/analytics';
+
+track('Viewed Slide 1');
 
 export default function Slide01_BooksRead({ stats, onAnimationComplete }: SlideProps) {
   const percentMore = calculatePercentageMore(stats.yearBooks);

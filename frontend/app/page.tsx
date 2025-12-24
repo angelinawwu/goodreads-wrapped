@@ -4,6 +4,10 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { containerVariants, itemVariants } from '@/lib/motionVariants';
+import { Heart } from 'phosphor-react';
+
+import { track } from '@vercel/analytics';
+
 
 export default function Home() {
   const [username, setUsername] = useState('');
@@ -26,6 +30,11 @@ export default function Home() {
         initial="hidden"
         animate="visible"
       >
+        <motion.div variants={itemVariants} className="fixed top-0 right-0 w-full h-full z-10">
+          <motion.div variants={itemVariants} className="w-full h-full flex items-end">
+            <Heart size={100} weight="fill" className="text-[var(--bg-4)]" />
+          </motion.div>
+        </motion.div>
 
         <motion.h2 variants={itemVariants} className="text-headline mb-4">
           Goodreads Wrapped 2025
@@ -54,6 +63,7 @@ export default function Home() {
             type="submit"
             disabled={!username.trim() || isLoading}
             className="w-full p-4 px-6 bg-[var(--bg-4)] text-[var(--text-3)] rounded-full font-semibold hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+            onClick={() => track('Created Wrapped')}
           >
             {isLoading ? 'Loading...' : 'Get My Wrapped'}
           </button>
