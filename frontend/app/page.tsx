@@ -71,6 +71,7 @@ export default function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="underline hover:text-[var(--bg-2)] transition-colors"
+                onClick={() => track('Clicked Portfolio Link')}
               >
                 Angelina Wu
               </a>
