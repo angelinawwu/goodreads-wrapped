@@ -15,10 +15,12 @@ import { calculatePercentageMore } from '@/lib/utils';
 import type { SlideProps } from '@/lib/types';
 import { track } from '@vercel/analytics';
 
-track('Viewed Slide 1');
-
 export default function Slide01_BooksRead({ stats, onAnimationComplete }: SlideProps) {
   const percentMore = calculatePercentageMore(stats.yearBooks);
+
+  useEffect(() => {
+    track('Viewed Slide 1');
+  }, []);
 
   useEffect(() => {
     const duration = calculateAnimationDuration({

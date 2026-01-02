@@ -11,13 +11,15 @@ import { getTopAuthor, formatAuthorName } from '@/lib/utils';
 import type { SlideProps } from '@/lib/types';
 import { track } from '@vercel/analytics';
 
-track('Finished Wrapped')
-
 export default function Slide17_Recap({ stats, onAnimationComplete }: SlideProps) {
   const [isExporting, setIsExporting] = useState(false);
   const { exportToImage } = useImageExport();
   const router = useRouter();
   const topAuthor = getTopAuthor(stats.books);
+
+  useEffect(() => {
+    track('Finished Wrapped');
+  }, []);
 
   useEffect(() => {
     const duration = calculateAnimationDuration({
