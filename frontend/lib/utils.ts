@@ -66,24 +66,6 @@ export function getDependabilityMessage(score: number): string {
 }
 
 /**
- * Format author name from "lastname, firstname" to "firstname lastname"
- * If no comma is present, returns the name as-is
- */
-export function formatAuthorName(authorName: string): string {
-  if (!authorName) return authorName;
-  
-  const commaIndex = authorName.indexOf(',');
-  if (commaIndex === -1) {
-    return authorName; // No comma, return as-is
-  }
-  
-  const lastName = authorName.substring(0, commaIndex).trim();
-  const firstName = authorName.substring(commaIndex + 1).trim();
-  
-  return `${firstName} ${lastName}`;
-}
-
-/**
  * Find top author from books list
  */
 export function getTopAuthor(books: any[]): { name: string; count: number } | null {
@@ -100,4 +82,19 @@ export function getTopAuthor(books: any[]): { name: string; count: number } | nu
   const topAuthor = Object.entries(authorCounts).sort((a, b) => b[1] - a[1])[0];
 
   return topAuthor ? { name: topAuthor[0], count: topAuthor[1] } : null;
+}
+
+/**
+ * Format author name (handles "Last, First" format and converts to "First Last")
+ */
+export function formatAuthorName(authorName: string): string {
+  if (!authorName) return '';
+  
+  // Check if name is in "Last, First" format
+  const commaMatch = authorName.match(/^(.+),\s*(.+)$/);
+  if (commaMatch) {
+    return `${commaMatch[2]} ${commaMatch[1]}`;
+  }
+  
+  return authorName;
 }

@@ -1,0 +1,30 @@
+{
+  "name": "goodreads-wrapped",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Goodreads Wrapped - Your annual reading statistics",
+  "scripts": {
+    "dev": "npm run dev --prefix frontend & npm run dev --prefix backend",
+    "build": "npm run build --prefix frontend && npm run build --prefix backend",
+    "build:backend": "npm run build --prefix backend",
+    "build:frontend": "npm run build --prefix frontend",
+    "install:all": "npm install --prefix frontend && npm install --prefix backend"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/goodreads-wrapped.git"
+  },
+  "keywords": [
+    "goodreads",
+    "reading",
+    "statistics",
+    "wrapped"
+  ],
+  "author": "",
+  "license": "ISC"
+}
+

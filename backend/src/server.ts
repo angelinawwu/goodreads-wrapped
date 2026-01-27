@@ -4,90 +4,123 @@ import * as cheerio from 'cheerio';
 import cors from 'cors';
 import Sentiment from 'sentiment';
 
-
-interface Book {
-    title: string;
-    author: string;
-    authorImage?: string;       // NEW: Author profile image URL
-    rating: string;
-    dateRead: string;
-    dateAdded?: string;         // NEW: Date when book was added to shelves
-    dateStarted?: string;       // NEW: Date when book was started
-    readingDays?: number;       // NEW: Days between start and finish
-    userRating?: number;        // 1-5 stars
-    avgRating?: number;         // Goodreads average
-    numRatings?: number;        // Total ratings count
-    numPages?: number;          // Total pages read
-    coverImage?: string;         // Cover image URL
-    genres?: string[];             // Genres
-    review?: string;
-    sentiment?: {
-      score: number;
-      comparative: number;
-      positive: string[];
-      negative: string[];
-      fullReview: string;
-    };
-  }
-
-const scrapeAuthorImage = async (authorUrl: string): Promise<string | undefined> => {
-  try {
-    const fullAuthorUrl = authorUrl.startsWith('http') 
-      ? authorUrl 
-      : `https://www.goodreads.com${authorUrl}`;
+// Helper function to parse RSS feed for books
+const scrapeBookListFromRSS = async (username: string, shelf: string = 'read'): Promise<any[]> => {
+  const books: any[] = [];
+  let page = 1;
+  let hasMoreItems = true;
+  
+  while (hasMoreItems) {
+    const rssUrl = `https://www.goodreads.com/review/list_rss/${username}?shelf=${shelf}&page=${page}`;
+    console.log(`Fetching RSS page ${page}: ${rssUrl}`);
     
-    console.log(`Scraping author image from: ${fullAuthorUrl}`);
-    
-    const response = await axios.get(fullAuthorUrl, {
-      timeout: 10000,
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+    try {
+      const response = await axios.get(rssUrl, {
+        timeout: 30000,
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        }
+      });
+      
+      const $ = cheerio.load(response.data, { xmlMode: true });
+      const items = $('item');
+      
+      if (items.length === 0) {
+        hasMoreItems = false;
+        console.log(`No items found on page ${page}, stopping.`);
+        break;
       }
-    });
-    
-    const $ = cheerio.load(response.data);
-    
-    // Find the image in the leftContainer authorLeftContainer div
-    // Try multiple selector combinations
-    let authorImage = $('.leftContainer.authorLeftContainer img').attr('src') || 
-                      $('.leftContainer.authorLeftContainer img').attr('data-src');
-    
-    if (!authorImage) {
-      // Try with space-separated classes
-      authorImage = $('.leftContainer .authorLeftContainer img').attr('src') || 
-                    $('.leftContainer .authorLeftContainer img').attr('data-src');
+      
+      items.each((index, element) => {
+        const $item = $(element);
+        
+        const title = $item.find('title').text().trim();
+        const authorName = $item.find('author_name').text().trim();
+        const userRating = parseInt($item.find('user_rating').text().trim()) || undefined;
+        const avgRating = parseFloat($item.find('average_rating').text().trim()) || undefined;
+        const userReadAt = $item.find('user_read_at').text().trim();
+        const userDateAdded = $item.find('user_date_added').text().trim();
+        const userDateCreated = $item.find('user_date_created').text().trim();
+        const numPages = parseInt($item.find('book num_pages').text().trim()) || undefined;
+        const bookLargeImageUrl = $item.find('book_large_image_url').text().trim();
+        const userReview = $item.find('user_review').text().trim();
+        // Some RSS feeds may expose an author image URL; if not present this will be empty
+        const authorImage = $item.find('author_image_url').text().trim();
+        const bookId = $item.find('book_id').text().trim();
+        const guid = $item.find('guid').text().trim();
+        
+        // Extract book URL from guid
+        const bookUrlMatch = guid.match(/review\/show\/(\d+)/);
+        const reviewId = bookUrlMatch ? bookUrlMatch[1] : null;
+        
+        books.push({
+          title,
+          author: authorName,
+          userRating,
+          avgRating,
+          userReadAt,
+          userDateAdded,
+          userDateCreated,
+          numPages,
+          coverImage: bookLargeImageUrl,
+          authorImage: authorImage || undefined,
+          review: userReview && userReview !== '' ? userReview : undefined,
+          bookId,
+          reviewId,
+        });
+      });
+      
+      console.log(`Page ${page}: Found ${items.length} items, total so far: ${books.length}`);
+      
+      // RSS typically has 30 items per page
+      if (items.length < 30) {
+        hasMoreItems = false;
+      } else {
+        page++;
+        await new Promise(resolve => setTimeout(resolve, 500)); // Small delay between pages
+      }
+    } catch (error) {
+      console.error(`Error fetching RSS page ${page}:`, error);
+      hasMoreItems = false;
     }
-    
-    if (!authorImage) {
-      // Try just authorLeftContainer
-      authorImage = $('.authorLeftContainer img').first().attr('src') || 
-                    $('.authorLeftContainer img').first().attr('data-src');
-    }
-    
-    if (authorImage) {
-      console.log(`Found author image: ${authorImage}`);
-      return authorImage;
-    }
-    
-    // Fallback: try to find any image in the author container
-    const fallbackImage = $('.authorPhoto img, [class*="author"] img').first().attr('src') || 
-                         $('.authorPhoto img, [class*="author"] img').first().attr('data-src');
-    
-    if (fallbackImage) {
-      console.log(`Found author image (fallback): ${fallbackImage}`);
-      return fallbackImage;
-    }
-    
-    console.log(`No author image found for ${fullAuthorUrl}`);
-    return undefined;
-    
-  } catch (error) {
-    console.error(`Error scraping author image from ${authorUrl}:`, error);
-    return undefined;
   }
+  
+  return books;
 };
 
-const scrapeBookGenres = async (bookUrl: string): Promise<{ genres: string[]; coverImage?: string }> => {
+// Helper to extract year from RSS date format (e.g., "Wed, 31 Dec 2025 00:00:00 +0000")
+const extractYearFromRSSDate = (dateStr: string): number | null => {
+  if (!dateStr) return null;
+  const match = dateStr.match(/\b(20\d{2})\b/);
+  return match ? parseInt(match[1]) : null;
+};
+
+interface Book {
+  title: string;
+  author: string;
+  rating: string;
+  dateRead: string;
+  dateAdded?: string; // Date when book was added to shelves
+  dateStarted?: string; // Date when book was started
+  readingDays?: number; // Days between start and finish
+  userRating?: number; // 1-5 stars
+  avgRating?: number; // Goodreads average
+  numRatings?: number; // Total ratings count
+  numPages?: number; // Total pages read
+  coverImage?: string; // Cover image URL
+  authorImage?: string; // Author image URL (if we can find it via RSS, may be undefined)
+  genres?: string[]; // Genres
+  review?: string;
+  sentiment?: {
+    score: number;
+    comparative: number;
+    positive: string[];
+    negative: string[];
+    fullReview: string;
+  };
+}
+
+const scrapeBookGenres = async (bookUrl: string): Promise<string[]> => {
   try {
     const fullBookUrl = bookUrl.startsWith('http') 
       ? bookUrl 
@@ -102,30 +135,25 @@ const scrapeBookGenres = async (bookUrl: string): Promise<{ genres: string[]; co
     
     const $ = cheerio.load(response.data);
     
-    // Extract book cover image from BookCover__image div
-    const coverImage = $('.BookCover__image img').attr('src') || 
-                      $('.BookCover__image img').attr('data-src') ||
-                      $('.BookCover__image').attr('style')?.match(/url\(['"]?([^'"]+)['"]?\)/)?.[1];
-    
     // Extract the Next.js data
     const nextDataScript = $('#__NEXT_DATA__').html();
     if (!nextDataScript) {
       console.log('No __NEXT_DATA__ found');
-      return { genres: [], coverImage };
+      return [];
     }
     
     const nextData = JSON.parse(nextDataScript);
     
     // Navigate to the book data
     const apolloState = nextData.props?.pageProps?.apolloState;
-    if (!apolloState) return { genres: [], coverImage };
+    if (!apolloState) return [];
     
     // Find the book object (it has bookGenres)
     const bookKey = Object.keys(apolloState).find(key => 
       key.startsWith('Book:') && apolloState[key].bookGenres
     );
     
-    if (!bookKey) return { genres: [], coverImage };
+    if (!bookKey) return [];
 
     const nonGenres = [
       'fiction', 'non-fiction', 'nonfiction', 'adult', 'young-adult', 'ya', 'children', 'kids',
@@ -147,14 +175,11 @@ const scrapeBookGenres = async (bookUrl: string): Promise<{ genres: string[]; co
       .filter((name: string) => !nonGenres.includes(name));
     
     console.log(`Found genres: ${genres.join(', ')}`);
-    if (coverImage) {
-      console.log(`Found cover image: ${coverImage}`);
-    }
-    return { genres, coverImage };
+    return genres;
     
   } catch (error) {
     console.error(`Error:`, error);
-    return { genres: [], coverImage: undefined };
+    return [];
   }
 };
 
@@ -221,61 +246,26 @@ const analyzeReviewsWithSentiment = async (books: Book[]): Promise<Book[]> => {
 
 const scrapeToReadList = async (username: string, year: string): Promise<Set<string>> => {
   const toReadIds = new Set<string>();
-  let page = 1;
-  let hasMorePages = true;
-  let foundOlderBook = false;
-
-  while (hasMorePages && !foundOlderBook) {
-    const toReadUrl = `https://www.goodreads.com/review/list/${username}?page=${page}&shelf=to-read&sort=date_added`;
-    console.log(`Scraping to-read page ${page}: ${toReadUrl}`);
+  const targetYearNum = parseInt(year);
+  
+  console.log(`Scraping to-read list via RSS for ${username}, year ${year}`);
+  
+  try {
+    // Use RSS feed for to-read shelf
+    const allToReadBooks = await scrapeBookListFromRSS(username, 'to-read');
+    console.log(`Total to-read books from RSS: ${allToReadBooks.length}`);
     
-    try {
-      const response = await axios.get(toReadUrl);
-      const $ = cheerio.load(response.data);
-      const bookElements = $('tr[itemtype="http://schema.org/Book"], tr:has(a[href*="/book/show/"])');
+    for (const book of allToReadBooks) {
+      // Use userDateAdded (when book was added to shelf) for to-read list
+      const bookYear = extractYearFromRSSDate(book.userDateAdded);
       
-      let booksOnThisPage = 0;
-      
-      bookElements.each((index, element) => {
-        const $book = $(element);
-        
-        const titleElement = $book.find('td.field.title a[href*="/book/show/"]');
-        const bookUrl = titleElement.attr('href');
-        const dateAdded = $book.find('.field.date_added').text().trim();
-        
-        if (bookUrl && dateAdded) {
-          booksOnThisPage++;
-          
-          // Check if this book was added in the target year
-          if (dateAdded.includes(year)) {
-            // Extract book ID from URL (e.g., "/book/show/12345-title" -> "12345")
-            const bookIdMatch = bookUrl.match(/\/book\/show\/(\d+)/);
-            if (bookIdMatch) {
-              toReadIds.add(bookIdMatch[1]);
-              console.log(`✅ To-read book added in ${year}: ${titleElement.text().trim()}`);
-            }
-          } else if (dateAdded && dateAdded !== 'Date not specified') {
-            // Since books are sorted by date_added, we can stop when we hit a different year
-            console.log(`🛑 Found book from different year: ${titleElement.text().trim()} (${dateAdded}) - stopping pagination`);
-            foundOlderBook = true;
-            return false; // Break out of the .each() loop
-          }
-        }
-      });
-      
-      console.log(`To-read page ${page}: Found ${booksOnThisPage} books, ${toReadIds.size} added in ${year} so far`);
-      
-      if (booksOnThisPage < 20) {
-        hasMorePages = false;
-        console.log(`Reached last to-read page (found ${booksOnThisPage} books)`);
-      } else if (!foundOlderBook) {
-        page++;
-        await new Promise(resolve => setTimeout(resolve, 1000)); // 1 second delay between pages
+      if (bookYear === targetYearNum && book.bookId) {
+        toReadIds.add(book.bookId);
+        console.log(`✅ To-read book added in ${year}: ${book.title}`);
       }
-    } catch (error) {
-      console.error(`Error scraping to-read page ${page}:`, error);
-      hasMorePages = false;
     }
+  } catch (error) {
+    console.error(`Error scraping to-read RSS:`, error);
   }
   
   console.log(`To-read scraping complete! Found ${toReadIds.size} books added in ${year}`);
@@ -360,209 +350,62 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
     try {
       const username = req.params.username;
       const year = req.params.year;
-      console.log(`Attempting to scrape ${year} books for: ${username}`);
+      const targetYearNum = parseInt(year);
+      console.log(`Attempting to scrape ${year} books for: ${username} using RSS feed`);
       
-      const allBooks: Book[] = [];
+      // Use RSS feed to get all books from 'read' shelf
+      const allRSSBooks = await scrapeBookListFromRSS(username, 'read');
+      console.log(`Total books from RSS: ${allRSSBooks.length}`);
+      
+      // Filter for target year books
       const yearBooks: Book[] = [];
-      let page = 1;
-      let hasMorePages = true;
-      let foundOlderBook = false;
+      const allBooks: Book[] = [];
       
-      while (hasMorePages && !foundOlderBook) {
-        // Use Goodreads' built-in date sorting
-        const goodreadsUrl = `https://www.goodreads.com/review/list/${username}?page=${page}&shelf=read&sort=date_read`;
-        console.log(`Scraping page ${page}: ${goodreadsUrl}`);
+      for (const rssBook of allRSSBooks) {
+        const bookYear = extractYearFromRSSDate(rssBook.userReadAt);
         
-        const response = await axios.get(goodreadsUrl);
-        console.log(`Page ${page} response status: ${response.status}`);
+        const book: Book = {
+          title: rssBook.title,
+          author: rssBook.author || 'Unknown Author',
+          rating: rssBook.userRating ? `${rssBook.userRating} stars` : 'No rating',
+          dateRead: rssBook.userReadAt || 'Date not specified',
+          dateAdded: rssBook.userDateAdded || undefined,
+          userRating: rssBook.userRating,
+          avgRating: rssBook.avgRating,
+          numPages: rssBook.numPages,
+          coverImage: rssBook.coverImage,
+          authorImage: rssBook.authorImage,
+          genres: [],
+          review: rssBook.review,
+        };
         
-        const $ = cheerio.load(response.data);
-        const bookElements = $('tr[itemtype="http://schema.org/Book"], tr:has(a[href*="/book/show/"])');
-        console.log(`Page ${page}: Found ${bookElements.length} book elements`);
+        // Store book ID for genre scraping
+        (book as any).bookId = rssBook.bookId;
         
-        let booksOnThisPage = 0;
+        allBooks.push(book);
         
-        bookElements.each((index, element) => {
-          const $book = $(element);
-          
-          
-          const titleElement = $book.find('td.field.title a[href*="/book/show/"]');
-          const title = titleElement.text().trim();
-          const bookUrl = titleElement.attr('href'); // NEW: Extract the book URL
-
-          
-          if (title) {
-            booksOnThisPage++;
-            
-            const authorElement = $book.find('td.field.author a[href*="/author/show/"], a[href*="/author/show/"]');
-            const author = authorElement.text().trim();
-            const authorUrl = authorElement.attr('href');
-            
-            
-            const ratingText = $book.find('.rating, .stars, [class*="rating"]').text().trim();
-
-            // Parse the rating data
-            let userRating: number | undefined;
-            let avgRating: number | undefined;
-            let numRatings: number | undefined;
-            
-            if (ratingText) {
-              // Extract user's rating (look for "liked it", "really liked it", etc.)
-              if (ratingText.includes('it was amazing')) userRating = 5;
-              else if (ratingText.includes('really liked it')) userRating = 4;
-              else if (ratingText.includes('liked it')) userRating = 3;
-              else if (ratingText.includes('it was ok')) userRating = 2;
-              else if (ratingText.includes('did not like it')) userRating = 1;
-              
-              // Extract average rating (look for "avg rating X.XX")
-              const avgMatch = ratingText.match(/avg rating\s+(\d+\.\d+)/);
-              if (avgMatch) {
-                avgRating = parseFloat(avgMatch[1]);
-              }
-
-              
-              
-              // Extract number of ratings (look for "num ratings X,XXX")
-              const numMatch = ratingText.match(/num ratings\s+([\d,]+)/);
-              if (numMatch) {
-                numRatings = parseInt(numMatch[1].replace(/,/g, ''));
-              }
-            }            
-            
-            // NEW: Extract number of pages
-            const numPagesText = $book.find('.field.num_pages').text().trim();
-            let numPages: number | undefined;
-            if (numPagesText) {
-              const pagesMatch = numPagesText.match(/(\d+)/);
-              if (pagesMatch) {
-                numPages = parseInt(pagesMatch[1]);
-              }
-            }
-            
-            // NEW: Extract book cover image
-            const coverElement = $book.find('.field.cover img');
-            const coverImage = coverElement.attr('src') || coverElement.attr('data-src');
-            const reviewText = $book.find('.field.review').text().trim();
-            // Filter out placeholder text
-            const actualReview = reviewText && reviewText !== 'Write a review' ? reviewText : undefined;
-
-            const dateRead = $book.find('.date, .date_pub, [class*="date"]').text().trim();
-            
-            // NEW: Extract date added to shelves
-            const dateAdded = $book.find('.field.date_added').text().trim();
-            
-            // NEW: Extract start and finish dates
-            const dateStarted = $book.find('.field.date_started').text().trim();
-            const dateFinished = $book.find('.field.date_read').text().trim();
-            
-            // Calculate reading days if both dates are available
-            let readingDays: number | undefined;
-            if (dateStarted && dateFinished) {
-              try {
-                const startDate = new Date(dateStarted);
-                const finishDate = new Date(dateFinished);
-                if (!isNaN(startDate.getTime()) && !isNaN(finishDate.getTime())) {
-                  const timeDiff = finishDate.getTime() - startDate.getTime();
-                  readingDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-                }
-              } catch (error) {
-                console.log(`Could not parse dates for ${title}: ${dateStarted} - ${dateFinished}`);
-              }
-            }
-
-            
-            const book: Book = {
-              title: title,
-              author: author || 'Unknown Author',
-              rating: ratingText || 'No rating',
-              dateRead: dateRead || 'Date not specified',
-              dateAdded: dateAdded || undefined,
-              dateStarted: dateStarted || undefined,
-              readingDays: readingDays,
-              userRating: userRating,
-              avgRating: avgRating,
-              numRatings: numRatings,
-              numPages: numPages,        // NEW
-              coverImage: coverImage,     // NEW
-              genres: [],
-              review: actualReview,
-            };
-
-            (book as any).bookUrl = bookUrl;
-            (book as any).authorUrl = authorUrl; // Store author URL for later scraping
-
-            // Extract book ID for dependability calculation
-            if (bookUrl) {
-              const bookIdMatch = bookUrl.match(/\/book\/show\/(\d+)/);
-              if (bookIdMatch) {
-                (book as any).bookId = bookIdMatch[1];
-              }
-            }
-
-            allBooks.push(book);
-            
-            // Check if this book was read in the target year
-            if (dateRead && dateRead.includes(year)) {
-              yearBooks.push(book);
-              console.log(`✅ ${year} book: ${title}`);
-            } else if (dateRead && dateRead !== 'Date not specified') {
-              // Since books are now sorted by date_read, we can stop when we hit a different year
-              console.log(`🛑 Found book from different year: ${title} (${dateRead}) - stopping pagination`);
-              foundOlderBook = true;
-              return false; // Break out of the .each() loop
-            }
-          }
-        });
-
-        
-        console.log(`Page ${page}: Found ${booksOnThisPage} books, ${yearBooks.length} from ${year} so far`);
-        
-        if (booksOnThisPage < 20) {
-          hasMorePages = false;
-          console.log(`Reached last page (found ${booksOnThisPage} books)`);
-        } else if (!foundOlderBook) {
-          page++;
-          await new Promise(resolve => setTimeout(resolve, 1000));
+        if (bookYear === targetYearNum) {
+          yearBooks.push(book);
+          console.log(`✅ ${year} book: ${rssBook.title}`);
+        } else if (bookYear !== null) {
+          console.log(`📅 Found book from ${bookYear}: ${rssBook.title}`);
         }
       }
       
       console.log(`Scraping complete! Total books found: ${allBooks.length}, Books in ${year}: ${yearBooks.length}`);
 
-      // Scrape author images for books in the target year
-      console.log(`Scraping author images for ${yearBooks.length} books from ${year}...`);
-      const authorImagePromises = yearBooks.map(async (book, index) => {
-        const authorUrl = (book as any).authorUrl;
-        if (authorUrl) {
-          const authorImage = await scrapeAuthorImage(authorUrl);
-          if (authorImage) {
-            book.authorImage = authorImage;
-          }
-          // Add delay to avoid rate limiting
-          if (index < yearBooks.length - 1) {
-            await new Promise(resolve => setTimeout(resolve, 500));
-          }
-        }
-        return book;
-      });
-      await Promise.all(authorImagePromises);
-      console.log(`Finished scraping author images`);
-
-      // ADD THIS CODE RIGHT HERE:
+      // Scrape genres for each book read in the target year
       console.log(`Scraping genres for ${yearBooks.length} books from ${year}...`);
 
-      // Scrape genres and cover images for each book read in the target year (parallel processing)
       const genrePromises = yearBooks.map(async (book, index) => {
-        const bookUrl = (book as any).bookUrl;
+        const bookId = (book as any).bookId;
         
-        if (bookUrl) {
+        if (bookId) {
           // Add staggered delay to avoid overwhelming the server
           await new Promise(resolve => setTimeout(resolve, index * 100));
-          const { genres, coverImage } = await scrapeBookGenres(bookUrl);
+          const bookUrl = `https://www.goodreads.com/book/show/${bookId}`;
+          const genres = await scrapeBookGenres(bookUrl);
           book.genres = genres;
-          // Update cover image if found (book page image is usually higher quality)
-          if (coverImage) {
-            book.coverImage = coverImage;
-          }
           console.log(`Progress: ${index + 1}/${yearBooks.length} books processed`);
         }
         
@@ -572,9 +415,9 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
       // Wait for all genre scraping to complete
       await Promise.all(genrePromises);
 
-      // Clean up the bookUrl property we added temporarily
+      // Clean up the bookId property we added temporarily
       yearBooks.forEach(book => {
-        delete (book as any).bookUrl;
+        delete (book as any).bookId;
       });
 
       // Calculate genre statistics
@@ -594,22 +437,18 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
       // Get unique genres count
       const uniqueGenres = Object.keys(genreCounts).length;
 
-      // Compute top 3 genres with percentages of books read this year
-      const totalYearBooks = yearBooks.length || 1;
+      // Calculate top genres with percentages
+      const totalGenreBooks = Object.values(genreCounts).reduce((sum, count) => sum + count, 0);
       const topGenres = Object.entries(genreCounts)
-        .sort(([, a], [, b]) => (b as number) - (a as number))
-        .slice(0, 5)
         .map(([name, count]) => ({
-          name,
-          count,
-          percentage: Math.round(((count as number) / totalYearBooks) * 1000) / 10, // 1 decimal place
-        }));
+          name: name.charAt(0).toUpperCase() + name.slice(1), // Capitalize first letter
+          count: count,
+          percentage: totalGenreBooks > 0 ? (count / totalGenreBooks) * 100 : 0,
+        }))
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 10); // Get top 10 genres
 
-      console.log(
-        `Genre stats: ${uniqueGenres} unique genres, most popular: ${mostPopularGenre}, top genres: ${topGenres
-          .map(g => `${g.name} (${g.percentage}%)`)
-          .join(', ')}`
-      );
+      console.log(`Genre stats: ${uniqueGenres} unique genres, most popular: ${mostPopularGenre}`);
 
       // Calculate monthly genre data for chart
       console.log(`Calculating monthly genre distribution...`);
@@ -723,6 +562,11 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
         ? booksWithRatings.reduce((sum, book) => sum + (book.userRating || 0), 0) / booksWithRatings.length
         : 0;
 
+      // Calculate top rated books (sorted by user rating, highest first)
+      const topRatedBooks = [...booksWithRatings]
+        .sort((a, b) => (b.userRating || 0) - (a.userRating || 0))
+        .slice(0, 5);
+
       const booksWithPages = yearBooks.filter(book => book.numPages !== undefined);
       const averagePages = booksWithPages.length > 0 
         ? booksWithPages.reduce((sum, book) => sum + (book.numPages || 0), 0) / booksWithPages.length
@@ -738,23 +582,6 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
         : null;
 
       console.log(`Page stats: Average ${averagePages.toFixed(0)} pages, Longest: ${longestBook?.title} (${longestBook?.numPages} pages), Shortest: ${shortestBook?.title} (${shortestBook?.numPages} pages)`);
-
-      // Top 3 highest-rated books (by user rating, then avg rating, then rating count)
-      const sortedByRating = [...booksWithRatings].sort((a, b) => {
-        const userDiff = (b.userRating || 0) - (a.userRating || 0);
-        if (userDiff !== 0) return userDiff;
-        const avgDiff = (b.avgRating || 0) - (a.avgRating || 0);
-        if (avgDiff !== 0) return avgDiff;
-        return (b.numRatings || 0) - (a.numRatings || 0);
-      });
-
-      const topRatedBooks = sortedByRating.slice(0, 5).map(book => ({
-        title: book.title,
-        author: book.author,
-        userRating: book.userRating,
-        avgRating: book.avgRating,
-        coverImage: book.coverImage,
-      }));
       
       // Analyze sentiment for existing reviews
       console.log(`Analyzing sentiment for ${yearBooks.length} books...`);
@@ -788,10 +615,9 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
         totalBooks: allBooks.length,
         yearBooks: yearBooks.length,
         books: yearBooks,
-        pagesScraped: page,
-        stoppedEarly: foundOlderBook,
         averageRating: Math.round(averageRating * 100) / 100,
         booksWithRatings: booksWithRatings.length,
+        topRatedBooks: topRatedBooks,
         averagePages: Math.round(averagePages),
         longestBook: longestBook,
         shortestBook: shortestBook,
@@ -824,8 +650,6 @@ app.get('/scrape/:username/books/:year', async (req, res) => {
         // NEW: Monthly genre data
         monthlyGenreData: monthlyGenreData,
         monthlyBookTotals: monthlyBookTotals,
-        // NEW: Top rated books
-        topRatedBooks: topRatedBooks,
       });
       
     } catch (error) {
@@ -847,27 +671,16 @@ app.post('/store-data', (req, res) => {
 
 // ------------------------------------------------------------------------------------------------
 
-// COMMENTED OUT FOR DEPLOYMENT
+// Local development server (uncomment for local dev, comment for Vercel deployment)
+console.log('About to start listening...');
 
-// Backend: Retrieve user data
-// app.get('/get-data/:userId', (req, res) => {
-//   const data = userDataStore[req.params.userId];
-//   res.json(data || { error: 'Data not found' });
-// });
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+}).on('error', (error) => {
+  console.error('Server error:', error);
+});
 
-// // Keep your existing app.listen() code below this
-// console.log('About to start listening...');
-
-// Only start the server if not in a serverless environment (like Vercel)
-if (process.env.VERCEL !== '1') {
-  app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-  }).on('error', (error) => {
-    console.error('Server error:', error);
-  });
-  
-  console.log('Server setup complete');
-}
+console.log('Server setup complete');
 
 // ------------------------------------------------------------------------------------------------
 

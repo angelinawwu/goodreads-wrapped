@@ -15,17 +15,14 @@ import type { ReadingStats } from '@/lib/types';
 import Slide01_BooksRead from './slides/Slide01_BooksRead';
 import Slide02_AverageRating from './slides/Slide02_AverageRating';
 import Slide03_TopFiveBooks from './slides/Slide03_TopFiveBooks';
-import Slide04_ReadingSpeed from './slides/Slide04_ReadingSpeed';
+// import Slide04_ReadingSpeed from './slides/Slide04_ReadingSpeed'; // Temporarily hidden - RSS feed doesn't provide readingDays
 import Slide05_AuthorCount from './slides/Slide05_AuthorCount';
 import Slide06_TopAuthor from './slides/Slide06_TopAuthor';
 import Slide07_GenreCount from './slides/Slide07_GenreCount';
 import Slide08_TopGenres from './slides/Slide08_TopGenres';
-import Slide09_GenresChart from './slides/Slide09_GenresChart';
-import Slide10_TBRIntro from './slides/Slide10_TBRIntro';
+// import Slide09_GenresChart from './slides/Slide09_GenresChart'; // Temporarily hidden - RSS feed doesn't provide monthlyGenreData
 import Slide11_Dependability from './slides/Slide11_Dependability';
-import Slide12_HaterIntro from './slides/Slide12_HaterIntro';
 import Slide13_BiggestHater from './slides/Slide13_BiggestHater';
-import Slide14_FanIntro from './slides/Slide14_FanIntro';
 import Slide15_BiggestFan from './slides/Slide15_BiggestFan';
 import Slide16_Thanks from './slides/Slide16_Thanks';
 import Slide17_Recap from './slides/Slide17_Recap';
@@ -34,7 +31,7 @@ interface StoryViewerProps {
   stats: ReadingStats;
 }
 
-const TOTAL_SLIDES = 17;
+const TOTAL_SLIDES = 12; // Reduced from 14 (removed ReadingSpeed and GenresChart)
 
 export default function StoryViewer({ stats }: StoryViewerProps) {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
@@ -87,33 +84,25 @@ export default function StoryViewer({ stats }: StoryViewerProps) {
         return <Slide02_AverageRating {...commonProps} />;
       case 2:
         return <Slide03_TopFiveBooks {...commonProps} />;
+      // case 3: Slide04_ReadingSpeed - Temporarily hidden
       case 3:
-        return <Slide04_ReadingSpeed {...commonProps} />;
-      case 4:
         return <Slide05_AuthorCount {...commonProps} />;
-      case 5:
+      case 4:
         return <Slide06_TopAuthor {...commonProps} />;
-      case 6:
+      case 5:
         return <Slide07_GenreCount {...commonProps} />;
-      case 7:
+      case 6:
         return <Slide08_TopGenres {...commonProps} />;
-      case 8:
-        return <Slide09_GenresChart {...commonProps} />;
-      case 9:
-        return <Slide10_TBRIntro {...commonProps} />;
-      case 10:
+      // case 8: Slide09_GenresChart - Temporarily hidden
+      case 7:
         return <Slide11_Dependability {...commonProps} />;
-      case 11:
-        return <Slide12_HaterIntro {...commonProps} />;
-      case 12:
+      case 8:
         return <Slide13_BiggestHater {...commonProps} />;
-      case 13:
-        return <Slide14_FanIntro {...commonProps} />;
-      case 14:
+      case 9:
         return <Slide15_BiggestFan {...commonProps} />;
-      case 15:
+      case 10:
         return <Slide16_Thanks {...commonProps} />;
-      case 16:
+      case 11:
         return <Slide17_Recap {...commonProps} />;
       default:
         return null;

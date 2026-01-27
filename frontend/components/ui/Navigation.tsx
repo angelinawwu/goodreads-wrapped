@@ -36,7 +36,7 @@ export default function Navigation({
       {/* Desktop arrow buttons - 25% width zones */}
       {showPrev && (
         <div
-          className="hidden md:flex fixed left-0 top-0 h-full w-1/4 z-[var(--z-nav-desktop)] cursor-pointer items-center justify-start pl-24 text-black/30 hover:text-[var(--bg-4)] transition-colors"
+          className="hidden md:flex fixed left-0 top-0 h-full w-1/4 z-10 cursor-pointer items-center justify-start pl-24 text-black/30 hover:text-[var(--bg-4)] transition-colors"
           onClick={onPrev}
         >
           <CircleChevronLeft size={48} />
@@ -44,7 +44,7 @@ export default function Navigation({
       )}
       {showNext && (
         <div
-          className="hidden md:flex fixed right-0 top-0 h-full w-1/4 z-[var(--z-nav-desktop)] cursor-pointer items-center justify-end pr-24 text-black/30 hover:text-[var(--bg-4)] transition-colors"
+          className="hidden md:flex fixed right-0 top-0 h-full w-1/4 z-10 cursor-pointer items-center justify-end pr-24 text-black/30 hover:text-[var(--bg-4)] transition-colors"
           onClick={onNext}
         >
           <CircleChevronRight size={48} />

@@ -30,9 +30,10 @@ export default function Slide06_TopAuthor({ stats, onAnimationComplete }: SlideP
     return null;
   }
 
-  // Find the top author's book to get the author image
+  // Find the top author's book to get the author image (if available from RSS)
   const topAuthorBook = stats.books.find(book => book.author === topAuthor.name);
-  const authorImage = topAuthorBook?.authorImage;
+  // Fallback: if we don't have an author image from RSS, use a generic replacement image
+  const authorImage = topAuthorBook?.authorImage ?? '/Goodreads-Image.png';
 
   return (
     <motion.div
@@ -46,15 +47,11 @@ export default function Slide06_TopAuthor({ stats, onAnimationComplete }: SlideP
         variants={heroVariants}
         className="w-48 h-48 rounded-lg bg-[var(--bg-5)] flex items-center justify-center mb-8 shadow-xl overflow-hidden"
       >
-        {authorImage ? (
-          <img
-            src={authorImage}
-            alt={topAuthor.name}
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <span className="text-6xl">✍️</span>
-        )}
+        <img
+          src={authorImage}
+          alt={topAuthor.name}
+          className="w-full h-full object-cover"
+        />
       </motion.div>
 
       <motion.h2 variants={itemVariants} className="text-headline text-center mb-4 font-bold">
