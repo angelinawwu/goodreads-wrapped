@@ -40,7 +40,7 @@ export default function Navigation({
       <style jsx>{`
         .nav-arrow {
           opacity: 0.3;
-          transition: opacity 200ms ease, transform 200ms ease;
+          transition: opacity 100ms ease, transform 100ms ease;
         }
         @media (hover: hover) and (pointer: fine) {
           .nav-arrow:hover {

@@ -164,7 +164,7 @@ export default function Slide17_Recap({ stats, onAnimationComplete }: SlideProps
         variants={itemVariants}
         onClick={handleExport}
         disabled={isExporting}
-        className="flex items-center gap-2 px-6 py-3 mt-8 bg-[var(--bg-4)] text-[var(--text-3)] rounded-full hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed"
+        className="flex items-center gap-2 px-6 py-3 mt-8 bg-[var(--bg-4)] text-[var(--text-3)] rounded-full transition-all duration-100 hover:scale-[1.02] hover:shadow-lg active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
       >
         <Download size={20} />
         {isExporting ? 'Exporting...' : 'Download'}

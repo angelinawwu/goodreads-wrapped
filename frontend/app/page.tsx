@@ -50,7 +50,7 @@ export default function Home() {
             e.stopPropagation();
             setShowPopup(!showPopup);
           }}
-          className="text-[var(--text-1)] transition-transform duration-200 ease-out hover:scale-110 active:scale-95"
+          className="text-[var(--text-1)] transition-transform duration-100 hover:scale-110 active:scale-95"
           aria-label="About"
         >
           <Heart size={24}/>
@@ -73,7 +73,7 @@ export default function Home() {
                   href="https://angelinawwu.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline hover:text-[var(--bg-2)] transition-colors duration-200"
+                  className="underline hover:text-[var(--bg-2)] transition-colors duration-100"
                   onClick={() => track('Clicked Portfolio Link')}
                 >
                   Angelina Wu
@@ -112,14 +112,14 @@ export default function Home() {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             placeholder="ex: 165807089"
-            className="w-full p-4 px-6 border-2 border-[var(--text-1)] rounded-full bg-transparent text-[var(--text-1)] placeholder:text-[var(--text-1)]/50 focus:outline-none focus:border-[var(--bg-4)] transition-all duration-200 ease-out focus:shadow-md"
+            className="w-full p-4 px-6 border-2 border-[var(--text-1)] rounded-full bg-transparent text-[var(--text-1)] placeholder:text-[var(--text-1)]/50 focus:outline-none focus:border-[var(--bg-4)] transition-all duration-100 focus:shadow-md"
             disabled={isLoading}
           />
 
           <button
             type="submit"
             disabled={!username.trim() || isLoading}
-            className="w-full p-4 px-6 bg-[var(--bg-4)] text-[var(--text-3)] rounded-full font-semibold transition-all duration-200 ease-out hover:scale-[1.02] hover:shadow-lg active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
+            className="w-full p-4 px-6 bg-[var(--bg-4)] text-[var(--text-3)] rounded-full font-semibold transition-all duration-100 hover:scale-[1.02] hover:shadow-lg active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
             onClick={() => track('Created Wrapped')}
           >
             {isLoading ? 'Loading...' : 'Get My Wrapped'}
