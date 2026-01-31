@@ -27,12 +27,13 @@ interface DecorProps {
 const getPositionClasses = (position: DecorPosition): string => {
   const baseClasses = 'absolute pointer-events-none z-[var(--z-decor)] mix-blend-multiply opacity-80';
 
+  // All decor uses z-[var(--z-decor)] from baseClasses to stay behind content
   const positionMap: Record<DecorPosition, string> = {
     top: 'top-0 left-1/2 -translate-x-1/2 w-full overflow-hidden',
     bottom: 'bottom-0 left-1/2 -translate-x-1/2 w-full max-h-[150px] overflow-hidden',
-    center: 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[80%] z-0 opacity-[0.15]',
-    frame: 'top-0 left-0 w-full h-auto z-10',
-    'frame-c': 'top-1/2 left-0 right-0 -translate-y-1/2 z-0 origin-center',
+    center: 'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[80%] opacity-[0.15]',
+    frame: 'top-0 left-0 w-full h-auto',
+    'frame-c': 'top-1/2 left-0 right-0 -translate-y-1/2 origin-center',
     'corner-tl': 'top-0 left-0 w-[150px]',
     'corner-tr': 'top-0 right-0 w-[150px] scale-x-[-1]',
     'corner-bl': 'bottom-0 left-0 w-[150px] scale-y-[-1]',

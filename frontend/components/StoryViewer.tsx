@@ -22,8 +22,11 @@ import Slide06_TopAuthor from './slides/Slide06_TopAuthor';
 import Slide07_GenreCount from './slides/Slide07_GenreCount';
 import Slide08_TopGenres from './slides/Slide08_TopGenres';
 // import Slide09_GenresChart from './slides/Slide09_GenresChart'; // Temporarily hidden - RSS feed doesn't provide monthlyGenreData
+import Slide10_TBRIntro from './slides/Slide10_TBRIntro';
 import Slide11_Dependability from './slides/Slide11_Dependability';
+import Slide12_HaterIntro from './slides/Slide12_HaterIntro';
 import Slide13_BiggestHater from './slides/Slide13_BiggestHater';
+import Slide14_FanIntro from './slides/Slide14_FanIntro';
 import Slide15_BiggestFan from './slides/Slide15_BiggestFan';
 import Slide16_Thanks from './slides/Slide16_Thanks';
 import Slide17_Recap from './slides/Slide17_Recap';
@@ -32,7 +35,7 @@ interface StoryViewerProps {
   stats: ReadingStats;
 }
 
-const TOTAL_SLIDES = 12; // Reduced from 14 (removed ReadingSpeed and GenresChart)
+const TOTAL_SLIDES = 15; // 17 slides minus Slide04 and Slide09 which are hidden
 
 export default function StoryViewer({ stats }: StoryViewerProps) {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
@@ -96,14 +99,20 @@ export default function StoryViewer({ stats }: StoryViewerProps) {
         return <Slide08_TopGenres {...commonProps} />;
       // case 8: Slide09_GenresChart - Temporarily hidden
       case 7:
-        return <Slide11_Dependability {...commonProps} />;
+        return <Slide10_TBRIntro {...commonProps} />;
       case 8:
-        return <Slide13_BiggestHater {...commonProps} />;
+        return <Slide11_Dependability {...commonProps} />;
       case 9:
-        return <Slide15_BiggestFan {...commonProps} />;
+        return <Slide12_HaterIntro {...commonProps} />;
       case 10:
-        return <Slide16_Thanks {...commonProps} />;
+        return <Slide13_BiggestHater {...commonProps} />;
       case 11:
+        return <Slide14_FanIntro {...commonProps} />;
+      case 12:
+        return <Slide15_BiggestFan {...commonProps} />;
+      case 13:
+        return <Slide16_Thanks {...commonProps} />;
+      case 14:
         return <Slide17_Recap {...commonProps} />;
       default:
         return null;
@@ -135,7 +144,7 @@ export default function StoryViewer({ stats }: StoryViewerProps) {
         />
       ))}
 
-      {/* Slide content with blur transition */}
+      {/* Slide content with blur transition - z-index ensures it's above decor */}
       <AnimatePresence mode="wait">
         <motion.div
           key={currentSlideIndex}
@@ -143,6 +152,7 @@ export default function StoryViewer({ stats }: StoryViewerProps) {
           initial="initial"
           animate="animate"
           exit="exit"
+          className="relative z-[var(--z-content)]"
           style={{ willChange: 'transform, opacity, filter' }}
         >
           {renderSlide()}
