@@ -9,6 +9,7 @@ import ProgressBar from './ui/ProgressBar';
 import Decor from './ui/Decor';
 import { DECOR_BY_SLIDE } from '@/lib/decorConfig';
 import { getBackgroundColor, getTextColor } from '@/lib/utils';
+import { slideTransitionVariants, EASING } from '@/lib/motionVariants';
 import type { ReadingStats } from '@/lib/types';
 
 // Import all slide components
@@ -114,10 +115,11 @@ export default function StoryViewer({ stats }: StoryViewerProps) {
 
   return (
     <div
-      className="relative min-h-screen overflow-hidden transition-colors duration-500"
+      className="relative min-h-screen overflow-hidden"
       style={{
         backgroundColor: getBackgroundColor(currentSlideIndex),
         color: getTextColor(currentSlideIndex),
+        transition: `background-color 0.4s cubic-bezier(${EASING.easeOutCubic.join(', ')}), color 0.4s cubic-bezier(${EASING.easeOutCubic.join(', ')})`,
       }}
     >
       {/* Progress bar */}
@@ -133,14 +135,15 @@ export default function StoryViewer({ stats }: StoryViewerProps) {
         />
       ))}
 
-      {/* Slide content */}
+      {/* Slide content with blur transition */}
       <AnimatePresence mode="wait">
         <motion.div
           key={currentSlideIndex}
-          initial={{ opacity: 0, x: 100 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -100 }}
-          transition={{ duration: 0.3 }}
+          variants={slideTransitionVariants}
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          style={{ willChange: 'transform, opacity, filter' }}
         >
           {renderSlide()}
         </motion.div>
@@ -152,6 +155,7 @@ export default function StoryViewer({ stats }: StoryViewerProps) {
         onPrev={handlePrev}
         showPrev={currentSlideIndex > 0}
         showNext={currentSlideIndex < TOTAL_SLIDES - 1}
+        textColor={getTextColor(currentSlideIndex)}
       />
     </div>
   );

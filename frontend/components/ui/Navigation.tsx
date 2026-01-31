@@ -7,6 +7,7 @@ interface NavigationProps {
   onNext: () => void;
   showPrev?: boolean;
   showNext?: boolean;
+  textColor?: string;
 }
 
 export default function Navigation({
@@ -14,6 +15,7 @@ export default function Navigation({
   onNext,
   showPrev = true,
   showNext = true,
+  textColor = 'currentColor',
 }: NavigationProps) {
   return (
     <>
@@ -34,9 +36,26 @@ export default function Navigation({
       )}
 
       {/* Desktop arrow buttons - 25% width zones */}
+      {/* Hover transitions only on devices that support hover (not touch) */}
+      <style jsx>{`
+        .nav-arrow {
+          opacity: 0.3;
+          transition: opacity 200ms ease, transform 200ms ease;
+        }
+        @media (hover: hover) and (pointer: fine) {
+          .nav-arrow:hover {
+            opacity: 0.8;
+            transform: scale(1.05);
+          }
+          .nav-arrow:active {
+            transform: scale(0.95);
+          }
+        }
+      `}</style>
       {showPrev && (
         <div
-          className="hidden md:flex fixed left-0 top-0 h-full w-1/4 z-10 cursor-pointer items-center justify-start pl-24 text-black/30 hover:text-[var(--bg-4)] transition-colors"
+          className="nav-arrow hidden md:flex fixed left-0 top-0 h-full w-1/4 z-[var(--z-nav-desktop)] cursor-pointer items-center justify-start pl-24"
+          style={{ color: textColor }}
           onClick={onPrev}
         >
           <CircleChevronLeft size={48} />
@@ -44,7 +63,8 @@ export default function Navigation({
       )}
       {showNext && (
         <div
-          className="hidden md:flex fixed right-0 top-0 h-full w-1/4 z-10 cursor-pointer items-center justify-end pr-24 text-black/30 hover:text-[var(--bg-4)] transition-colors"
+          className="nav-arrow hidden md:flex fixed right-0 top-0 h-full w-1/4 z-[var(--z-nav-desktop)] cursor-pointer items-center justify-end pr-24"
+          style={{ color: textColor }}
           onClick={onNext}
         >
           <CircleChevronRight size={48} />

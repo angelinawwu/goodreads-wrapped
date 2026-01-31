@@ -81,12 +81,12 @@ export default function Decor({
   return (
     <motion.div
       className={`${getPositionClasses(position)} ${className}`}
-      style={style}
+      style={{ ...style, willChange: 'transform, opacity, filter' }}
       variants={variants}
       initial="hidden"
       animate="visible"
       transition={{
-        delay: 0.5, // Animate in after initial page content
+        delay: 0.3, // Slightly faster - animate in after initial page content
       }}
     >
       <img

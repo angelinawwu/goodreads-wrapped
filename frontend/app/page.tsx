@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
-import { containerVariants, itemVariants } from '@/lib/motionVariants';
+import { AnimatePresence, motion } from 'framer-motion';
+import { containerVariants, itemVariants, popupVariants } from '@/lib/motionVariants';
 import { Heart } from 'phosphor-react';
 
 import { track } from '@vercel/analytics';
@@ -50,36 +50,40 @@ export default function Home() {
             e.stopPropagation();
             setShowPopup(!showPopup);
           }}
-          className="text-[var(--text-1)] hover:scale-110 transition-transform"
+          className="text-[var(--text-1)] transition-transform duration-200 ease-out hover:scale-110 active:scale-95"
           aria-label="About"
         >
           <Heart size={24}/>
         </button>
         
-        {/* Popup */}
-        {showPopup && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="absolute flex flex-col gap-4 top-8 right-2 w-64 p-4 bg-[var(--bg-4)] text-[var(--text-3)] rounded-lg shadow-lg text-sm z-30"
-          >
-            <p>
-              Goodreads Wrapped was made with lots of love by{' '}
-              <a
-                href="https://angelinawwu.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline hover:text-[var(--bg-2)] transition-colors"
-                onClick={() => track('Clicked Portfolio Link')}
-              >
-                Angelina Wu
-              </a>
-              . 
-            </p>
-            <p>Thank you for checking it out! :)</p>
-          </motion.div>
-        )}
+        {/* Popup with blur transition */}
+        <AnimatePresence>
+          {showPopup && (
+            <motion.div
+              variants={popupVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              style={{ willChange: 'transform, opacity, filter' }}
+              className="absolute flex flex-col gap-4 top-8 right-2 w-64 p-4 bg-[var(--bg-4)] text-[var(--text-3)] rounded-lg shadow-lg text-sm z-30 origin-top-right"
+            >
+              <p>
+                Goodreads Wrapped was made with lots of love by{' '}
+                <a
+                  href="https://angelinawwu.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:text-[var(--bg-2)] transition-colors duration-200"
+                  onClick={() => track('Clicked Portfolio Link')}
+                >
+                  Angelina Wu
+                </a>
+                . 
+              </p>
+              <p>Thank you for checking it out! :)</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       <motion.div
@@ -108,14 +112,14 @@ export default function Home() {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             placeholder="ex: 165807089"
-            className="w-full p-4 px-6 border-2 border-[var(--text-1)] rounded-full bg-transparent text-[var(--text-1)] placeholder:text-[var(--text-1)]/50 focus:outline-none focus:border-[var(--bg-4)] transition-colors"
+            className="w-full p-4 px-6 border-2 border-[var(--text-1)] rounded-full bg-transparent text-[var(--text-1)] placeholder:text-[var(--text-1)]/50 focus:outline-none focus:border-[var(--bg-4)] transition-all duration-200 ease-out focus:shadow-md"
             disabled={isLoading}
           />
 
           <button
             type="submit"
             disabled={!username.trim() || isLoading}
-            className="w-full p-4 px-6 bg-[var(--bg-4)] text-[var(--text-3)] rounded-full font-semibold hover:scale-105 transition-transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+            className="w-full p-4 px-6 bg-[var(--bg-4)] text-[var(--text-3)] rounded-full font-semibold transition-all duration-200 ease-out hover:scale-[1.02] hover:shadow-lg active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
             onClick={() => track('Created Wrapped')}
           >
             {isLoading ? 'Loading...' : 'Get My Wrapped'}

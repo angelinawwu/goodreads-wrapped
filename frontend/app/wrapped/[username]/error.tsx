@@ -32,7 +32,7 @@ export default function Error({
         <motion.button
           variants={itemVariants}
           onClick={reset}
-          className="px-8 py-3 bg-[var(--bg-4)] text-[var(--text-3)] rounded-full hover:scale-105 transition-transform"
+          className="px-8 py-3 bg-[var(--bg-4)] text-[var(--text-3)] rounded-full transition-all duration-200 ease-out hover:scale-[1.02] hover:shadow-lg active:scale-[0.98]"
         >
           Try again
         </motion.button>

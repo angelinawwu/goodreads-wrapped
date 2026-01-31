@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { EASING } from '@/lib/motionVariants';
 
 interface ProgressBarProps {
   current: number;
@@ -23,11 +24,13 @@ export default function ProgressBar({ current, total }: ProgressBarProps) {
                 width: i <= current ? '100%' : '0%',
               }}
               transition={{
-                duration: i === current ? 3 : 0.3,
-                ease: 'linear',
+                // Active bar fills linearly, completed bars snap in quickly
+                duration: i === current ? 3 : 0.2,
+                ease: i === current ? 'linear' : EASING.easeOutQuart,
               }}
               style={{
-                boxShadow: i === current ? '0 0 8px var(--bg-4)' : 'none',
+                boxShadow: i === current ? '0 0 10px var(--bg-4)' : 'none',
+                willChange: i === current ? 'width' : 'auto',
               }}
             />
           </div>

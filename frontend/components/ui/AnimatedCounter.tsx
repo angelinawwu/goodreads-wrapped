@@ -2,6 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
+import { EASING } from '@/lib/motionVariants';
 
 interface AnimatedCounterProps {
   value: number;
@@ -19,7 +20,7 @@ interface AnimatedCounterProps {
 export default function AnimatedCounter({
   value,
   decimals = 0,
-  duration = 2.5,
+  duration = 2.0,
   delay = 0,
   className = '',
 }: AnimatedCounterProps) {
@@ -35,7 +36,8 @@ export default function AnimatedCounter({
     const controls = animate(count, value, {
       duration,
       delay,
-      ease: 'circOut',
+      // ease-out-quart for a snappy, responsive feel
+      ease: EASING.easeOutQuart,
     });
     return () => {
       controls.stop();

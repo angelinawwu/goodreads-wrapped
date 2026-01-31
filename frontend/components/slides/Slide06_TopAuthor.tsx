@@ -42,18 +42,7 @@ export default function Slide06_TopAuthor({ stats, onAnimationComplete }: SlideP
       initial="hidden"
       animate="visible"
     >
-      {/* Author image or placeholder */}
-      <motion.div
-        variants={heroVariants}
-        className="w-48 h-48 rounded-lg bg-[var(--bg-5)] flex items-center justify-center mb-8 shadow-xl overflow-hidden"
-      >
-        <img
-          src={authorImage}
-          alt={topAuthor.name}
-          className="w-full h-full object-cover"
-        />
-      </motion.div>
-
+      
       <motion.h2 variants={itemVariants} className="text-headline text-center mb-4 font-bold">
         {formatAuthorName(topAuthor.name)}
       </motion.h2>
